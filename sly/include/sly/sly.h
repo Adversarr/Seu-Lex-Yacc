@@ -56,8 +56,6 @@ class AttrDict;
 
 using TokenAttr = YYSTATE;
 
-
-
 class Token;
 
 class Production;

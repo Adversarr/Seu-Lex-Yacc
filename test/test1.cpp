@@ -9,13 +9,14 @@
 #include <sly/TableGenerateMethodImpl.h>
 #include <iostream>
 
+
 using namespace sly;
 using sly::core::type::Token;
 using sly::core::type::Production;
 
 int main()
 {
-  utils::Log::SetLogLevel(sly::utils::Log::kInfo);
+  utils::Log::SetLogLevel(sly::utils::Log::kWarning);
   
   auto Expr = Token::NonTerminator("Expr");
   auto id = Token::Terminator("id");

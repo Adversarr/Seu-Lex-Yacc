@@ -120,8 +120,7 @@ void Log::Err(const T &... args) const {
 };
 
 inline const Log &Log::GetGlobalLogger() {
-  static Log log;
-  return log;
+  return GetGlobalLoggerPrivate();
 }
 
 
@@ -152,8 +151,9 @@ size_t hash(const T &v, const Args &... args) {
   return hash_combine(v1, v2);
 }
 
-#define FUNC_END_INFO sly::utils::Log::GetGlobalLogger().Info("Done.")
-#define FUNC_START_INFO sly::utils::Log::GetGlobalLogger().Info("Calling ", __FUNCTION__)
+#define FUNC_END_INFO sly::utils::Log::GetGlobalLogger().Info(__FILE__, __LINE__, __FUNCTION__, "Done.")
+
+#define FUNC_START_INFO sly::utils::Log::GetGlobalLogger().Info(__FILE__, __LINE__, __FUNCTION__, "Start.")
 }
 #endif //SEULEXYACC_UTILS_H
 

@@ -14,9 +14,9 @@ namespace sly::core::lexical {
 
 using AutomataState = bool;
 
-static constexpr AutomataState Accept = true;
+static constexpr AutomataState Accept = false;
 
-static constexpr AutomataState Decline = false;
+static constexpr AutomataState Decline = true;
 
 
 
@@ -105,9 +105,22 @@ class NfaModel
   
 };
 
+NfaModel operator +(const NfaModel& na, const NfaModel& nb);
+
+NfaModel operator *(const NfaModel& na, const NfaModel& nb);
+
+NfaModel operator ++(const NfaModel& na);
+
+
 class DfaModel
 {
  public:
+  struct CStyleTable {
+    vector<bool> can_accept_;
+    
+    vector<array<int, 128>> transition_;
+  };
+  
   static constexpr int entry_ = DFA_ENTRY_STATE_ID;
   
   explicit DfaModel(NfaModel &nfa);
@@ -120,6 +133,8 @@ class DfaModel
   const vector<map<char, int>> &GetTransition() const;
   
   optional<int> Defer(int sid, char c) const;
+  
+  CStyleTable ToCTable() const;
  
  private:
   
@@ -132,6 +147,9 @@ class DfaModel
   // 状态转移矩阵
   vector<map<char, int>> transition_;
 };
+
+
+
 
 
 class DfaController
@@ -152,13 +170,6 @@ class DfaController
 };
 
 
-NfaModel operator +(const NfaModel& na, const NfaModel& nb);
-
-
-NfaModel operator *(const NfaModel& na, const NfaModel& nb);
-
-
-NfaModel operator ++(const NfaModel& na);
 
 
 }

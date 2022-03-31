@@ -4,6 +4,7 @@
 
 #include <sly/FaModel.h>
 #include <sly/utils.h>
+#include <array>
 
 namespace sly::core::lexical {
 
@@ -263,6 +264,20 @@ optional<int> DfaModel::Defer(int sid, char c) const {
   if (deferred == transition_[sid].end())
     return {};
   return deferred->second;
+}
+
+DfaModel::CStyleTable DfaModel::ToCTable() const {
+  CStyleTable table;
+  for (auto& trans: transition_) {
+    decltype(CStyleTable::transition_)::value_type tr_item;
+    fill(tr_item.begin(), tr_item.end(), -1);
+    for(auto [k, v]: trans) {
+      tr_item[k] = v;
+    }
+    table.transition_.emplace_back(tr_item);
+  }
+  copy(states_.begin(), states_.end(), back_inserter(table.can_accept_));
+  return move(table);
 }
 
 DfaController::DfaController(DfaModel model) :
