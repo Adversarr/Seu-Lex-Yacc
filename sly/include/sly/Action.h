@@ -19,6 +19,7 @@ class Action {
   
   Action();
   
+  
   explicit Action(ActionFType f);
   
   bool operator==(const Action &rhs) const;

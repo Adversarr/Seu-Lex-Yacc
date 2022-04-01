@@ -4,4 +4,8 @@
 
 #include <sly/RegEx.h>
 
+namespace sly::core::lexical{
+sly::core::lexical::RegEx::RegEx(std::string expr, bool compile) {
 
+}
+}

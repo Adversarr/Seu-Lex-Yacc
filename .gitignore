@@ -3,4 +3,5 @@ cmake-build**
 cmake-build-debug
 cmake-build-relwithdebinfo-xcode-clang
 cmake-build-relwithdebinfo
+build
 .vscode/**

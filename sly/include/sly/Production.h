@@ -30,6 +30,8 @@ class Production {
   
   Production(std::vector<Token> tokens, std::vector<Action> actions);
   
+  Production();
+  
   explicit Production(Token start);
   
   explicit Production(Token start, Action act);

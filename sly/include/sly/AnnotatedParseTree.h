@@ -18,18 +18,39 @@ using namespace std;
 namespace sly::core::type {
 class AnnotatedParseTree {
  public:
+  enum class Type{
+    kNonTerminator,
+    kTerminator
+  };
   
   using SubNode = std::shared_ptr<AnnotatedParseTree>;
   
+  const vector<AttrDict> &GetRootAttributes() const;
+  
+  void EmplaceBack(AnnotatedParseTree&& tree);
+  
+  void PushBack(AnnotatedParseTree tree);
+  
+  void Annotate(AnnotatedParseTree* p_father = nullptr);
+  
+  AnnotatedParseTree(Token token, AttrDict attr);
+  
+  explicit AnnotatedParseTree(Production prod);
+  
+  void Print(ostream& oss, int depth=0) const;
+  
  private:
+  Type type_;
   
-  sly::core::type::Token token_;
+  Token token_;
   
-  sly::core::type::AttrDict root_attributes_;
+  vector<AttrDict> attrs_;
   
-  sly::core::type::Production production_;
+  vector<Action> actions_;
   
   vector<SubNode> sub_nodes_;
+  
+  bool is_annotated_;
 };
 }
 

@@ -69,6 +69,9 @@ bool Production::IsEpsilon() const {
   return tokens_.size() == 1;
 }
 
+Production::Production(): tokens_({Token::NonTerminator("EMPTY")}) {
+}
+
 ostream &operator<<(ostream &os, const Production &prod)
 {
   os << "Prod[" << prod.GetTokens().front() << " -> ";

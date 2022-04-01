@@ -7,39 +7,46 @@
 #include <sly/ContextFreeGrammar.h>
 #include <sly/TableGenerateMethod.h>
 #include <sly/TableGenerateMethodImpl.h>
+#include <sly/AttrDict.h>
+#include <sly/FaModel.h>
 #include <iostream>
+#include <vector>
 
-
-using namespace sly;
+using sly::core::type::Action;
 using sly::core::type::Token;
 using sly::core::type::Production;
+using sly::core::type::AttrDict;
+
 
 int main()
 {
-  utils::Log::SetLogLevel(sly::utils::Log::kWarning);
-  
-  auto Expr = Token::NonTerminator("Expr");
-  auto id = Token::Terminator("id");
-  auto multi = Token::Terminator("*");
-  auto plus = Token::Terminator("+");
   auto lb = Token::Terminator("(");
   auto rb = Token::Terminator(")");
-  
-  multi.SetAttr(Token::kLeftAssociative);
-  plus.SetAttr(Token::kLeftAssociative);
-  sly::core::grammar::ContextFreeGrammar cfg({
-            Production(Expr)(lb)(rb),
-            Production(Expr)(Expr)(plus)(Expr),
-            Production(Expr)(Expr)(multi)(Expr),
-            Production(Expr)(id)
-          }, Expr, Token::Terminator("[[Exit]]"));
-  
-  try {
-    sly::core::grammar::Lr1 method;
-    cfg.Compile(method);
-    auto table = cfg.GetLrTable();
-  } catch (exception &e) {
-    cerr << e.what();
+  auto alpha = Token::Terminator("a");
+  auto slash = Token::Terminator("-");
+  auto lbb = Token::Terminator("[");
+  auto rbb = Token::Terminator("]");
+  auto range = Token::NonTerminator("Range");
+  auto range_prod = Production(range, Action([](std::vector<YYSTATE>& attr){
+    auto c1 = attr[2].Get<char>("lval");
+    auto c2 = attr[4].Get<char>("lval");
+    sly::core::lexical::NfaModel model(c2);
+    for (auto c = c1; c < c2; ++c) {
+      model.Combine(sly::core::lexical::NfaModel(c));
+    }
+    attr[0].Set<sly::core::lexical::NfaModel>("model", model);
+    sly::utils::Log::GetGlobalLogger().Info("Range.");
+  }))(lb)(alpha)(slash)(alpha)(rb);
+
+  sly::core::type::mark_as_printable<Token>();
+  AttrDict ad;
+  ad.Set<int>("iv", 1);
+  ad.Set<float>("fv", 2.0);
+  ad.Set<Token>("tok", lbb);
+  for (auto [k, v]: ad.ToString()) {
+    std::cout << k << "\t" << v << std::endl;
   }
+  
+
   return 0;
 }

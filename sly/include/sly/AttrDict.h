@@ -9,8 +9,11 @@
 #include <string>
 #include <optional>
 #include <map>
+#include <functional>
 #include <memory>
+#include <typeindex>
 #include "sly.h"
+
 using namespace std;
 
 namespace sly::core::type{
@@ -34,13 +37,33 @@ class AttrDict
   void Emplace(const string& attr_name, T&& attr_value);
   
   template<typename T>
-  void Put(string attr_name, T attr_value);
+  void Set(string attr_name, T attr_value);
   
   inline void Clear();
+
+  map<string, string> ToString() const;
  
  private:
   map<string, any> attr_dict_;
 };
+
+extern map<std::type_index, function<std::string(const any& v)>> __type_registery;
+
+template<typename T>
+void mark_as_printable(std::function<std::string(const T & v)> f) {
+  __type_registery.emplace(std::type_index(typeid(T)), [g = f](const any& a) {
+    return g(std::any_cast<T>(a));
+  });
+}
+
+template<typename T>
+void mark_as_printable() {
+  __type_registery.emplace(std::type_index(typeid(T)), [](const any& a) {
+    return utils::to_string<T>(std::any_cast<T>(a));
+  });
+}
+
+
 
 template<typename T>
 T AttrDict::Get(const std::string& attr_name) const
@@ -74,6 +97,7 @@ void AttrDict::Emplace(const string& attr_name, T &&attr_value)
 {
   static_assert(is_copy_constructible<T>::value);
   static_assert(is_copy_assignable<T>::value);
+  
   
   auto i = attr_dict_.find(attr_name);
   if (i == attr_dict_.end())
@@ -121,10 +145,9 @@ T &AttrDict::Ref(const string &attr_name)
 }
 
 template<typename T>
-void AttrDict::Put(string attr_name, T attr_value)
+void AttrDict::Set(string attr_name, T attr_value)
 {
-  static_assert(is_copy_constructible<T>::value);
-  static_assert(is_copy_assignable<T>::value);
+  static_assert(is_copy_constructible<T>::value || is_move_constructible<T>::value);
   
   auto i = attr_dict_.find(attr_name);
   if (i == attr_dict_.end())

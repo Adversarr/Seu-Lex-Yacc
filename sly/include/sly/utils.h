@@ -12,6 +12,9 @@
 #include <set>
 #include <map>
 #include <unordered_map>
+#include <sstream>
+
+#include <concepts>
 
 using namespace std;
 
@@ -154,6 +157,15 @@ size_t hash(const T &v, const Args &... args) {
 #define FUNC_END_INFO sly::utils::Log::GetGlobalLogger().Info(__FILE__, __LINE__, __FUNCTION__, "Done.")
 
 #define FUNC_START_INFO sly::utils::Log::GetGlobalLogger().Info(__FILE__, __LINE__, __FUNCTION__, "Start.")
+
+template<typename T>
+std::string to_string(const T& v) {
+  stringstream ss;
+  ss << v;
+  return ss.str();
+}
+
+
 }
 #endif //SEULEXYACC_UTILS_H
 
