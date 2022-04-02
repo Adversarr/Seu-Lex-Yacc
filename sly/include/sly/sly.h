@@ -91,7 +91,6 @@ class Lalr;
  */
 class LrParser;
 
-
 }
 }
 

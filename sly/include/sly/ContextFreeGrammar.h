@@ -97,7 +97,7 @@ class ContextFreeGrammar {
   optional<IdType> FindProd(const Production::TokenVec &token_vec) const;
  
  public:
-  const unordered_map<Token, vector<IdType>, Token::TokenHash> &GetTokProdIdMap() const;
+  const unordered_map<Token, vector<IdType>, Token::Hash> &GetTokProdIdMap() const;
   
   const Token &GetAugmentedToken() const;
   
@@ -138,7 +138,7 @@ class ContextFreeGrammar {
   
   vector<Production> productions_;
   
-  unordered_map<Token, vector<IdType>, Token::TokenHash> tok_prod_id_map_;
+  unordered_map<Token, vector<IdType>, Token::Hash> tok_prod_id_map_;
   
   Token entry_token_;
   

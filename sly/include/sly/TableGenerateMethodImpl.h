@@ -12,7 +12,7 @@ namespace sly::core::grammar {
 
 class Lr1: public TableGenerateMethod{
 //  TODO:
-  using TokenSet = unordered_set<Token, Token::TokenHash>;
+  using TokenSet = unordered_set<Token, Token::Hash>;
   
   
 
@@ -55,15 +55,14 @@ class Lr1: public TableGenerateMethod{
   
   optional<unordered_set<LRItem, LRItem::Hash>> Lr1GotoFunc(const LRItemSet &lrs, const Token &tok) const;
   
-  vector<unordered_map<Token, IdType, Token::TokenHash>> item_go_map_;
+  vector<unordered_map<Token, IdType, Token::Hash>> item_go_map_;
   
   vector<LRItemSet> lr_item_set_;
   
-  unordered_map<Token, TokenSet, Token::TokenHash> first_set_;
+  unordered_map<Token, TokenSet, Token::Hash> first_set_;
   
-  unordered_map<Token, TokenSet, Token::TokenHash> follow_set_;
+  unordered_map<Token, TokenSet, Token::Hash> follow_set_;
   
-  ParsingTable lr_table_;
 };
 
 }

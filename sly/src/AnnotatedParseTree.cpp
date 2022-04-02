@@ -12,7 +12,8 @@ AnnotatedParseTree::AnnotatedParseTree(Token token, AttrDict attr): is_annotated
 {
 }
 
-AnnotatedParseTree::AnnotatedParseTree(Production prod): is_annotated_(false), type_(Type::kNonTerminator)
+AnnotatedParseTree::AnnotatedParseTree(const Production& prod):
+  is_annotated_(false), type_(Type::kNonTerminator), actions_(prod.GetActions()), token_(prod.GetTokens().front())
 {
 }
 
@@ -32,11 +33,10 @@ void AnnotatedParseTree::Annotate(AnnotatedParseTree* p_father) {
   attrs_.clear();
   attrs_.emplace_back();
   for (int i = 1; i < actions_.size(); ++i) {
-    auto p = sub_nodes_[i];
-    if (p->is_annotated_) {
-      continue;
+    auto p = sub_nodes_[i - 1];
+    if (!(p->is_annotated_)) {
+      p->Annotate(this);
     }
-    p->Annotate(this);
     if (!(p->is_annotated_)) {
       if (p_father == nullptr) {
         throw runtime_error("Cannot annotate.");
@@ -58,14 +58,27 @@ void AnnotatedParseTree::EmplaceBack(AnnotatedParseTree &&tree) {
   sub_nodes_.emplace_back(make_shared<AnnotatedParseTree>(tree));
 }
 
+
+void AnnotatedParseTree::EmplaceFront(AnnotatedParseTree &&tree) {
+  sub_nodes_.emplace_front(make_shared<AnnotatedParseTree>(tree));
+}
+
+
+
 void AnnotatedParseTree::Print(ostream &oss, int depth) const{
   if (depth > 0) {
     oss << std::setw(depth * 2) << "* ";
   }
-  if (type_ == Type::kTerminator) {
-    oss << "Terminator" << token_ << std::endl;
-  } else {
-    oss << "NonTerminator" << token_ << std::endl;
+  oss << token_ << "<";
+  if (!attrs_.empty()) {
+    auto dict = attrs_[0].ToStrDict();
+    for (const auto&[k, v]: dict) {
+      oss << k << ":" << v << "/";
+    }
+  }
+  oss << ">";
+  oss << std::endl;
+  if (type_ == Type::kNonTerminator) {
     for (const auto &sub_node: sub_nodes_) {
       sub_node->Print(oss, depth + 1);
     }

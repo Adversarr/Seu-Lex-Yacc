@@ -20,8 +20,12 @@ void ParsingTable::Reset() {
 
 bool ParsingTable::PutAction(IdType lhs, const Token &tok, ParsingTable::CellTp action) {
   auto f = action_table_[lhs].find(tok);
-  if (f != action_table_[lhs].end())
-    f->second.push_back(action);
+  if (f != action_table_[lhs].end()) {
+    if (action.action == kAccept)
+      f->second = {action};
+    else
+      f->second.push_back(action);
+  }
   action_table_[lhs].insert({tok, {action}});
   
   string acts;
@@ -78,8 +82,64 @@ void ParsingTable::Print(ostream &os) const {
 
 }
 
+const vector<unordered_map<Token, vector<ParsingTable::CellTp>, Token::Hash>> &ParsingTable::GetActionTable() const {
+  return action_table_;
+}
+
+void ParsingTable::SetActionTable(const vector<unordered_map<Token, vector<CellTp>, Token::Hash>> &action_table) {
+  action_table_ = action_table;
+}
+
+const vector<unordered_map<Token, vector<IdType>, Token::Hash>> &ParsingTable::GetGotoTable() const {
+  return goto_table_;
+}
+
+void ParsingTable::SetGotoTable(const vector<unordered_map<Token, vector<IdType>, Token::Hash>> &goto_table) {
+  goto_table_ = goto_table;
+}
+
+const Token &ParsingTable::GetEntryToken() const {
+  return entry_token_;
+}
+
+void ParsingTable::SetEntryToken(const Token &entry_token) {
+  entry_token_ = entry_token;
+}
+
+const Token &ParsingTable::GetAugmentedToken() const {
+  return augmented_token_;
+}
+
+void ParsingTable::SetAugmentedToken(const Token &augmented_token) {
+  augmented_token_ = augmented_token;
+}
+
+const Token &ParsingTable::GetEndingToken() const {
+  return ending_token_;
+}
+
+void ParsingTable::SetEndingToken(const Token &ending_token) {
+  ending_token_ = ending_token;
+}
+
+const Token &ParsingTable::GetEpsilonToken() const {
+  return epsilon_token_;
+}
+
+void ParsingTable::SetEpsilonToken(const Token &epsilon_token) {
+  epsilon_token_ = epsilon_token;
+}
+
+const vector<type::Production> &ParsingTable::GetProductions() const {
+  return productions_;
+}
+
+void ParsingTable::SetProductions(const vector<type::Production> &productions) {
+  productions_ = productions;
+}
+
 const ParsingTable &TableGenerateMethod::GetParsingTable() const {
-  return parsing_table_;
+  return lr_table_;
 }
 
 }

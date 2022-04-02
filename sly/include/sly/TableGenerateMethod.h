@@ -6,6 +6,7 @@
 #define SEULEXYACC_TABLEGENERATEMETHOD_H
 #include "sly.h"
 #include "Token.h"
+#include "Production.h"
 #include <vector>
 
 
@@ -46,12 +47,51 @@ class ParsingTable
   void Reset();
   
   void Print(ostream& os) const;
+  
+  const vector<unordered_map<Token, vector<CellTp>, Token::Hash>> &GetActionTable() const;
+  
+  void SetActionTable(const vector<unordered_map<Token, vector<CellTp>, Token::Hash>> &action_table);
+  
+  const vector<unordered_map<Token, vector<IdType>, Token::Hash>> &GetGotoTable() const;
+  
+  void SetGotoTable(const vector<unordered_map<Token, vector<IdType>, Token::Hash>> &goto_table);
+  
+  const Token &GetEntryToken() const;
+  
+  void SetEntryToken(const Token &entry_token);
+  
+  const Token &GetAugmentedToken() const;
+  
+  void SetAugmentedToken(const Token &augmented_token);
+  
+  const Token &GetEndingToken() const;
+  
+  void SetEndingToken(const Token &ending_token);
+  
+  const Token &GetEpsilonToken() const;
+  
+  void SetEpsilonToken(const Token &epsilon_token);
+ 
+  const vector<type::Production> &GetProductions() const;
+  
+  void SetProductions(const vector<type::Production> &productions);
+ 
+ private:
+  vector<type::Production> productions_;
  
  private:
   
-  vector<unordered_map<Token, vector<CellTp>, Token::TokenHash>> action_table_;
+  vector<unordered_map<Token, vector<CellTp>, Token::Hash>> action_table_;
   
-  vector<unordered_map<Token, vector<IdType>, Token::TokenHash>> goto_table_;
+  vector<unordered_map<Token, vector<IdType>, Token::Hash>> goto_table_;
+  
+  Token entry_token_;
+  
+  Token augmented_token_;
+  
+  Token ending_token_;
+  
+  Token epsilon_token_;
 };
 
 
@@ -66,8 +106,7 @@ class TableGenerateMethod {
   
   const ContextFreeGrammar* p_grammar = nullptr;
   
- private:
-  ParsingTable parsing_table_;
+  ParsingTable lr_table_;
 };
 }
 

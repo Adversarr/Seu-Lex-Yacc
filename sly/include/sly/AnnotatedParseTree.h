@@ -11,6 +11,7 @@
 #include "Production.h"
 #include <memory>
 #include <vector>
+#include <deque>
 
 
 using namespace std;
@@ -28,6 +29,8 @@ class AnnotatedParseTree {
   const vector<AttrDict> &GetRootAttributes() const;
   
   void EmplaceBack(AnnotatedParseTree&& tree);
+
+  void EmplaceFront(AnnotatedParseTree&& tree);
   
   void PushBack(AnnotatedParseTree tree);
   
@@ -35,7 +38,7 @@ class AnnotatedParseTree {
   
   AnnotatedParseTree(Token token, AttrDict attr);
   
-  explicit AnnotatedParseTree(Production prod);
+  explicit AnnotatedParseTree(const Production& prod);
   
   void Print(ostream& oss, int depth=0) const;
   
@@ -48,7 +51,7 @@ class AnnotatedParseTree {
   
   vector<Action> actions_;
   
-  vector<SubNode> sub_nodes_;
+  std::deque<SubNode> sub_nodes_;
   
   bool is_annotated_;
 };

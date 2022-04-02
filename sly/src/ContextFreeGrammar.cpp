@@ -48,11 +48,13 @@ void ContextFreeGrammar::CheckHealthAndPrepare() {
   // 0. 增广文法
   epsilon_token_ = Token();
   augmented_token_ = Token::NonTerminator("#LR augmented#");
-  productions_.insert(productions_.begin(), Production(augmented_token_)(entry_token_));
+  productions_.insert(productions_.begin(),
+                      Production(augmented_token_)(entry_token_));
   
   // 1. 计算所有非终结符/终结符
   non_terminators_.clear();
   terminators_.clear();
+  terminators_.emplace_back(ending_token_);
   
   for (auto &prod: productions_) {
     // 所有产生式左部的都是非终结符。
@@ -182,7 +184,7 @@ const vector<Token> &ContextFreeGrammar::GetTerminators() const {
   return terminators_;
 }
 
-const unordered_map<Token, vector<IdType>, Token::TokenHash> &ContextFreeGrammar::GetTokProdIdMap() const {
+const unordered_map<Token, vector<IdType>, Token::Hash> &ContextFreeGrammar::GetTokProdIdMap() const {
   return tok_prod_id_map_;
 }
 
@@ -198,10 +200,10 @@ const Token &ContextFreeGrammar::GetEpsilonToken() const {
 std::size_t LRItem::Hash::operator()(const LRItem &k) const {
   size_t hv = 0;
   for (const auto &tok: k.GetTokens()) {
-    hv = hash_combine(hv, Token::TokenHash{}(tok));
+    hv = hash_combine(hv, Token::Hash{}(tok));
   }
   for (const auto &tok: k.GetLookAhead()) {
-    hv = hash_combine(hv, Token::TokenHash{}(tok));
+    hv = hash_combine(hv, Token::Hash{}(tok));
   }
   return hv;
 }
@@ -212,7 +214,7 @@ bool LRItem::operator==(const LRItem &rhs) const {
 
 LRItem::LRItem(Production::TokenVec tos, Production::TokenSet las, size_t cur_pos) :
   tokens_(std::move(tos)), look_ahead_(move(las)), current_position_(cur_pos) {
-  for (auto &t: las) {
+  for (const auto &t: las) {
     if (t.GetTokenType() != Token::kTerminator)
       throw runtime_error("Found non-term in Look Ahead!");
   }

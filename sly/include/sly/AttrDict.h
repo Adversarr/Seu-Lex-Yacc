@@ -19,7 +19,6 @@ using namespace std;
 namespace sly::core::type{
 class AttrDict
 {
- 
  public:
   template<typename T>
   T Get(const std::string& attr_name) const;
@@ -41,24 +40,24 @@ class AttrDict
   
   inline void Clear();
 
-  map<string, string> ToString() const;
+  map<string, string> ToStrDict() const;
  
  private:
   map<string, any> attr_dict_;
 };
 
-extern map<std::type_index, function<std::string(const any& v)>> __type_registery;
+extern map<std::type_index, function<std::string(const any& v)>> type_registery;
 
 template<typename T>
 void mark_as_printable(std::function<std::string(const T & v)> f) {
-  __type_registery.emplace(std::type_index(typeid(T)), [g = f](const any& a) {
+  type_registery.emplace(std::type_index(typeid(T)), [g = f](const any& a) {
     return g(std::any_cast<T>(a));
   });
 }
 
 template<typename T>
 void mark_as_printable() {
-  __type_registery.emplace(std::type_index(typeid(T)), [](const any& a) {
+  type_registery.emplace(std::type_index(typeid(T)), [](const any& a) {
     return utils::to_string<T>(std::any_cast<T>(a));
   });
 }
