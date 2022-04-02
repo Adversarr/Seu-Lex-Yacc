@@ -22,7 +22,7 @@ class Production {
   
   using TokenVec = std::vector<Token>;
   
-  using TokenSet = std::unordered_set<Token, Token::TokenHash>;
+  using TokenSet = std::unordered_set<Token, Token::Hash>;
   
   bool CheckHealth() const;
   
@@ -46,7 +46,7 @@ class Production {
 
   const vector<Token> &GetTokens() const;
  
-  vector<Action> &GetActions();
+  const vector<Action> &GetActions() const;
  private:
   TokenVec tokens_;
   

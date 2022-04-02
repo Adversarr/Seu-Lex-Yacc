@@ -57,7 +57,7 @@ vector<Token> &Production::GetTokens() {
   return tokens_;
 }
 
-vector<Action> &Production::GetActions() {
+const vector<Action> &Production::GetActions() const{
   return actions_;
 }
 

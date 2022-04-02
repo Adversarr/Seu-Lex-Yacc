@@ -21,7 +21,7 @@ class Token {
   };
   
   // Token hash
-  struct TokenHash {
+  struct Hash {
     std::size_t operator()(const Token &k) const;
   };
   

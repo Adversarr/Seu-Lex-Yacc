@@ -279,16 +279,19 @@ void Lr1::GenTable() {
     // 2. Action: 可能有 shift-in <> reduce 冲突，需要解决
     // 当前的 Item Set
     for (const auto &tok:  aug_terminators) {
+      bool is_accept = false;
       if (tok == p_grammar->GetEpsilonToken()) {
-        auto it = find_if(curr_lrs.begin(), curr_lrs.end(),
-                          [this](const LRItem &v) {
-                            return v.GetTokens() == vector<Token>{p_grammar->GetAugmentedToken(), p_grammar->GetEntryToken()} && v.CanReduce();
-                          });
+        auto it = find_if(curr_lrs.begin(), curr_lrs.end(),[this](const LRItem &v) {
+          return v.GetTokens() == vector<Token>{p_grammar->GetAugmentedToken(), p_grammar->GetEntryToken()} && v.CanReduce();
+        });
         if (it != curr_lrs.end()) {
           lr_table_.PutAction(i, p_grammar->GetEndingToken(), {.action=ParsingTable::kAccept});
-          continue;
+          is_accept = true;
         }
       }
+      if (is_accept)
+        continue;
+      
       
       auto f = item_go_map_[i].find(tok);
       ParsingTable::CellTp shift_in{
@@ -350,9 +353,7 @@ void Lr1::GenTable() {
       } else if (shift_in.action == ParsingTable::AutomataAction::kShiftIn &&
                  reduce.action == ParsingTable::AutomataAction::kEmpty) {
         lr_table_.PutAction(i, tok, shift_in);
-      } else // conflict
-      {
-        auto preference = ParsingTable::AutomataAction::kEmpty;
+      } else /* conflict */ {
         // 生成提示信息
         stringstream ss;
         ss << "In state " << i << endl << "Causing Production:\nShiftIn:" << endl;
@@ -382,7 +383,8 @@ void Lr1::GenTable() {
             lr_table_.PutAction(i, tok, shift_in);
           }
         }
-          // 2. 用优先级分析
+        
+        // 2. 用优先级分析
         else if (all_of(shift_in.cause.cbegin(), shift_in.cause.cend(),
                         [&reduce](const auto &v) { return reduce.id < v; })) {
           // 执行reduce
@@ -408,6 +410,11 @@ void Lr1::GenTable() {
       
     }
   }
+  lr_table_.SetAugmentedToken(p_grammar->GetAugmentedToken());
+  lr_table_.SetEndingToken(p_grammar->GetEndingToken());
+  lr_table_.SetEntryToken(p_grammar->GetEntryToken());
+  lr_table_.SetEpsilonToken(p_grammar->GetEpsilonToken());
+  lr_table_.SetProductions((p_grammar->GetProductions()));
   FUNC_END_INFO;
 }
 

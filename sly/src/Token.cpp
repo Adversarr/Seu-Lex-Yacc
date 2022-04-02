@@ -7,7 +7,7 @@
 namespace sly::core::type {
 
 
-std::size_t Token::TokenHash::operator()(const Token &k) const
+std::size_t Token::Hash::operator()(const Token &k) const
 {
   return sly::utils::hash(k.GetTokName(), k.GetTokenType());
 }
