@@ -3,6 +3,7 @@
 //
 
 #include <sly/Token.h>
+#include <sly/utils.h>
 
 namespace sly::core::type {
 

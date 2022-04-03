@@ -4,8 +4,11 @@
 
 #ifndef SEULEXYACC_ACTION_H
 #define SEULEXYACC_ACTION_H
-#include "sly.h"
 
+#include "def.h"
+#include <vector>
+#include <functional>
+#include <optional>
 
 namespace sly::core::type {
 /**
@@ -13,9 +16,9 @@ namespace sly::core::type {
  */
 class Action {
  public:
-  using ActionFType = function<void(vector<YYSTATE> &)>;
+  using ActionFType = std::function<void(std::vector<YYSTATE> &)>;
   
-  void Modify(vector<TokenAttr> &tokens);
+  void Modify(std::vector<TokenAttr> &tokens);
   
   Action();
   
@@ -25,7 +28,7 @@ class Action {
   bool operator==(const Action &rhs) const;
  
  private:
-  optional<ActionFType> opt_f_;
+  std::optional<ActionFType> opt_f_;
 };
 
 }

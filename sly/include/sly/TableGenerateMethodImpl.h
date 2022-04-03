@@ -4,7 +4,7 @@
 
 #ifndef SEULEXYACC_TABLEGENERATEMETHODIMPL_H
 #define SEULEXYACC_TABLEGENERATEMETHODIMPL_H
-#include "sly.h"
+#include "def.h"
 #include "TableGenerateMethod.h"
 #include "ContextFreeGrammar.h"
 

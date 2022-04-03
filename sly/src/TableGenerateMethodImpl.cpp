@@ -3,6 +3,7 @@
 //
 
 #include <sly/TableGenerateMethodImpl.h>
+#include <sly/utils.h>
 #include <sstream>
 
 
@@ -18,7 +19,6 @@ void Lr1::Defer(const ContextFreeGrammar &cfg) {
 
 
 optional<unordered_set<LRItem, LRItem::Hash>> Lr1::Lr1GotoFunc(const LRItemSet &lrs, const Token &tok) const {
-  
   LRItemSet retval;
   for (const auto &lri: lrs) {
     auto deferred = lri.Defer(tok);

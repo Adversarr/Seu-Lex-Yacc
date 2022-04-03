@@ -1,11 +1,12 @@
 #include <sly/AttrDict.h>
+#include <sly/utils.h>
 #define DECLARE_TYPE_REGISTERY(T) {std::type_index(typeid(T)),\
-  [](const any& v){return utils::to_string<T>(any_cast<T>(v));}}
+  [](const std::any& v){return utils::to_string<T>(any_cast<T>(v));}}
 
 
 namespace sly::core::type{
 
-map<std::type_index, function<std::string(const std::any& v)>> type_registery{
+map<std::type_index, std::function<std::string(const std::any& v)>> type_registery{
   DECLARE_TYPE_REGISTERY(int),
   DECLARE_TYPE_REGISTERY(float),
   DECLARE_TYPE_REGISTERY(double),

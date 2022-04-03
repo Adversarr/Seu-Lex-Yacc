@@ -11,7 +11,7 @@ Action::Action(Action::ActionFType f) :
   opt_f_(f) {
 }
 
-void Action::Modify(vector<TokenAttr> &tokens) {
+void Action::Modify(std::vector<TokenAttr> &tokens) {
   if (opt_f_.has_value())
     opt_f_.value()(tokens);
 }

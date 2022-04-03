@@ -5,11 +5,13 @@
 #ifndef SEULEXYACC_CONTEXTFREEGRAMMAR_H
 #define SEULEXYACC_CONTEXTFREEGRAMMAR_H
 
-#include "sly.h"
+#include "def.h"
 #include "Token.h"
 #include "Production.h"
 #include "TableGenerateMethod.h"
 #include <optional>
+#include <unordered_set>
+#include <unordered_map>
 
 using namespace std;
 

@@ -3,11 +3,14 @@
 //
 
 #include <sly/AnnotatedParseTree.h>
+
 #include <iomanip>
 #include <utility>
+
 namespace sly::core::type {
 
-AnnotatedParseTree::AnnotatedParseTree(Token token, AttrDict attr): is_annotated_(true), type_(Type::kTerminator),
+AnnotatedParseTree::AnnotatedParseTree(Token token, AttrDict attr): 
+  is_annotated_(true), type_(Type::kTerminator),
   token_(std::move(token)), attrs_({std::move(attr)})
 {
 }
@@ -24,8 +27,7 @@ const vector<AttrDict> &sly::core::type::AnnotatedParseTree::GetRootAttributes()
 
 
 void AnnotatedParseTree::Annotate(AnnotatedParseTree* p_father) {
-  if (type_ == Type::kTerminator) {
-    // leaf node, do nothing and return.
+  if (type_ == Type::kTerminator) { // leaf node, do nothing and return.
     return;
   }
   
@@ -43,7 +45,7 @@ void AnnotatedParseTree::Annotate(AnnotatedParseTree* p_father) {
       }
       return;
     }
-    attrs_.push_back(p->attrs_.front());
+    attrs_.emplace_back(p->attrs_.front());
     actions_[i].Modify(attrs_);
   }
   actions_[0].Modify(attrs_);

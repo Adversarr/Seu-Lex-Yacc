@@ -4,12 +4,12 @@
 
 #ifndef SEULEXYACC_SEULEX_H
 #define SEULEXYACC_SEULEX_H
-#include "sly.h"
+#include "def.h"
 
 namespace sly::runtime {
 class SeuLex {
  public:
-  void Process(sly::utils::InputStream & is, sly::utils::InputStream & os);
+  void Process();
 };
 
 }

@@ -6,9 +6,10 @@
 #define SEULEXYACC_ANNOTATEDPARSETREE_H
 
 
-#include "sly.h"
+#include "def.h"
 #include "Token.h"
 #include "Production.h"
+#include "AttrDict.h"
 #include <memory>
 #include <vector>
 #include <deque>

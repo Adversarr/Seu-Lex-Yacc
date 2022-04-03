@@ -4,11 +4,11 @@
 
 #ifndef SEULEXYACC_TABLEGENERATEMETHOD_H
 #define SEULEXYACC_TABLEGENERATEMETHOD_H
-#include "sly.h"
+#include "def.h"
 #include "Token.h"
 #include "Production.h"
 #include <vector>
-
+#include <unordered_map>
 
 using sly::core::type::IdType;
 
@@ -81,9 +81,9 @@ class ParsingTable
  
  private:
   
-  vector<unordered_map<Token, vector<CellTp>, Token::Hash>> action_table_;
+  std::vector<std::unordered_map<Token, std::vector<CellTp>, Token::Hash>> action_table_;
   
-  vector<unordered_map<Token, vector<IdType>, Token::Hash>> goto_table_;
+  std::vector<std::unordered_map<Token, std::vector<IdType>, Token::Hash>> goto_table_;
   
   Token entry_token_;
   

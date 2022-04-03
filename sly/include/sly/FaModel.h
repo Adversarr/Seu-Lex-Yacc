@@ -4,9 +4,10 @@
 
 #ifndef SEULEXYACC_FAMODEL_H
 #define SEULEXYACC_FAMODEL_H
-#include "sly.h"
+#include "def.h"
 #include <vector>
 #include <set>
+#include <map>
 
 using namespace std;
 

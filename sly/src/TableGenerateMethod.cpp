@@ -1,9 +1,9 @@
 //
 // Created by Yang Jerry on 2022/3/30.
 //
-#include <sly/sly.h>
+#include <sly/def.h>
 #include <sly/TableGenerateMethod.h>
-
+#include <sly/utils.h>
 namespace sly::core::grammar {
 
 ParsingTable::ParsingTable(int n_states) {

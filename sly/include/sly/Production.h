@@ -5,7 +5,7 @@
 #ifndef SEULEXYACC_PRODUCTION_H
 #define SEULEXYACC_PRODUCTION_H
 
-#include "sly.h"
+#include "def.h"
 #include <unordered_set>
 #include <vector>
 #include "Token.h"

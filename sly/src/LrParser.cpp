@@ -1,4 +1,5 @@
 #include <sly/LrParser.h>
+#include <sly/utils.h>
 
 namespace sly::core::grammar {
 

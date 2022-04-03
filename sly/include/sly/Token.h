@@ -5,7 +5,7 @@
 #ifndef SEULEXYACC_TOKEN_H
 #define SEULEXYACC_TOKEN_H
 #include <string>
-#include "sly.h"
+#include "def.h"
 
 using namespace std;
 

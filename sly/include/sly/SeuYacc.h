@@ -4,12 +4,12 @@
 
 #ifndef SEULEXYACC_SEUYACC_H
 #define SEULEXYACC_SEUYACC_H
-#include "sly.h"
+#include "def.h"
 
 namespace sly::runtime {
 
 class SeuYacc {
-  void Process(sly::utils::InputStream &is, sly::utils::InputStream &os);
+  void Process();
 };
 
 }

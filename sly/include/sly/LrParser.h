@@ -1,7 +1,7 @@
 #ifndef LRPARSER_H
 #define LRPARSER_H
 
-#include "sly.h"
+#include "def.h"
 #include "ContextFreeGrammar.h"
 #include "AnnotatedParseTree.h"
 

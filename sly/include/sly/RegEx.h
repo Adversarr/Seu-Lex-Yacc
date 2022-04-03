@@ -4,8 +4,10 @@
 
 #ifndef SEULEXYACC_REGEX_H
 #define SEULEXYACC_REGEX_H
-#include "sly.h"
+#include "def.h"
 #include "FaModel.h"
+#include <memory>
+#include <string>
 namespace sly::core::lexical {
 
 class RegEx {
@@ -18,9 +20,9 @@ class RegEx {
   
   
  private:
-  unique_ptr<DfaModel> dfa_model_;
+  std::unique_ptr<DfaModel> dfa_model_;
   
-  unique_ptr<NfaModel> nfa_model_;
+  std::unique_ptr<NfaModel> nfa_model_;
 };
 
 }
