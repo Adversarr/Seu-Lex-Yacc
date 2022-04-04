@@ -54,7 +54,7 @@ class AnnotatedParseTree {
   
   std::deque<SubNode> sub_nodes_;
   
-  bool is_annotated_;
+  bool is_annotated_; 
 };
 }
 

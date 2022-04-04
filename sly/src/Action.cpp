@@ -3,12 +3,21 @@
 //
 
 #include <sly/Action.h>
+#include <string>
 namespace sly::core::type {
 
 Action::Action() = default;
 
+
 Action::Action(Action::ActionFType f) :
-  opt_f_(f) {
+  opt_f_(f),
+  impl_(""){
+}
+
+
+Action::Action(Action::ActionFType f, std::string impl) :
+  opt_f_(f),
+  impl_(move(impl)){
 }
 
 void Action::Modify(std::vector<TokenAttr> &tokens) {
@@ -21,6 +30,13 @@ bool Action::operator==(const Action &rhs) const {
     return false;
   else
     return true;
+}
+
+
+std::ostream& operator <<(std::ostream& os, const Action& act) {
+  os << "sly::core::type::Action([](const std::vector<YYSTATE>& attr) {"
+    << act.GetImpl() << "}, \"" << act.GetImpl() << "\"}";
+  return os;
 }
 
 }

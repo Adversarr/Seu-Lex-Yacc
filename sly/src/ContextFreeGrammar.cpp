@@ -69,10 +69,10 @@ void ContextFreeGrammar::CheckHealthAndPrepare() {
   for (auto &prod: productions_) {
     for (auto &t: prod.GetTokens()) {
       switch (t.GetTokenType()) {
-        case Token::kEpsilon:
+        case Token::Type::kEpsilon:
           epsilon_token_ = t;
           break;
-        case Token::kTerminator:
+        case Token::Type::kTerminator:
           PutTerminator(t);
           break;
         default:
@@ -81,23 +81,23 @@ void ContextFreeGrammar::CheckHealthAndPrepare() {
     }
   }
   // 3. 检查一致性
-  if (ending_token_.GetTokenType() != Token::kTerminator)
+  if (ending_token_.GetTokenType() != Token::Type::kTerminator)
     throw runtime_error("Ending token is not a terminator!");
-  if (entry_token_.GetTokenType() != Token::kNonTerminator)
+  if (entry_token_.GetTokenType() != Token::Type::kNonTerminator)
     throw runtime_error("Entry token is not a non-terminator!");
   
   for (auto &prod: productions_) {
     for (auto &tok: prod.GetTokens()) {
       switch (tok.GetTokenType()) {
-        case Token::kEpsilon:
+        case Token::Type::kEpsilon:
           if (!(tok == epsilon_token_))
             throw runtime_error("Found Epsilon in token-list.");
           break;
-        case Token::kTerminator:
+        case Token::Type::kTerminator:
           if (find(terminators_.begin(), terminators_.end(), tok) == terminators_.end())
             throw runtime_error("Cannot find terminator. <" + tok.GetTokName() + ">");
           break;
-        case Token::kNonTerminator:
+        case Token::Type::kNonTerminator:
           if (tok_prod_id_map_.find(tok) == tok_prod_id_map_.end())
             throw runtime_error("Cannot find non-term. <" + tok.GetTokName() + ">");
           break;
@@ -146,8 +146,8 @@ ContextFreeGrammar::ContextFreeGrammar(vector<Production> prod_list, Token entry
 }
 
 bool ContextFreeGrammar::PutTerminator(const Token &tok) {
-  if (tok.GetTokenType() != Token::kTerminator &&
-      tok.GetTokenType() != Token::kEpsilon)
+  if (tok.GetTokenType() != Token::Type::kTerminator &&
+      tok.GetTokenType() != Token::Type::kEpsilon)
     return false;
   auto it = find(terminators_.begin(), terminators_.end(), tok);
   if (it == terminators_.end())
@@ -156,7 +156,7 @@ bool ContextFreeGrammar::PutTerminator(const Token &tok) {
 }
 
 bool ContextFreeGrammar::PutNonTerminator(const Token &tok) {
-  if (tok.GetTokenType() != Token::kNonTerminator)
+  if (tok.GetTokenType() != Token::Type::kNonTerminator)
     return false;
   auto it = find(non_terminators_.begin(), non_terminators_.end(), tok);
   if (it == non_terminators_.end()) {
@@ -215,7 +215,7 @@ bool LRItem::operator==(const LRItem &rhs) const {
 LRItem::LRItem(Production::TokenVec tos, Production::TokenSet las, size_t cur_pos) :
   tokens_(std::move(tos)), look_ahead_(move(las)), current_position_(cur_pos) {
   for (const auto &t: las) {
-    if (t.GetTokenType() != Token::kTerminator)
+    if (t.GetTokenType() != Token::Type::kTerminator)
       throw runtime_error("Found non-term in Look Ahead!");
   }
 }

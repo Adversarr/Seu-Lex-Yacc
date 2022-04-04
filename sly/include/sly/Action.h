@@ -9,7 +9,8 @@
 #include <vector>
 #include <functional>
 #include <optional>
-
+#include <string>
+#include <iostream>
 namespace sly::core::type {
 /**
  * LR 自动机中的 Action 类
@@ -22,15 +23,25 @@ class Action {
   
   Action();
   
-  
   Action(ActionFType f);
   
+  Action(ActionFType f, std::string impl);
+  
   bool operator==(const Action &rhs) const;
+  
+  inline std::string GetImpl() const;
  
  private:
   std::optional<ActionFType> opt_f_;
+  
+  std::string impl_;
 };
 
+std::ostream &operator<<(std::ostream &os, const Action &act);
+
+std::string Action::GetImpl() const {
+  return impl_;
+}
 }
 
 

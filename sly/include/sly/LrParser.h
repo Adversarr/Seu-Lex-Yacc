@@ -41,8 +41,7 @@ class LrParser {
   IdType current_offset_;
   
   unordered_map<Token, type::Action, Token::Hash> token_actions_;
-  
-  optional<AnnotatedParseTree> optional_apt_;
+
 };
 }
 

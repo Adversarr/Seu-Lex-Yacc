@@ -189,7 +189,7 @@ Lr1::TokenSet Lr1::GetFirst(vector<Token>::const_iterator first, vector<Token>::
   if (first == last)
     return {p_grammar->GetEpsilonToken()};
   auto tok = *first;
-  if (tok.GetTokenType() == Token::kEpsilon)
+  if (tok.GetTokenType() == Token::Type::kEpsilon)
     return {p_grammar->GetEpsilonToken()};
   
   auto s = first_set_.at(tok);
@@ -211,7 +211,7 @@ unordered_set<LRItem, LRItem::Hash> Lr1::Lr1Closure(LRItemSet lrs) const {
       if (!next_tok.has_value())
         continue;
       
-      if (next_tok->GetTokenType() != Token::kNonTerminator)
+      if (next_tok->GetTokenType() != Token::Type::kNonTerminator)
         continue;
       
       // 找到可以扩张的production id

@@ -21,29 +21,28 @@ bool Token::operator==(const Token &another) const
 
 bool Token::IsTerminator() const
 {
-  return type_ == kTerminator;
+  return type_ == Type::kTerminator;
 }
 
-Token::Token(string tok_name, Type tok_type, IdType tid) :
+Token::Token(string tok_name, Type tok_type, IdType tid, Attr attr) :
   name_(std::move(tok_name)), tid_(tid), type_(tok_type)
 {
-
 }
 
-Token Token::NonTerminator(string tok_name, IdType tid)
+Token Token::NonTerminator(string tok_name, IdType tid, Attr attr)
 {
-  return Token(std::move(tok_name), kNonTerminator, tid);
+  return Token(std::move(tok_name), Type::kNonTerminator, tid, attr);
 }
 
-Token Token::Terminator(string tok_name, IdType tid)
+Token Token::Terminator(string tok_name, IdType tid, Attr attr)
 {
-  return Token(std::move(tok_name), kTerminator, tid);
+  return Token(std::move(tok_name), Type::kTerminator, tid, attr);
 }
 
 Token::Token()
 {
-  type_ = kEpsilon;
-  attr_ = kNone;
+  type_ = Type::kEpsilon;
+  attr_ = Attr::kNone;
 }
 
 
@@ -86,17 +85,44 @@ ostream &operator<<(ostream &os, const Token &tok)
 {
   switch (tok.GetTokenType())
   {
-    case Token::kNonTerminator:
+    case Token::Type::kNonTerminator:
       os << "N<" + tok.GetTokName() + ">";
       break;
-    case Token::kTerminator:
+    case Token::Type::kTerminator:
       os << "T<" + tok.GetTokName() + ">";
       break;
-    case Token::kEpsilon:
+    case Token::Type::kEpsilon:
       os << "E< >";
       break;
   }
   return os;
 }
+
+ostream &operator<<(ostream &os, const Token::Attr& attr) {
+  if (attr == Token::Attr::kLeftAssociative) {
+    os << "sly::core::type::Token::Attr::kLeftAssociative";
+  } else if (attr == Token::Attr::kRightAssociative) {
+    os << "sly::core::type::Token::Attr::kRightAssociative";
+  } else if (attr == Token::Attr::kNone) {
+    os << "sly::core::type::Token::Attr::kNone";
+  } else {
+    assert(false);
+  }
+  return os;
+}
+
+ostream &operator<<(ostream &os, const Token::Type& type) {
+  if (type == Token::Type::kTerminator) {
+    os << "sly::core::type::Token::Type::kTerminator";
+  } else if (type == Token::Type::kNonTerminator) {
+    os << "sly::core::type::Token::Type::kNonTerminator";
+  } else if (type == Token::Type::kEpsilon) {
+    os << "sly::core::type::Token::Type::kEpsilon";
+  } else {
+    assert(false);
+  }
+  return os;
+}
+
 
 }

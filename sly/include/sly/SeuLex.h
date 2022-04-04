@@ -7,6 +7,8 @@
 #include "def.h"
 
 namespace sly::runtime {
+
+// From `.lex` to `.cpp`.
 class SeuLex {
  public:
   void Process();

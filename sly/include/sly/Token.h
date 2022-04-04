@@ -16,8 +16,12 @@ namespace sly::core::type {
  */
 class Token {
  public:
-  enum Type {
+  enum class Type {
     kTerminator, kNonTerminator, kEpsilon
+  };
+  
+  enum class Attr {
+    kLeftAssociative, kRightAssociative, kNone
   };
   
   // Token hash
@@ -25,9 +29,6 @@ class Token {
     std::size_t operator()(const Token &k) const;
   };
   
-  enum Attr {
-    kLeftAssociative, kRightAssociative, kNone
-  };
   
   bool operator==(const Token &another) const;
   
@@ -39,10 +40,11 @@ class Token {
   
   Token();
   
-  static Token NonTerminator(string tok_name, IdType tid = -1);
+  static Token NonTerminator(string tok_name, IdType tid = -1, Attr attr = Attr::kNone);
   
-  static Token Terminator(string tok_name, IdType tid = -1);
+  static Token Terminator(string tok_name, IdType tid = -1, Attr attr = Attr::kNone);
  
+  explicit Token(string tok_name, Type tok_type, IdType tid, Attr attr = Attr::kNone);
  public:
   IdType GetTid() const;
   
@@ -51,14 +53,12 @@ class Token {
   void SetAttr(Attr attribute);
   
   bool operator<(const Token &rhs) const;
+
  
  private:
-  explicit Token(string tok_name, Type tok_type, IdType tid);
- 
- private:
-  IdType tid_{};
+  IdType tid_;
   
-  Attr attr_ = kNone;
+  Attr attr_ = Attr::kNone;
   
   std::string name_;
   
@@ -67,5 +67,9 @@ class Token {
 
 ostream &operator<<(ostream &os, const Token &tok);
 
+ostream &operator<<(ostream &os, const Token::Attr& attr);
+
+
+ostream &operator<<(ostream &os, const Token::Type& type);
 }
 #endif //SEULEXYACC_TOKEN_H

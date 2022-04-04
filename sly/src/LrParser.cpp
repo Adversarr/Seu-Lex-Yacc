@@ -12,7 +12,7 @@ void LrParser::SetPt(const ParsingTable &pt) {
 }
 
 LrParser::LrParser(ParsingTable &parsing_table) :
-  pt_(parsing_table), current_state_id_(-1), optional_apt_{} , current_offset_(0) {
+  pt_(parsing_table), current_state_id_(-1), current_offset_(0) {
   
 }
 
@@ -30,7 +30,6 @@ void LrParser::Parse(vector<Token> token_stream, vector<YYSTATE> yylval_stream) 
   while (current_offset_ < token_stream.size()) {
     ParseOnce(token_stream, yylval_stream);
   }
-  optional_apt_ = make_optional(apt_stack_.front());
 }
 
 void LrParser::ParseOnce(const vector<Token> &token_stream, const vector<YYSTATE>& yylval_stream) {
@@ -78,11 +77,8 @@ void LrParser::ParseOnce(const vector<Token> &token_stream, const vector<YYSTATE
       }
       if (action.action == ParsingTable::kError)
         utils::Log::GetGlobalLogger().Err("Found invalid action.");
-      
       assert(false);
     }
-  
-  
   } else {
     utils::Log::GetGlobalLogger().Err("found non terminator in token_stream.");
     assert(false);
@@ -91,6 +87,6 @@ void LrParser::ParseOnce(const vector<Token> &token_stream, const vector<YYSTATE
 }
 
 AnnotatedParseTree LrParser::GetTree() const {
-  return optional_apt_.value();
+  return apt_stack_.front();
 }
 }

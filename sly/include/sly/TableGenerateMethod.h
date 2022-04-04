@@ -75,11 +75,18 @@ class ParsingTable
   const vector<type::Production> &GetProductions() const;
   
   void SetProductions(const vector<type::Production> &productions);
+
+  static ParsingTable FromRaw(
+    std::vector<std::unordered_map<Token, std::vector<CellTp>, Token::Hash>> action_table,
+    std::vector<std::unordered_map<Token, std::vector<IdType>, Token::Hash>> goto_table,
+    vector<type::Production> productions,
+    Token entry_token,
+    Token augmented_token,
+    Token epsilon_token
+  );
  
  private:
   vector<type::Production> productions_;
- 
- private:
   
   std::vector<std::unordered_map<Token, std::vector<CellTp>, Token::Hash>> action_table_;
   
@@ -108,6 +115,8 @@ class TableGenerateMethod {
   
   ParsingTable lr_table_;
 };
+
+ostream& operator<<(ostream& os, const ParsingTable::CellTp& cell);
 }
 
 #endif //SEULEXYACC_TABLEGENERATEMETHOD_H

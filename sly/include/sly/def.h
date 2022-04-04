@@ -94,11 +94,7 @@ class LrParser;
 }
 }
 
-namespace utils {
-
-class File;
-
-}
+namespace utils{}
 
 namespace lex {
 
@@ -121,6 +117,8 @@ extern YYSTATE yylval;
 class SeuLex;
 
 class SeuYacc;
+
+class Stream2TokenPipe;
 
 }
 }
