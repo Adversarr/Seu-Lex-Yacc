@@ -5,6 +5,7 @@
 #include <sly/FaModel.h>
 #include <sly/utils.h>
 #include <array>
+#include <sly/TableGenerateMethod.h>
 
 namespace sly::core::lexical {
 

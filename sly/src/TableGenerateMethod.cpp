@@ -85,7 +85,7 @@ vector<IdType> ParsingTable::GetGoto(IdType lhs, const Token &tok) const {
 }
 
 void ParsingTable::Print(ostream &os) const {
-  os << "sly::core::grammar::ParsingTable::FromRaw(";
+  os << "sly::core::grammar::ParsingTable(";
   // print out action table:
   os << "{";
   for (const auto &line : action_table_) {
@@ -95,16 +95,14 @@ void ParsingTable::Print(ostream &os) const {
       // print token:
       // Token(token.GetTokName(), token.GetTokenType(), token.GetTid(),
       // token.GetAttr());
-      os << "sly::core::type::Token(\"" << token.GetTokName() << "\","
-         << token.GetTokenType() << "," << token.GetTid() << ","
-         << token.GetAttr() << ")";
+      token.PrintImpl(os);
       // Print comma.
       os << ", {";
       // print cell:
       for (const auto &c : cell) {
         os << c << ",";
       }
-      os << "}},\n";
+      os << "}},";
     }
     os << "}, ";
   }
@@ -112,32 +110,28 @@ void ParsingTable::Print(ostream &os) const {
   // print out goto
   os << "{";
   for (const auto &line : goto_table_) {
+    // break;
     os << "{";
     for (const auto &[token, go] : line) {
-      os << "{sly::core::type::Token(\"" << token.GetTokName() << "\","
-         << token.GetTokenType() << "," << token.GetTid() << ","
-         << token.GetAttr() << "),{";
+      os << "{";
+      token.PrintImpl(os);
+      os << ",{";
       for (auto v : go) {
         os << v << ",";
       }
-      os << "}},\n";
+      os << "}},";
     }
     os << "},";
   }
   os << "}, productions,";
-  
-  // several tokens
-  os << "sly::core::type::Token(\"" << entry_token_.GetTokName() << "\","
-         << entry_token_.GetTokenType() << "," << entry_token_.GetTid() << ","
-         << entry_token_.GetAttr() << "),";
-  os << "sly::core::type::Token(\"" << augmented_token_.GetTokName() << "\","
-         << augmented_token_.GetTokenType() << "," << augmented_token_.GetTid() << ","
-         << augmented_token_.GetAttr() << "),";
 
-  os << "sly::core::type::Token(\"" << epsilon_token_.GetTokName() << "\","
-         << epsilon_token_.GetTokenType() << "," << epsilon_token_.GetTid() << ","
-         << epsilon_token_.GetAttr() << "))";
-  
+  // several tokens
+  entry_token_.PrintImpl(os);
+  os << ",";
+  augmented_token_.PrintImpl(os);
+  os << ",";
+  epsilon_token_.PrintImpl(os);
+  os << ")";
 }
 
 const vector<unordered_map<Token, vector<ParsingTable::CellTp>, Token::Hash>> &
@@ -217,16 +211,30 @@ ParsingTable ParsingTable::FromRaw(
   return pt;
 }
 
+ParsingTable::ParsingTable(
+    std::vector<std::unordered_map<Token, std::vector<CellTp>, Token::Hash>>
+        action_table,
+    std::vector<std::unordered_map<Token, std::vector<IdType>, Token::Hash>>
+        goto_table,
+    vector<type::Production> productions, Token entry_token,
+    Token augmented_token, Token epsilon_token)
+    : productions_(productions), action_table_(action_table),
+      goto_table_(goto_table), entry_token_(entry_token),
+      augmented_token_(augmented_token), epsilon_token_(epsilon_token) {}
+
 ostream &operator<<(ostream &os, const ParsingTable::CellTp &cell) {
   os << "sly::core::grammar::ParsingTable::CellTp{";
   if (cell.action == ParsingTable::kReduce) {
-    os << ".action = sly::core::grammar::ParsingTable::AutomataAction::kReduce,";
+    os << ".action = "
+          "sly::core::grammar::ParsingTable::AutomataAction::kReduce,";
   } else if (cell.action == ParsingTable::kAccept) {
-    os << ".action = sly::core::grammar::ParsingTable::AutomataAction::kAccept,";
+    os << ".action = "
+          "sly::core::grammar::ParsingTable::AutomataAction::kAccept,";
   } else if (cell.action == ParsingTable::kEmpty) {
     os << ".action = sly::core::grammar::ParsingTable::AutomataAction::kEmpty,";
   } else if (cell.action == ParsingTable::kShiftIn) {
-    os << ".action = sly::core::grammar::ParsingTable::AutomataAction::kShiftIn,";
+    os << ".action = "
+          "sly::core::grammar::ParsingTable::AutomataAction::kShiftIn,";
   } else {
     os << ".action = sly::core::grammar::ParsingTable::AutomataAction::kError,";
   }

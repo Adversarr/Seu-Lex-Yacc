@@ -25,7 +25,7 @@ bool Token::IsTerminator() const
 }
 
 Token::Token(string tok_name, Type tok_type, IdType tid, Attr attr) :
-  name_(std::move(tok_name)), tid_(tid), type_(tok_type)
+  name_(std::move(tok_name)), tid_(tid), type_(tok_type), attr_(attr)
 {
 }
 
@@ -43,6 +43,7 @@ Token::Token()
 {
   type_ = Type::kEpsilon;
   attr_ = Attr::kNone;
+  tid_ = 0;
 }
 
 
@@ -106,6 +107,7 @@ ostream &operator<<(ostream &os, const Token::Attr& attr) {
   } else if (attr == Token::Attr::kNone) {
     os << "sly::core::type::Token::Attr::kNone";
   } else {
+    utils::Log::GetGlobalLogger().Err((int) attr);
     assert(false);
   }
   return os;
@@ -124,5 +126,32 @@ ostream &operator<<(ostream &os, const Token::Type& type) {
   return os;
 }
 
+
+void Token::PrintImpl(std::ostream& os) const {
+  os << "sly::core::type::Token(\"" << GetTokName() << "\",";
+  auto type = GetTokenType();
+  auto attr= GetAttr();
+  if (type == Token::Type::kTerminator) {
+    os << "sly::core::type::Token::Type::kTerminator";
+  } else if (type == Token::Type::kNonTerminator) {
+    os << "sly::core::type::Token::Type::kNonTerminator";
+  } else if (type == Token::Type::kEpsilon) {
+    os << "sly::core::type::Token::Type::kEpsilon";
+  } else {
+    assert(false);
+  }
+  os << "," << GetTid() << ",";
+  if (attr == Token::Attr::kLeftAssociative) {
+    os << "sly::core::type::Token::Attr::kLeftAssociative";
+  } else if (attr == Token::Attr::kRightAssociative) {
+    os << "sly::core::type::Token::Attr::kRightAssociative";
+  } else if (attr == Token::Attr::kNone) {
+    os << "sly::core::type::Token::Attr::kNone";
+  } else {
+    utils::Log::GetGlobalLogger().Err((int) attr);
+    assert(false);
+  }
+  os << ")";
+}
 
 }

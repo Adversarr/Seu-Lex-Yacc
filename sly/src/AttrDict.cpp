@@ -11,6 +11,7 @@ map<std::type_index, std::function<std::string(const std::any& v)>> type_registe
   DECLARE_TYPE_REGISTERY(float),
   DECLARE_TYPE_REGISTERY(double),
   DECLARE_TYPE_REGISTERY(size_t),
+  DECLARE_TYPE_REGISTERY(char),
   DECLARE_TYPE_REGISTERY(std::string),
   DECLARE_TYPE_REGISTERY(long),
 };

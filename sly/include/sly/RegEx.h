@@ -8,10 +8,12 @@
 #include "FaModel.h"
 #include <memory>
 #include <string>
+#include <iostream>
 namespace sly::core::lexical {
 
 class RegEx {
  public:
+
   explicit RegEx(std::string expr, bool compile=false);
   
   bool CanMatch(std::string str);
@@ -20,10 +22,15 @@ class RegEx {
   
   
  private:
+
+  std::string expr_;
+
   std::unique_ptr<DfaModel> dfa_model_;
   
   std::unique_ptr<NfaModel> nfa_model_;
 };
+
+
 
 }
 #endif //SEULEXYACC_REGEX_H

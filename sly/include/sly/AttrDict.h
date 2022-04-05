@@ -6,6 +6,7 @@
 #define SEULEXYACC_ATTRDICT_H
 
 #include <any>
+#include <cassert>
 #include <string>
 #include <optional>
 #include <map>
@@ -71,9 +72,10 @@ T AttrDict::Get(const std::string& attr_name) const
 {
   // check attr_name available:
   auto i = attr_dict_.find(attr_name);
-  if (i == attr_dict_.end())
-    throw runtime_error("cannot find attribute[[" + attr_name + "]].");
-  
+  if (i == attr_dict_.end()){
+    utils::Log::GetGlobalLogger().Err("cannot find attribute[[" + attr_name + "]].");
+    assert(false);
+  }
   auto& v = i->second;
   // check has_value
   if (!v.has_value())

@@ -15,9 +15,9 @@ namespace sly::core::lexical {
 
 using AutomataState = bool;
 
-static constexpr AutomataState Accept = false;
+static constexpr AutomataState Accept = true;
 
-static constexpr AutomataState Decline = true;
+static constexpr AutomataState Decline = false;
 
 
 
@@ -89,6 +89,8 @@ class NfaModel
   NfaModel(const NfaModel &) = default;
   
   NfaModel(NfaModel &&) = default;
+
+  NfaModel& operator=(const NfaModel& another) = default;
  
  private:
   
@@ -125,6 +127,8 @@ class DfaModel
   static constexpr int entry_ = DFA_ENTRY_STATE_ID;
   
   explicit DfaModel(NfaModel &nfa);
+
+  DfaModel& operator=(const DfaModel& ) = default;
  
  public: // Getters
   const set<char> &GetCharset() const;

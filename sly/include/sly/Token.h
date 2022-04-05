@@ -40,9 +40,9 @@ class Token {
   
   Token();
   
-  static Token NonTerminator(string tok_name, IdType tid = -1, Attr attr = Attr::kNone);
+  static Token NonTerminator(string tok_name, IdType tid = 0, Attr attr = Attr::kNone);
   
-  static Token Terminator(string tok_name, IdType tid = -1, Attr attr = Attr::kNone);
+  static Token Terminator(string tok_name, IdType tid = 0, Attr attr = Attr::kNone);
  
   explicit Token(string tok_name, Type tok_type, IdType tid, Attr attr = Attr::kNone);
  public:
@@ -54,11 +54,13 @@ class Token {
   
   bool operator<(const Token &rhs) const;
 
+  void PrintImpl(std::ostream& os) const;
+
  
  private:
   IdType tid_;
   
-  Attr attr_ = Attr::kNone;
+  Attr attr_;
   
   std::string name_;
   

@@ -1,31 +1,31 @@
 //
 // Created by Yang Jerry on 2022/3/30.
 //
-#include <sly/def.h>
-#include <sly/Production.h>
 #include <iostream>
+#include <sly/Production.h>
+#include <sly/def.h>
 #include <sstream>
 
 namespace sly::core::type {
 bool Production::CheckHealth() const {
-  if (tokens_.empty())
+  if (tokens_.empty()){
     return false;
-  
-  if (tokens_.front().IsTerminator())
+  } else if (tokens_.front().IsTerminator()) {
     return false;
-  
-  if (tokens_.size() != actions_.size())
+  } else if (tokens_.size() != actions_.size()) {
     return false;
-  
-  return true;
+  } else {
+    return true;
+  }
 }
 
-Production::Production(std::vector<Token> tokens, std::vector<Action> actions) :
-  tokens_(std::move(tokens)), actions_(std::move(actions)) {
-}
+Production::Production(std::vector<Token> tokens, std::vector<Action> actions)
+    : tokens_(std::move(tokens)), actions_(std::move(actions)) {}
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "performance-unnecessary-value-param"
+
+
 
 Production Production::operator()(Token next_token) const {
   auto clone = *this;
@@ -45,37 +45,22 @@ bool Production::operator==(const Production &rhs) const {
   return tokens_ == rhs.tokens_ && actions_ == rhs.actions_;
 }
 
-Production::Production(Token start) :
-  tokens_{start}, actions_{Action()} {
-  
-}
+Production::Production(Token start) : tokens_{start}, actions_{Action()} {}
 
-Production::Production(Token start, Action act) :
-  tokens_{start}, actions_{act} {
-  
-}
+Production::Production(Token start, Action act)
+    : tokens_{start}, actions_{act} {}
 
-vector<Token> &Production::GetTokens() {
-  return tokens_;
-}
+vector<Token> &Production::GetTokens() { return tokens_; }
 
-const vector<Action> &Production::GetActions() const{
-  return actions_;
-}
+const vector<Action> &Production::GetActions() const { return actions_; }
 
-const vector<Token> &Production::GetTokens() const {
-  return cref(tokens_);
-}
+const vector<Token> &Production::GetTokens() const { return cref(tokens_); }
 
-bool Production::IsEpsilon() const {
-  return tokens_.size() == 1;
-}
+bool Production::IsEpsilon() const { return tokens_.size() == 1; }
 
-Production::Production(): tokens_({Token::NonTerminator("EMPTY")}) {
-}
+Production::Production() : tokens_({Token::NonTerminator("EMPTY")}) {}
 
-ostream &operator<<(ostream &os, const Production &prod)
-{
+ostream &operator<<(ostream &os, const Production &prod) {
   os << "Prod[" << prod.GetTokens().front() << " -> ";
   copy(prod.GetTokens().cbegin() + 1, prod.GetTokens().cend(),
        ostream_iterator<Token>(os, ", "));
@@ -83,5 +68,4 @@ ostream &operator<<(ostream &os, const Production &prod)
   return os;
 }
 
-
-}
+} // namespace sly::core::type

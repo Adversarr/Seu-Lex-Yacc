@@ -75,6 +75,14 @@ class ParsingTable
   const vector<type::Production> &GetProductions() const;
   
   void SetProductions(const vector<type::Production> &productions);
+  explicit ParsingTable (
+    std::vector<std::unordered_map<Token, std::vector<CellTp>, Token::Hash>> action_table,
+    std::vector<std::unordered_map<Token, std::vector<IdType>, Token::Hash>> goto_table,
+    vector<type::Production> productions,
+    Token entry_token,
+    Token augmented_token,
+    Token epsilon_token
+  );
 
   static ParsingTable FromRaw(
     std::vector<std::unordered_map<Token, std::vector<CellTp>, Token::Hash>> action_table,

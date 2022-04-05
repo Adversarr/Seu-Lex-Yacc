@@ -34,7 +34,7 @@ bool Action::operator==(const Action &rhs) const {
 
 
 std::ostream& operator <<(std::ostream& os, const Action& act) {
-  os << "sly::core::type::Action([](const std::vector<YYSTATE>& attr) {"
+  os << "sly::core::type::Action([](std::vector<YYSTATE>& v) {"
     << act.GetImpl() << "}, \"" << act.GetImpl() << "\"}";
   return os;
 }
