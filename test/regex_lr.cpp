@@ -4,6 +4,7 @@
 #include "sly/FaModel.h"
 #include "sly/LrParser.h"
 #include "sly/Production.h"
+#include "sly/RegEx.h"
 #include "sly/TableGenerateMethodImpl.h"
 #include "sly/Token.h"
 #include <ios>
@@ -28,6 +29,7 @@ auto rbrace = Token::Terminator(")");
 auto lbracket = Token::Terminator("[");
 auto rbracket = Token::Terminator("]");
 auto ch = Token::Terminator("ch");
+auto anti = Token::Terminator("^");
 auto star = Token::Terminator("*");
 auto dot = Token::Terminator(".");
 auto slash = Token::Terminator("-");
@@ -100,9 +102,7 @@ std::vector<Production> productions = {
     Production(non_empty_closure,
                Action(
                    [](std::vector<YYSTATE> &v) {
-                     v[0].Set("nfa",
-                              v[1].Get<NfaModel>("nfa").Cascade(
-                                  v[1].Get<NfaModel>("nfa").ToClosure()));
+                     v[0].Set("nfa", v[1].Get<NfaModel>("nfa").Cascade(v[1].Get<NfaModel>("nfa").ToClosure()));
                    },
                    "v[0].Set(\"nfa\", "
                    "v[1].Get<NfaModel>(\"nfa\").Cascade(v[1].Get<NfaModel>("
@@ -132,52 +132,83 @@ std::vector<Production> productions = {
     // support for grammar: [a-zA-z]
     Production(range, Action(
                           [](std::vector<YYSTATE> &v) {
-                            v[0].Set("nfa", v[2].Get<NfaModel>("nfa"));
+                            auto e = v[2].Get<set<char>>("cs");
+                            NfaModel nfa(e);
+                            v[0].Set("nfa", nfa);
                           },
-                          "v[0].Set(\"nfa\", v[2].Get<NfaModel>(\"nfa\"));"))(
+                          R"(auto e = v[2].Get<set<char>>("cs");
+                            NfaModel nfa(e);
+                            v[0].Set("nfa", nfa);)"))(
         lbracket)(range_content)(rbracket),
+    // support for grammar: [^a-zA-z]
+    Production(range, Action(
+                          [](std::vector<YYSTATE> &v) {
+                            set<char> cs;
+                            auto e = v[3].Get<set<char>>("cs");
+                            for (char c = 0; c <= 127 && c >= 0; ++c) {
+                              if (e.find(c) == e.end())
+                                cs.emplace(c);
+                            }
+                            NfaModel nfa(cs);
+                            v[0].Set("nfa", nfa);
+                          },
+                         R"(set<char> cs;
+                            auto e = v[3].Get<set<char>>("cs");
+                            for (char c = 0; c <= 127 && c >= 0; ++c) {
+                              if (e.find(c) == e.end())
+                                cs.emplace(c);
+                            }
+                            NfaModel nfa(cs);
+                            v[0].Set("nfa", nfa);)"))(
+        lbracket)(anti)(range_content)(rbracket),
     Production(range_content,
                Action(
                    [](std::vector<YYSTATE> &v) {
-                     v[0].Set("nfa", v[1].Get<NfaModel>("nfa") +
-                                         v[2].Get<NfaModel>("nfa"));
+                     set<char> cs{v[1].Get<char>("lval")};
+                     for (const auto &c : v[2].Get<set<char>>("cs")) {
+                       cs.insert(c);
+                     }
+                     v[0].Set("cs", cs);
                    },
-                   "v[0].Set(\"nfa\", v[1].Get<NfaModel>(\"nfa\") + "
-                   "v[2].Get<NfaModel>(\"nfa\"));"))(ch)(range_content),
+                   R"(set<char> cs{v[1].Get<char>("lval")};
+                     for (const auto &c : v[2].Get<set<char>>("cs")) {
+                       cs.insert(c);
+                     }
+                     v[0].Set("cs", cs);)"))(ch)(range_content),
     Production(
         range_content,
         Action(
             [](std::vector<YYSTATE> &v) {
               auto c_end = v[3].Get<char>("lval");
-              NfaModel nfa(c_end);
-              for (char c1 = v[1].Get<char>("lval"); c1 < c_end; ++c1) {
-                nfa = nfa.Combine(NfaModel(c1));
+              auto cs = v[4].Get<set<char>>("cs");
+              for (char c = v[1].Get<char>("lval"); c <= c_end; ++c) {
+                cs.insert(c);
               }
-              v[0].Set("nfa", nfa.Combine(v[4].Get<NfaModel>("nfa")));
+              v[0].Set("cs", cs);
             },
-            "auto c_end = v[3].Get<char>(\"lval\");"
-            "NfaModel nfa(c_end);"
-            "for (char c1 = v[1].Get<char>(\"lval\"); c1 < c_end; ++c1) {"
-            "nfa = nfa.Combine(NfaModel(c1));"
-            "}"
-            "v[0].Set(\"nfa\", nfa.Combine(v[4].Get<NfaModel>(\"nfa\")));"))(
-        ch)(slash)(ch)(range_content),
+            R"(auto c_end = v[3].Get<char>("lval");
+              auto cs = v[4].Get<set<char>>("cs");
+              for (char c = v[1].Get<char>("lval"); c <= c_end; ++c) {
+                cs.insert(c);
+              }
+              v[0].Set("cs", cs);)"))
+      (ch)(slash)(ch)(range_content),
     Production(range_content,
                Action(
                    [](std::vector<YYSTATE> &v) {
-                     v[0].Set("nfa", v[1].Get<NfaModel>("nfa"));
+                     v[0].Set("cs", set<char>{v[1].Get<char>("lval")});
                    },
-                   "v[0].Set(\"nfa\", v[1].Get<NfaModel>(\"nfa\"));"))(ch),
+                   R"(v[0].Set("cs", set<char>{v[1].Get<char>("lval")});)"))(ch),
     Production(
         range_content,
         Action(
             [](std::vector<YYSTATE> &v) {
               auto c_end = v[3].Get<char>("lval");
-              NfaModel nfa(c_end);
-              for (char c1 = v[1].Get<char>("lval"); c1 < c_end; ++c1) {
-                nfa = nfa.Combine(NfaModel(c1));
+              set<char> cs;
+              for (char c = v[1].Get<char>("lval"); c <= c_end; ++c) {
+                cs.insert(c);
               }
-              v[0].Set("nfa", nfa);
+              v[0].Set("cs", cs);
             },
             "auto c_end = v[3].Get<char>(\"lval\");"
             "NfaModel nfa(c_end);"
@@ -191,7 +222,6 @@ std::optional<std::pair<Token, AttrDict>> stream2token(std::istream &is) {
     return {};
   }
   char c = is.get();
-  sly::utils::Log::GetGlobalLogger().Info((int)c);
   if (c == '(') {
     return {{lbrace, AttrDict()}};
   } else if (c == ')') {
@@ -208,6 +238,8 @@ std::optional<std::pair<Token, AttrDict>> stream2token(std::istream &is) {
     return {{dash, {}}};
   } else if (c == '-') {
     return {{slash, {}}};
+  } else if (c == '^') {
+    return {{anti, {}}};
   } else if (c == '+') {
     return {{pl, {}}};
   } else if (c <= 0) {
@@ -229,10 +261,9 @@ std::optional<std::pair<Token, AttrDict>> stream2token(std::istream &is) {
 }
 
 int main() {
-  std::istringstream iss("[a-zA-Z][a-zA-Z0-9]*");
+  std::istringstream iss("[^ab]*[ab]+");
 
   dash.SetAttr(Token::Attr::kLeftAssociative);
-
   sly::core::grammar::ContextFreeGrammar grammar{productions, seq, eof_token};
 
   sly::core::grammar::Lr1 lr1;
@@ -245,7 +276,6 @@ int main() {
   for (;;) {
     auto token = stream2token(iss);
     if (token.has_value()) {
-      sly::utils::Log::GetGlobalLogger().Info("Caught ", token.value().first);
       token_input.push_back(token.value().first);
       ad_input.push_back(token.value().second);
     } else {
@@ -257,17 +287,21 @@ int main() {
   }
   parser.Parse(token_input, ad_input);
   auto tree = parser.GetTree();
-  // tree.Print(std::cout);
-  // tree.Annotate();
-  // auto nfa = tree.GetRootAttributes()[0].Get<NfaModel>("nfa");
-  // sly::utils::Log::GetGlobalLogger().Info("nfa generated.");
-  // DfaModel dfa(nfa);
-  // sly::utils::Log::GetGlobalLogger().Info("dfa generated.");
-  // sly::core::lexical::DfaController dc(dfa);
-  // for(const auto &c: std::string("identifier0")) {
-  //   dc = dc.Defer(c);
-  // }
-  // std::cout << std::boolalpha << static_cast<bool>(dc.CanAccept());
+  tree.Print(std::cout);
+  tree.Annotate();
+  tree.Print(std::cout);
+  auto nfa = tree.GetRootAttributes()[0].Get<NfaModel>("nfa");
+  auto dfa = sly::core::lexical::DfaModel(nfa);
+  auto dfaController = sly::core::lexical::DfaController(dfa);
+  for (auto c: dfa.GetCharset()) {
+    std::cout << c;
+  }
+  std::cout << std::endl;
+  int i = 0;
+  for (auto c : "123ab") {
+    std::cout << c << "\t" << std::boolalpha << dfaController.CanAccept() << std::endl;
+    dfaController = dfaController.Defer(c);
+  }
 
   return 0;
 }

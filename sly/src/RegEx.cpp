@@ -4,6 +4,7 @@
 
 #include "sly/FaModel.h"
 #include "sly/LrParser.h"
+#include <cstddef>
 #include <optional>
 #include <sly/AttrDict.h>
 #include <sly/Production.h>
@@ -19,6 +20,16 @@ sly::core::lexical::RegEx::RegEx(std::string expr, bool compile) : expr_(expr) {
   if (compile) {
     Compile();
   }
+}
+bool RegEx::CanMatch(std::string str) {
+  if (dfa_model_ == nullptr) {
+    return false;
+  }
+  DfaController dc(*dfa_model_);
+  for (auto c : str) {
+    dc.Defer(c);
+  }
+  return dc.CanAccept();
 }
 
 using sly::core::grammar::LrParser;
@@ -189,7 +200,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -241,6 +252,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                      .action = sly::core::grammar::ParsingTable::
                          AutomataAction::kShiftIn,
                      .id = 9},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
              }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
@@ -281,7 +301,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -334,6 +354,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kError,
                      .id = 0},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -365,7 +394,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -418,6 +447,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kShiftIn,
                      .id = 9},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -457,7 +495,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -510,6 +548,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kReduce,
                      .id = 5},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -549,7 +596,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -601,6 +648,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                      .action = sly::core::grammar::ParsingTable::
                          AutomataAction::kReduce,
                      .id = 7},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
              }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
@@ -641,7 +697,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -694,6 +750,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kReduce,
                      .id = 4},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -733,7 +798,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -786,6 +851,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kReduce,
                      .id = 11},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -825,7 +899,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -878,6 +952,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kShiftIn,
                      .id = 22},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -917,7 +1000,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -970,6 +1053,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kReduce,
                      .id = 10},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -1009,7 +1101,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -1062,6 +1154,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kError,
                      .id = 0},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 25},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -1101,7 +1202,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -1154,6 +1255,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kShiftIn,
                      .id = 9},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -1193,7 +1303,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -1246,6 +1356,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kError,
                      .id = 0},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -1285,7 +1404,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -1338,6 +1457,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kReduce,
                      .id = 6},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -1377,7 +1505,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -1430,6 +1558,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kReduce,
                      .id = 8},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -1469,41 +1606,41 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kShiftIn,
-                     .id = 26},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
              {
                  sly::core::grammar::ParsingTable::CellTp{
                      .action = sly::core::grammar::ParsingTable::
                          AutomataAction::kShiftIn,
                      .id = 27},
              }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 28},
+             }},
             {sly::core::type::Token("ch",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -1514,6 +1651,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                      .id = 0},
              }},
             {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("^",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
              {
@@ -1561,7 +1707,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -1614,6 +1760,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kShiftIn,
                      .id = 22},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -1653,7 +1808,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -1706,6 +1861,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kReduce,
                      .id = 5},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -1745,7 +1909,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -1798,6 +1962,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kReduce,
                      .id = 7},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -1837,7 +2010,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -1846,15 +2019,6 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                      .id = 4},
              }},
             {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kShiftIn,
-                     .id = 29},
-             }},
-            {sly::core::type::Token("+",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
              {
@@ -1863,6 +2027,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kShiftIn,
                      .id = 30},
              }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 31},
+             }},
             {sly::core::type::Token("(",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -1889,6 +2062,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                      .action = sly::core::grammar::ParsingTable::
                          AutomataAction::kReduce,
                      .id = 4},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
              }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
@@ -1929,7 +2111,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -1982,6 +2164,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kReduce,
                      .id = 11},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -2021,7 +2212,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -2074,6 +2265,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kShiftIn,
                      .id = 22},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -2113,7 +2313,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -2166,6 +2366,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kReduce,
                      .id = 10},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -2205,7 +2414,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -2258,6 +2467,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kError,
                      .id = 0},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 34},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -2297,7 +2515,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -2350,35 +2568,16 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kError,
                      .id = 0},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kShiftIn,
-                     .id = 33},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("-",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
              {
@@ -2387,162 +2586,6 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kShiftIn,
                      .id = 35},
              }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kShiftIn,
-                     .id = 24},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 15},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 2},
-             }},
-            {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 2},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
             {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
                                     0, sly::core::type::Token::Attr::kNone),
              {
@@ -2563,503 +2606,6 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                      .id = 0},
              }},
             {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kShiftIn,
-                     .id = 20},
-             }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kShiftIn,
-                     .id = 21},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kShiftIn,
-                     .id = 22},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 9},
-             }},
-            {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 9},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 9},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 9},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 9},
-             }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 9},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 9},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 3},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 3},
-             }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 6},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 6},
-             }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 6},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 6},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 8},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 8},
-             }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 8},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 8},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kShiftIn,
-                     .id = 26},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("(",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
              {
@@ -3068,708 +2614,9 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kShiftIn,
                      .id = 37},
              }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kShiftIn,
-                     .id = 38},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 12},
-             }},
-            {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 12},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 12},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 12},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 12},
-             }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 12},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 12},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 13},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kShiftIn,
-                     .id = 39},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 2},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 2},
-             }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 9},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 9},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 9},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 9},
-             }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 9},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 9},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
-                 sly::core::type::Token::Attr::kLeftAssociative),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 12},
-             }},
-            {sly::core::type::Token("*",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 12},
-             }},
-            {sly::core::type::Token("+",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 12},
-             }},
-            {sly::core::type::Token("(",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 12},
-             }},
-            {sly::core::type::Token("ch",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 12},
-             }},
-            {sly::core::type::Token("[",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kReduce,
-                     .id = 12},
-             }},
-            {sly::core::type::Token("]",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-        },
-        {
-            {sly::core::type::Token("eof",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token("-",
-                                    sly::core::type::Token::Type::kTerminator,
-                                    0, sly::core::type::Token::Attr::kNone),
-             {
-                 sly::core::grammar::ParsingTable::CellTp{
-                     .action = sly::core::grammar::ParsingTable::
-                         AutomataAction::kError,
-                     .id = 0},
-             }},
-            {sly::core::type::Token(
-                 "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -3814,6 +2661,15 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                      .id = 24},
              }},
             {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("^",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
              {
@@ -3861,7 +2717,815 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
              }},
             {sly::core::type::Token(
                  "|", sly::core::type::Token::Type::kTerminator,
-                 0,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 24},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 2},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 2},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 20},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 21},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 22},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 9},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 9},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 9},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 9},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 9},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 9},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 9},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 3},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 3},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 6},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 6},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 6},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 6},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 8},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 8},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 8},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 8},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 27},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 40},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
                  sly::core::type::Token::Attr::kLeftAssociative),
              {
                  sly::core::grammar::ParsingTable::CellTp{
@@ -3914,6 +3578,318 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                          AutomataAction::kError,
                      .id = 0},
              }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 41},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 24},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 12},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 12},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 12},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 12},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 12},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 12},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 12},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
             {sly::core::type::Token("]",
                                     sly::core::type::Token::Type::kTerminator,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -3922,6 +3898,1016 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                      .action = sly::core::grammar::ParsingTable::
                          AutomataAction::kReduce,
                      .id = 14},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 43},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 44},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 2},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 2},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 9},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 9},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 9},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 9},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 9},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 9},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 12},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 12},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 12},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 12},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 12},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 12},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 45},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kShiftIn,
+                     .id = 24},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 17},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 13},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 13},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 13},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 13},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 13},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 13},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 13},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 13},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 13},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 13},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 13},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 13},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 13},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+        },
+        {
+            {sly::core::type::Token("eof",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("-",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token(
+                 "|", sly::core::type::Token::Type::kTerminator,
+                 18446744073709551615,
+                 sly::core::type::Token::Attr::kLeftAssociative),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("*",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("+",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("(",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("ch",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("[",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("^",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kError,
+                     .id = 0},
+             }},
+            {sly::core::type::Token("]",
+                                    sly::core::type::Token::Type::kTerminator,
+                                    0, sly::core::type::Token::Attr::kNone),
+             {
+                 sly::core::grammar::ParsingTable::CellTp{
+                     .action = sly::core::grammar::ParsingTable::
+                         AutomataAction::kReduce,
+                     .id = 15},
              }},
             {sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon,
                                     0, sly::core::type::Token::Attr::kNone),
@@ -4070,7 +5056,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                  "seq", sly::core::type::Token::Type::kNonTerminator, 0,
                  sly::core::type::Token::Attr::kNone),
              {
-                 25,
+                 26,
              }},
             {sly::core::type::Token(
                  "item", sly::core::type::Token::Type::kNonTerminator, 0,
@@ -4113,7 +5099,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                  "seq", sly::core::type::Token::Type::kNonTerminator, 0,
                  sly::core::type::Token::Attr::kNone),
              {
-                 28,
+                 29,
              }},
             {sly::core::type::Token(
                  "item", sly::core::type::Token::Type::kNonTerminator, 0,
@@ -4155,49 +5141,40 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
             {sly::core::type::Token(
                  "seq", sly::core::type::Token::Type::kNonTerminator, 0,
                  sly::core::type::Token::Attr::kNone),
-             {
-                 31,
-             }},
-            {sly::core::type::Token(
-                 "item", sly::core::type::Token::Type::kNonTerminator, 0,
-                 sly::core::type::Token::Attr::kNone),
-             {
-                 15,
-             }},
-            {sly::core::type::Token(
-                 "closure", sly::core::type::Token::Type::kNonTerminator, 0,
-                 sly::core::type::Token::Attr::kNone),
-             {
-                 16,
-             }},
-            {sly::core::type::Token(
-                 "non-empty-closure",
-                 sly::core::type::Token::Type::kNonTerminator, 0,
-                 sly::core::type::Token::Attr::kNone),
-             {
-                 17,
-             }},
-            {sly::core::type::Token(
-                 "atom", sly::core::type::Token::Type::kNonTerminator, 0,
-                 sly::core::type::Token::Attr::kNone),
-             {
-                 18,
-             }},
-            {sly::core::type::Token(
-                 "range", sly::core::type::Token::Type::kNonTerminator, 0,
-                 sly::core::type::Token::Attr::kNone),
-             {
-                 19,
-             }},
-        },
-        {},
-        {
-            {sly::core::type::Token(
-                 "range-content", sly::core::type::Token::Type::kNonTerminator,
-                 0, sly::core::type::Token::Attr::kNone),
              {
                  32,
              }},
+            {sly::core::type::Token(
+                 "item", sly::core::type::Token::Type::kNonTerminator, 0,
+                 sly::core::type::Token::Attr::kNone),
+             {
+                 15,
+             }},
+            {sly::core::type::Token(
+                 "closure", sly::core::type::Token::Type::kNonTerminator, 0,
+                 sly::core::type::Token::Attr::kNone),
+             {
+                 16,
+             }},
+            {sly::core::type::Token(
+                 "non-empty-closure",
+                 sly::core::type::Token::Type::kNonTerminator, 0,
+                 sly::core::type::Token::Attr::kNone),
+             {
+                 17,
+             }},
+            {sly::core::type::Token(
+                 "atom", sly::core::type::Token::Type::kNonTerminator, 0,
+                 sly::core::type::Token::Attr::kNone),
+             {
+                 18,
+             }},
+            {sly::core::type::Token(
+                 "range", sly::core::type::Token::Type::kNonTerminator, 0,
+                 sly::core::type::Token::Attr::kNone),
+             {
+                 19,
+             }},
         },
         {},
         {
@@ -4205,7 +5182,24 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                  "range-content", sly::core::type::Token::Type::kNonTerminator,
                  0, sly::core::type::Token::Attr::kNone),
              {
-                 34,
+                 33,
+             }},
+        },
+        {},
+        {
+            {sly::core::type::Token(
+                 "range-content", sly::core::type::Token::Type::kNonTerminator,
+                 0, sly::core::type::Token::Attr::kNone),
+             {
+                 36,
+             }},
+        },
+        {
+            {sly::core::type::Token(
+                 "range-content", sly::core::type::Token::Type::kNonTerminator,
+                 0, sly::core::type::Token::Attr::kNone),
+             {
+                 38,
              }},
         },
         {},
@@ -4214,7 +5208,7 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                  "seq", sly::core::type::Token::Type::kNonTerminator, 0,
                  sly::core::type::Token::Attr::kNone),
              {
-                 36,
+                 39,
              }},
             {sly::core::type::Token(
                  "item", sly::core::type::Token::Type::kNonTerminator, 0,
@@ -4254,6 +5248,16 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
         {},
         {},
         {},
+        {
+            {sly::core::type::Token(
+                 "range-content", sly::core::type::Token::Type::kNonTerminator,
+                 0, sly::core::type::Token::Attr::kNone),
+             {
+                 42,
+             }},
+        },
+        {},
+        {},
         {},
         {},
         {},
@@ -4265,9 +5269,11 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
                  "range-content", sly::core::type::Token::Type::kNonTerminator,
                  0, sly::core::type::Token::Attr::kNone),
              {
-                 40,
+                 46,
              }},
         },
+        {},
+        {},
         {},
     },
     productions,
@@ -4279,9 +5285,8 @@ grammar::ParsingTable table = sly::core::grammar::ParsingTable(
     sly::core::type::Token("", sly::core::type::Token::Type::kEpsilon, 0,
                            sly::core::type::Token::Attr::kNone));
 
-
 void RegEx::Compile() {
-  std::istringstream is(expr_); 
+  std::istringstream is(expr_);
   LrParser parser(table);
   vector<Token> token_input;
   vector<AttrDict> ad_input;

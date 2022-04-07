@@ -86,6 +86,8 @@ class NfaModel
   explicit NfaModel(set<char> &&charset, set<int> &&entries, vector<AutomataState> &&states,
                     vector<map<char, set<int>>> &&transition);
   
+  explicit NfaModel(set<char> accept);
+  
   NfaModel(const NfaModel &) = default;
   
   NfaModel(NfaModel &&) = default;
@@ -152,10 +154,6 @@ class DfaModel
   // 状态转移矩阵
   vector<map<char, int>> transition_;
 };
-
-
-
-
 
 class DfaController
 {

@@ -5,6 +5,7 @@
 #include <sly/FaModel.h>
 #include <sly/utils.h>
 #include <array>
+#include <utility>
 #include <sly/TableGenerateMethod.h>
 
 namespace sly::core::lexical {
@@ -207,6 +208,13 @@ set<int> NfaModel::GetEpsilonClosure(const set<int> &s) const {
 
 const set<char> &NfaModel::GetCharset() const {
   return charset_;
+}
+
+NfaModel::NfaModel(set<char> accept): charset_(std::move(accept)),
+  states_{Decline, Accept}, transition_(2), entries_{0} {
+  for (const auto &c: charset_) {
+    transition_[0].insert({c, {1}});
+  }
 }
 
 DfaModel::DfaModel(NfaModel &nfa) :
