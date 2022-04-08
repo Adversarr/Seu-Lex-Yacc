@@ -4,7 +4,10 @@
 
 #include <sly/TableGenerateMethodImpl.h>
 #include <sly/utils.h>
+#include <iostream>
 #include <sstream>
+#include <iterator>
+
 
 
 namespace sly::core::grammar {

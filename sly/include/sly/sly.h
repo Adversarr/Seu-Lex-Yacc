@@ -14,6 +14,6 @@
 #include <sly/TableGenerateMethodImpl.h>
 #include <sly/FaModel.h>
 #include <sly/LrParser.h>
-
+#include <sly/RegEx.h>
 
 #endif //SEULEXYACC_SLY_H

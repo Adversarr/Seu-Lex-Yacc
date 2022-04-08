@@ -13,6 +13,7 @@
 #include <map>
 #include <unordered_map>
 #include <sstream>
+#include <functional>
 
 #include <concepts>
 

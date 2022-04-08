@@ -6,8 +6,11 @@
 #define SEULEXYACC_FAMODEL_H
 #include "def.h"
 #include <vector>
+#include <array>
 #include <set>
 #include <map>
+#include <optional>
+#include <memory>
 
 using namespace std;
 
@@ -81,7 +84,7 @@ class NfaModel
    * 创建一个接受单个字符 opt_c 的自动机
    * @param opt_c
    */
-  explicit NfaModel(optional<char> opt_c);
+  explicit NfaModel(std::optional<char> opt_c);
   
   explicit NfaModel(set<char> &&charset, set<int> &&entries, vector<AutomataState> &&states,
                     vector<map<char, set<int>>> &&transition);
@@ -120,10 +123,11 @@ NfaModel operator ++(const NfaModel& na);
 class DfaModel
 {
  public:
-  struct CStyleTable {
-    vector<bool> can_accept_;
+  class CStyleTable {
+   public:
+    vector<int> can_accept_;
     
-    vector<array<int, 128>> transition_;
+    vector<vector<int>> transition_;
   };
   
   static constexpr int entry_ = DFA_ENTRY_STATE_ID;
@@ -140,6 +144,8 @@ class DfaModel
   const vector<map<char, int>> &GetTransition() const;
   
   optional<int> Defer(int sid, char c) const;
+
+  static pair<vector<vector<int>>, vector<int>> Merge(const std::vector<DfaModel>& dfa_list);
   
   CStyleTable ToCTable() const;
  

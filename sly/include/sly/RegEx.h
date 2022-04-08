@@ -20,16 +20,19 @@ class RegEx {
   
   void Compile();
   
-  
+  inline const DfaModel& GetDfaModel() const ;
+
  private:
 
   std::string expr_;
 
-  std::unique_ptr<DfaModel> dfa_model_;
-  
-  std::unique_ptr<NfaModel> nfa_model_;
+  DfaModel dfa_model_;
+
 };
 
+const DfaModel& RegEx::GetDfaModel() const {
+  return dfa_model_;
+}
 
 
 }

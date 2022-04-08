@@ -71,7 +71,6 @@ ostream &operator<<(ostream &os, const Token &tok);
 
 ostream &operator<<(ostream &os, const Token::Attr& attr);
 
-
 ostream &operator<<(ostream &os, const Token::Type& type);
 }
 #endif //SEULEXYACC_TOKEN_H

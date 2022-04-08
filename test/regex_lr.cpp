@@ -34,7 +34,7 @@ auto star = Token::Terminator("*");
 auto dot = Token::Terminator(".");
 auto slash = Token::Terminator("-");
 auto pl = Token::Terminator("+");
-auto dash = Token::Terminator("|", -1, Token::Attr::kLeftAssociative);
+auto dash = Token::Terminator("|", 0, Token::Attr::kLeftAssociative);
 auto atom = Token::NonTerminator("atom");
 auto item = Token::NonTerminator("item");
 auto range = Token::NonTerminator("range");
@@ -261,9 +261,7 @@ std::optional<std::pair<Token, AttrDict>> stream2token(std::istream &is) {
 }
 
 int main() {
-  std::istringstream iss("[^ab]*[ab]+");
-
-  dash.SetAttr(Token::Attr::kLeftAssociative);
+  std::istringstream iss("ab*d+");
   sly::core::grammar::ContextFreeGrammar grammar{productions, seq, eof_token};
 
   sly::core::grammar::Lr1 lr1;
@@ -298,7 +296,7 @@ int main() {
   }
   std::cout << std::endl;
   int i = 0;
-  for (auto c : "123ab") {
+  for (auto c : "abd") {
     std::cout << c << "\t" << std::boolalpha << dfaController.CanAccept() << std::endl;
     dfaController = dfaController.Defer(c);
   }
