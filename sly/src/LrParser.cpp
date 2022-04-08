@@ -64,7 +64,7 @@ void LrParser::ParseOnce(const vector<Token> &token_stream, const vector<YYSTATE
       apt_stack_.emplace_back(apt);
       const auto& go = pt_.GetGoto(state_stack_.back(), prod.GetTokens().front());
       if (go.size() != 1) {
-        utils::Log::GetGlobalLogger().Err("Found invalid goto.");
+        utils::Log::GetGlobalLogger().Err("Found invalid goto. from ", state_stack_.back(), " to ", prod.GetTokens().front());
         assert(false);
       }
       state_stack_.emplace_back(go[0]);

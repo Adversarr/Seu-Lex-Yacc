@@ -7,24 +7,32 @@
 
 #include "def.h"
 #include "Token.h"
+#include "AttrDict.h"
 #include <iostream>
+#include <string>
 #include <vector>
 
 namespace sly::runtime {
 
 class Stream2TokenPipe {
  public:
-  explicit Stream2TokenPipe(std::vector<std::vector<int>> working_table, std::vector<int> accept_states);
+  explicit Stream2TokenPipe(std::vector<std::vector<int>> working_table, 
+    std::vector<int> accept_states, std::vector<core::type::Token> corr_token, core::type::Token end_token);
 
   core::type::Token Defer(std::istream& is);
  
  private:
+  std::string yytext;
+
+  YYSTATE yylval;
 
   std::vector<std::vector<int>> table_;
   
   std::vector<int> accept_states_;
 
   vector<core::type::Token> token_list_;
+
+  core::type::Token end_token_;
 };
 
 } // namespace sly::runtime

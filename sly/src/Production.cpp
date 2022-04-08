@@ -5,6 +5,7 @@
 #include <sly/Production.h>
 #include <sly/def.h>
 #include <sstream>
+#include <iterator>
 
 namespace sly::core::type {
 bool Production::CheckHealth() const {

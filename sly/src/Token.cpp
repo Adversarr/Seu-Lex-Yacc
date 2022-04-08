@@ -4,6 +4,7 @@
 
 #include <sly/Token.h>
 #include <sly/utils.h>
+#include <cassert>
 
 namespace sly::core::type {
 
