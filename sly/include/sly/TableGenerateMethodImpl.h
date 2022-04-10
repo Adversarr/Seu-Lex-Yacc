@@ -11,10 +11,7 @@
 namespace sly::core::grammar {
 
 class Lr1: public TableGenerateMethod{
-//  TODO:
   using TokenSet = unordered_set<Token, Token::Hash>;
-  
-  
 
  public:
   void Defer(const ContextFreeGrammar &cfg) override;

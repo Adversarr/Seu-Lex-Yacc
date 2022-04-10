@@ -114,7 +114,7 @@ std::vector<Production> productions = {
                            v[0].Set("nfa", v[2].Get<NfaModel>("nfa"));
                          },
                          "v[0].Set(\"nfa\", v[2].Get<NfaModel>(\"nfa\"));"))(
-        lbrace)(seq)(lbrace),
+        lbrace)(seq)(rbrace),
     // an atom can be a char
     Production(atom,
                Action(
@@ -215,7 +215,19 @@ std::vector<Production> productions = {
             "for (char c1 = v[1].Get<char>(\"lval\"); c1 < c_end; ++c1) {"
             "nfa = nfa.Combine(NfaModel(c1));"
             "}"
-            "v[0].Set(\"nfa\", nfa);"))(ch)(slash)(ch)};
+            "v[0].Set(\"nfa\", nfa);"))(ch)(slash)(ch),
+    Production(atom, Action{[](std::vector<YYSTATE>& v){
+      set<char> cs;
+      for (char c = 1; c < static_cast<char>(127); ++c) {
+        cs.emplace(c);
+      }
+      v[0].Set("nfa", NfaModel(cs));
+    }, R"([](std::vector<YYSTATE>& v){
+      set<char> cs;
+      for (char c = 1; c < static_cast<char>(127); ++c) {
+        cs.emplace(c);
+      }
+      v[0].Set("nfa", NfaModel(cs));)"})(dot)};
 
 std::optional<std::pair<Token, AttrDict>> stream2token(std::istream &is) {
   if (is.eof() || !is.good() || is.bad() || is.fail()) {
@@ -261,7 +273,7 @@ std::optional<std::pair<Token, AttrDict>> stream2token(std::istream &is) {
 }
 
 int main() {
-  std::istringstream iss("ab*d+");
+  std::istringstream iss("(1|2|3)+");
   sly::core::grammar::ContextFreeGrammar grammar{productions, seq, eof_token};
 
   sly::core::grammar::Lr1 lr1;
@@ -296,7 +308,7 @@ int main() {
   }
   std::cout << std::endl;
   int i = 0;
-  for (auto c : "abd") {
+  for (auto c : "1234") {
     std::cout << c << "\t" << std::boolalpha << dfaController.CanAccept() << std::endl;
     dfaController = dfaController.Defer(c);
   }

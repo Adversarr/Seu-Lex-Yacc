@@ -20,11 +20,13 @@ class Stream2TokenPipe {
     std::vector<int> accept_states, std::vector<core::type::Token> corr_token, core::type::Token end_token);
 
   core::type::Token Defer(std::istream& is);
- 
- private:
-  std::string yytext;
 
-  YYSTATE yylval;
+  void SetIngore(std::vector<core::type::Token> ignored_token);
+
+  std::string buffer_;
+
+ private:
+
 
   std::vector<std::vector<int>> table_;
   

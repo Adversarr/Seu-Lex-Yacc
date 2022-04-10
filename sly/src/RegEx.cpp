@@ -59,7 +59,6 @@ auto non_empty_closure = Token::NonTerminator("non-empty-closure");
 auto seq = Token::NonTerminator("seq");
 auto eof_token = Token::Terminator("eof");
 
-
 std::vector<Production> productions = {
     // An regex is a sequential string.
     Production(seq,
@@ -118,9 +117,7 @@ std::vector<Production> productions = {
     Production(non_empty_closure,
                Action(
                    [](std::vector<YYSTATE> &v) {
-                     v[0].Set("nfa",
-                              v[1].Get<NfaModel>("nfa").Cascade(
-                                  v[1].Get<NfaModel>("nfa").ToClosure()));
+                     v[0].Set("nfa", v[1].Get<NfaModel>("nfa").Cascade(v[1].Get<NfaModel>("nfa").ToClosure()));
                    },
                    "v[0].Set(\"nfa\", "
                    "v[1].Get<NfaModel>(\"nfa\").Cascade(v[1].Get<NfaModel>("
@@ -132,7 +129,7 @@ std::vector<Production> productions = {
                            v[0].Set("nfa", v[2].Get<NfaModel>("nfa"));
                          },
                          "v[0].Set(\"nfa\", v[2].Get<NfaModel>(\"nfa\"));"))(
-        lbrace)(seq)(lbrace),
+        lbrace)(seq)(rbrace),
     // an atom can be a char
     Production(atom,
                Action(
@@ -156,8 +153,8 @@ std::vector<Production> productions = {
                           },
                           R"(auto e = v[2].Get<set<char>>("cs");
                             NfaModel nfa(e);
-                            v[0].Set("nfa", nfa);)"))(lbracket)(
-        range_content)(rbracket),
+                            v[0].Set("nfa", nfa);)"))(
+        lbracket)(range_content)(rbracket),
     // support for grammar: [^a-zA-z]
     Production(range, Action(
                           [](std::vector<YYSTATE> &v) {
@@ -170,52 +167,53 @@ std::vector<Production> productions = {
                             NfaModel nfa(cs);
                             v[0].Set("nfa", nfa);
                           },
-                          R"(set<char> cs;
+                         R"(set<char> cs;
                             auto e = v[3].Get<set<char>>("cs");
                             for (char c = 0; c <= 127 && c >= 0; ++c) {
                               if (e.find(c) == e.end())
                                 cs.emplace(c);
                             }
                             NfaModel nfa(cs);
-                            v[0].Set("nfa", nfa);)"))(lbracket)(
-        anti)(range_content)(rbracket),
-    Production(range_content, Action(
-                                  [](std::vector<YYSTATE> &v) {
-                                    set<char> cs{v[1].Get<char>("lval")};
-                                    for (const auto &c :
-                                         v[2].Get<set<char>>("cs")) {
-                                      cs.insert(c);
-                                    }
-                                    v[0].Set("cs", cs);
-                                  },
-                                  R"(set<char> cs{v[1].Get<char>("lval")};
+                            v[0].Set("nfa", nfa);)"))(
+        lbracket)(anti)(range_content)(rbracket),
+    Production(range_content,
+               Action(
+                   [](std::vector<YYSTATE> &v) {
+                     set<char> cs{v[1].Get<char>("lval")};
+                     for (const auto &c : v[2].Get<set<char>>("cs")) {
+                       cs.insert(c);
+                     }
+                     v[0].Set("cs", cs);
+                   },
+                   R"(set<char> cs{v[1].Get<char>("lval")};
                      for (const auto &c : v[2].Get<set<char>>("cs")) {
                        cs.insert(c);
                      }
                      v[0].Set("cs", cs);)"))(ch)(range_content),
-    Production(range_content, Action(
-                                  [](std::vector<YYSTATE> &v) {
-                                    auto c_end = v[3].Get<char>("lval");
-                                    auto cs = v[4].Get<set<char>>("cs");
-                                    for (char c = v[1].Get<char>("lval");
-                                         c <= c_end; ++c) {
-                                      cs.insert(c);
-                                    }
-                                    v[0].Set("cs", cs);
-                                  },
-                                  R"(auto c_end = v[3].Get<char>("lval");
+    Production(
+        range_content,
+        Action(
+            [](std::vector<YYSTATE> &v) {
+              auto c_end = v[3].Get<char>("lval");
               auto cs = v[4].Get<set<char>>("cs");
               for (char c = v[1].Get<char>("lval"); c <= c_end; ++c) {
                 cs.insert(c);
               }
-              v[0].Set("cs", cs);)"))(ch)(slash)(ch)(range_content),
+              v[0].Set("cs", cs);
+            },
+            R"(auto c_end = v[3].Get<char>("lval");
+              auto cs = v[4].Get<set<char>>("cs");
+              for (char c = v[1].Get<char>("lval"); c <= c_end; ++c) {
+                cs.insert(c);
+              }
+              v[0].Set("cs", cs);)"))
+      (ch)(slash)(ch)(range_content),
     Production(range_content,
                Action(
                    [](std::vector<YYSTATE> &v) {
                      v[0].Set("cs", set<char>{v[1].Get<char>("lval")});
                    },
-                   R"(v[0].Set("cs", set<char>{v[1].Get<char>("lval")});)"))(
-        ch),
+                   R"(v[0].Set("cs", set<char>{v[1].Get<char>("lval")});)"))(ch),
     Production(
         range_content,
         Action(
@@ -232,7 +230,20 @@ std::vector<Production> productions = {
             "for (char c1 = v[1].Get<char>(\"lval\"); c1 < c_end; ++c1) {"
             "nfa = nfa.Combine(NfaModel(c1));"
             "}"
-            "v[0].Set(\"nfa\", nfa);"))(ch)(slash)(ch)};
+            "v[0].Set(\"nfa\", nfa);"))(ch)(slash)(ch),
+    Production(atom, Action{[](std::vector<YYSTATE>& v){
+      set<char> cs;
+      for (char c = 1; c < static_cast<char>(127); ++c) {
+        cs.emplace(c);
+      }
+      v[0].Set("nfa", NfaModel(cs));
+    }, R"([](std::vector<YYSTATE>& v){
+      set<char> cs;
+      for (char c = 1; c < static_cast<char>(127); ++c) {
+        cs.emplace(c);
+      }
+      v[0].Set("nfa", NfaModel(cs));)"})(dot)};
+
 static std::optional<std::pair<Token, AttrDict>>
 stream2token(std::istream &is) {
   if (is.eof() || !is.good() || is.bad() || is.fail()) {
