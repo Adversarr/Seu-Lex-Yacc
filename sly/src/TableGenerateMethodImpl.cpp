@@ -5,6 +5,7 @@
 #include <sly/TableGenerateMethodImpl.h>
 #include <sly/utils.h>
 #include <iostream>
+#include <algorithm>
 #include <sstream>
 #include <iterator>
 
