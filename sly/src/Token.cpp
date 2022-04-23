@@ -20,6 +20,12 @@ bool Token::operator==(const Token &another) const
          name_ == another.name_;
 }
 
+bool Token::operator!=(const Token &another) const
+{
+  return !(type_ == another.type_ &&
+           name_ == another.name_);
+}
+
 bool Token::IsTerminator() const
 {
   return type_ == Type::kTerminator;

@@ -20,7 +20,8 @@ using namespace std;
 
 
 int main() {
-  sly::utils::Log::SetLogLevel(sly::utils::Log::kInfo);
+  // return 0;
+  sly::utils::Log::SetLogLevel(sly::utils::Log::kWarning);
   // 定义文法
   // 1. 定义tokens
   auto add    = Token::Terminator("+", 0, sly::core::type::Token::Attr::kLeftAssociative);
@@ -43,11 +44,11 @@ int main() {
   auto expr   = Token::NonTerminator("Expr");
   auto fact   = Token::NonTerminator("Fact");
   vector<Production> productions = {
-  // expr -> expr + expr
+    // expr -> expr + expr
     Production(expr, {[](vector<YYSTATE> &v) {
                   v[0].Set<int>("v", v[1].Get<int>("v") + v[3].Get<int>("v"));
                 }})(expr)(add)(expr),
-  // expr -> expr - expr
+    // expr -> expr - expr
     Production(expr, {[](vector<YYSTATE> &v) {
                   v[0].Set<int>("v", v[1].Get<int>("v") - v[3].Get<int>("v"));
                 }})(expr)(sub)(expr),

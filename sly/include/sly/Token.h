@@ -31,6 +31,7 @@ class Token {
   
   
   bool operator==(const Token &another) const;
+  bool operator!=(const Token &another) const;
   
   bool IsTerminator() const;
   

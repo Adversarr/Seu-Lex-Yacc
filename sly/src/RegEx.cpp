@@ -234,6 +234,7 @@ std::vector<Production> productions = {
     Production(atom, Action{[](std::vector<YYSTATE>& v){
       set<char> cs;
       for (char c = 1; c < static_cast<char>(127); ++c) {
+        if (c == '\n' || c == '\r') continue;
         cs.emplace(c);
       }
       v[0].Set("nfa", NfaModel(cs));

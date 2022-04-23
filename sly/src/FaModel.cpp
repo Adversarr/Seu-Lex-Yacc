@@ -323,7 +323,9 @@ pair<vector<vector<int>>, vector<int>> DfaModel::Merge(const std::vector<DfaMode
   states.emplace_back(dfa_list.size(), 0);
   
   auto determine_can_accept = [&dfa_list](const vector<int> &state) {
-    for (int i = 0; i < state.size(); ++i) {
+    for (int i = 0; i < dfa_list.size(); ++i) {
+      if (state[i] < 0 || state[i] >= dfa_list[i].states_.size())
+        continue;
       if (dfa_list[i].states_[state[i]]) {
         return i;
       }
