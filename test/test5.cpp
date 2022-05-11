@@ -1,3 +1,7 @@
+// 
+// example of the output code file
+// @variable indicates the position for replacement
+// 
 #include "sly/AttrDict.h"
 #include "sly/FaModel.h"
 #include "sly/LrParser.h"
@@ -19,24 +23,24 @@ using sly::runtime::Stream2TokenPipe;
 using sly::core::grammar::LrParser;
 using namespace std;
 
-//@variable
+/* @variable */
 const int num_lexical_tokens = 2;
 const int num_syntax_tokens = 3;
 
 auto ending = Token::Terminator("EOF_FLAG");
 
-//@variable
+/* @variable */
 #define AUTO 256
 #define primary_expression 257
 #define postfix_expression 258
 
 // lexical
-//@variable
+/* @variable */
 vector<RegEx> lexical_tokens_regex_str = {
   "auto", 
   "\\+", 
 };
-//@variable
+/* @variable */
 vector<Token> lexical_tokens = {
   Token::Terminator("auto"), 
   Token::Terminator("+"), 
@@ -307,7 +311,7 @@ Token syntax_tokens[256 + num_syntax_tokens] = {
 
 auto &start_syntax_token = syntax_tokens[primary_expression];
 
-//@variable
+/* @variable */
 vector<Production> productions = {
   // primary_expression : AUTO postfix_expression ; 
   Production(syntax_tokens[primary_expression], {[](vector<YYSTATE> &v) {
@@ -323,7 +327,7 @@ void count() {
   // pass
 }
 
-//@variable
+/* @variable */
 IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {
   string token_name = lexical_token.GetTokName();
   if (token_name == "auto") {
@@ -335,7 +339,7 @@ IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {
 
 int main() {
   sly::utils::Log::SetLogLevel(sly::utils::Log::kError);
-  // lexical
+  // BUG: RegEx cannot be defined before runtime
   vector<RegEx> lexical_tokens_regex = {
     RegEx("auto"), 
     RegEx("\\+"), 

@@ -32,4 +32,6 @@
 
 还差 Lex 和 Yacc 的实现
 
-参考：`test1.cpp` 的[实现](test/test1.cpp)。
+`test4.cpp`已提供了读取Lex和Yacc至结构化数据的实现，暂时未封装。
+
+`test5.cpp`给出了最终生成代码文件的格式模板，其中需替换的部分已标识出。

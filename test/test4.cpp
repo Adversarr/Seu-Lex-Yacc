@@ -1,5 +1,5 @@
 //
-// for Lex File Analysis by line
+// load from Lex File and Yacc File, and save as structural parameters
 //
 #include "sly/AttrDict.h"
 #include "sly/FaModel.h"
@@ -23,38 +23,6 @@ using sly::core::grammar::LrParser;
 using sly::utils::replace_all;
 using namespace std;
 
-
-/**
- * .l file analysis: 
- * 
- * delim  %%[\r\n]
- * lbrace   %{[\r\n]
- * rbrace   %}[\r\n]
- * line     .*[\r\n]
- * 
- * LexFile <- Defs delim Rules delim Sub eof
- * Defs <- DefsLine Defs | lbrace Codes rbrace | 
- * Codes <- CodesLine Codes | 
- * CodesLine <- line {}
- * DefsLine <- line {word blank RegEx "\n"}
- * Rules <- RulesLine Rules | 
- * RulesLine <- line {LexRegEx blank CodePart "\n"}
- * Sub <- SubLine Sub | 
- * SubLine <- line {}
- **/
-
-/**
- * .y file analysis: 
- * 
- * delim       %%[\r\n]
- * line        .*[\r\n]
- * 
- * YaccFile <-  Defs delim ProdLines delim Sub eof
- * Defs <- DefsLine Defs | 
- * ProdLines <- ProdLine ProdLines | 
- * Sub <- SubLine Sub | 
- * SubLine <- line {}
- **/
 
 struct LexParms {
   struct LexDef {
@@ -114,73 +82,7 @@ struct Parms {
   void Print(ostream &oss) const;
 };
 
-Parms ParseParameters(LexParms lexParms, YaccParms yaccParms) {
-  Parms parms;
-  auto lexRegex2regex = [](const string &exp) -> string {
-    // headache, fuck lex regex
-    // L?\"(\\.|[^\\"\n])*\"
-    stringstream ss;
-    bool isEscape = false;
-    bool isLiteral = false;
-    for (char c : exp) {
-      if (isEscape) {
-        if (c == '"') {
-          ss << c;
-        } else {
-          ss << '\\' << c;
-        }
-        isEscape = false;
-      } else if (c == '\\') {
-        isEscape = true;
-      } else if (c == '"') {
-        ss << (isLiteral ? ")" : "(");
-        isLiteral = !isLiteral;
-      } else {
-        if (isLiteral && (c == '(' || c == ')' || c == '[' || 
-            c == ']' || c == '^' || c == '*' || c == '.' ||
-            c == '+' || c == '|')) {
-          ss << '\\' << c;
-        } else {
-          ss << c;
-        }
-      }
-    }
-    return ss.str();
-  };
-  // initialize lexTokens
-  for (auto rule : lexParms.lexRules) {
-    // transform lex-regex to regex
-    rule.exp = lexRegex2regex(rule.exp);
-    // replace {D} with its regex
-    // inversely visit, to supoort recursive call
-    for (auto it = lexParms.lexDefs.rbegin(); it != lexParms.lexDefs.rend(); it++) {
-      auto &name = it->name;
-      auto &regex = it->regex;
-      replace_all(rule.exp, "{" + name + "}", regex);
-    }
-    parms.lexTokens.push_back({rule.exp, rule.code});
-  }
-
-  parms.startToken = yaccParms.yaccStartToken;
-  // initialize terminalTokens, nonTerminalTokens
-  parms.terminalTokens.insert(yaccParms.yaccStartToken);
-  for (const string &tokenName : yaccParms.yaccTokens) {
-    parms.terminalTokens.insert(tokenName);
-  }
-  for (const auto &[startToken, nextTokens] : yaccParms.yaccProds) {
-    parms.terminalTokens.erase(startToken);
-    parms.nonTerminalTokens.insert(startToken);
-  }
-
-  /// initialize prods
-  for (const auto &[startToken, nextTokens] : yaccParms.yaccProds) {
-    parms.prods.push_back({startToken, nextTokens});
-  }
-
-  return parms;
-}
-
-void LexParms::Print(ostream &oss) const{
+void LexParms::Print(ostream &oss) const {
     oss << "Defs: " << endl;
     for (const auto &lexDef : lexDefs) {
       oss << "  " << lexDef.name << ": " << lexDef.regex << endl;
@@ -196,7 +98,7 @@ void LexParms::Print(ostream &oss) const{
     oss << tailCodeblock << endl;
   }
 
-void YaccParms::Print(ostream &oss) const{
+void YaccParms::Print(ostream &oss) const {
     oss << "Tokens: " << endl;
     for (const auto &token : yaccTokens) {
       oss << "  " << token << endl;
@@ -244,6 +146,25 @@ void Parms::Print(ostream &oss) const {
 }
 
 LexParms ParseLexParameters(stringstream &file_stream) {
+  /**
+   * .l file analysis: 
+   * 
+   * delim  %%[\r\n]
+   * lbrace   %{[\r\n]
+   * rbrace   %}[\r\n]
+   * line     .*[\r\n]
+   * 
+   * LexFile <- Defs delim Rules delim Sub eof
+   * Defs <- DefsLine Defs | lbrace Codes rbrace | 
+   * Codes <- CodesLine Codes | 
+   * CodesLine <- line {}
+   * DefsLine <- line {word blank RegEx "\n"}
+   * Rules <- RulesLine Rules | 
+   * RulesLine <- line {LexRegEx blank CodePart "\n"}
+   * Sub <- SubLine Sub | 
+   * SubLine <- line {}
+   * 
+   **/
   LexParms lexParms;
   const auto ending = Token::Terminator("EOF_FLAG");
 
@@ -333,7 +254,6 @@ LexParms ParseLexParameters(stringstream &file_stream) {
         // SubLine <- line {}
         Production(SubLine, {[&lexParms](vector<YYSTATE> &v) {
             // Subline: copy code
-            // TODO
             lexParms.tailCodeblock += v[1].Get<string>("lval");
           }})(line),
     };
@@ -370,18 +290,24 @@ LexParms ParseLexParameters(stringstream &file_stream) {
   parser.value().Parse(tokens, attributes);
   auto tree = parser.value().GetTree();
   tree.Annotate();
-  
-  // cout << "\n\nAfter Annotate:" << endl;
-  // tree.Print(std::cout);
-  // cout << "\n\nThe Expr: " << input_string << endl;
-
-  // cout << "Lex Parameters:" << endl;
-  // lexParms.Print(std::cout);
 
   return lexParms;
 }
 
 YaccParms ParseYaccParameters(stringstream &file_stream) {
+  /**
+   * .y file analysis: 
+   * 
+   * delim       %%[\r\n]
+   * line        .*[\r\n]
+   * 
+   * YaccFile <-  Defs delim ProdLines delim Sub eof
+   * Defs <- DefsLine Defs | 
+   * ProdLines <- ProdLine ProdLines | 
+   * Sub <- SubLine Sub | 
+   * SubLine <- line {}
+   * 
+   **/
   YaccParms yaccParms;
   const auto ending = Token::Terminator("EOF_FLAG");
 
@@ -403,105 +329,105 @@ YaccParms ParseYaccParameters(stringstream &file_stream) {
     auto Sub       = Token::NonTerminator("Sub");
     auto SubLine   = Token::NonTerminator("SubLine");
     vector<Production> productions = {
-        // YaccFile <- Defs delim Prods delim Sub
-        Production(YaccFile, {[&yaccParms](vector<YYSTATE> &v) {
-            // parse Productions
-            {
-              stringstream ss;
-              ss.str(v[3].Get<string>("lval"));
-
-              int state = 0;
-              string startToken;
-              vector<string> nextTokens;
-
-              string str;
-              while (!ss.eof()) {
-                ss >> str;
-                if (str.length() == 0) {
-                  break;
-                }
-                switch (state) {
-                  case 0:
-                    startToken = str;
-                    state = 1;
-                    break;
-                  case 1:
-                    assert(str == ":");
-                    state = 2;
-                    break;
-                  case 2:
-                    if (str == "|") {
-                      yaccParms.yaccProds.push_back({startToken, nextTokens});
-                      nextTokens.resize(0);
-                      state = 2;
-                    } else if (str == ";") {
-                      yaccParms.yaccProds.push_back({startToken, nextTokens});
-                      nextTokens.resize(0);
-                      state = 0;
-                    } else {
-                      nextTokens.emplace_back(str);
-                      state = 2;
-                    }
-                    break;
-                }
-              }
-            }
-          }})(Defs)(delim)(Prods)(delim)(Sub),
-        // Defs <- DefsLine Defs
-        Production(Defs, {[](vector<YYSTATE> &v) {
-          }})(DefsLine)(Defs),
-        // Defs <- 
-        Production(Defs, {[](vector<YYSTATE> &v) {
-          }}),
-        // DefsLine <- line
-        Production(DefsLine, {[&yaccParms](vector<YYSTATE> &v) {
-            // parse symbol definitions
-            // DefsLine: %token word word word ... / %start word
-            const string &str = v[1].Get<string>("lval");
+      // YaccFile <- Defs delim Prods delim Sub
+      Production(YaccFile, {[&yaccParms](vector<YYSTATE> &v) {
+          // parse Productions
+          {
             stringstream ss;
-            ss.str(str);
+            ss.str(v[3].Get<string>("lval"));
 
-            string word;
-            ss >> word;
-            if (word == "%token") {
-              while (true) {
-                ss >> word;
-                if (word.length() == 0 || ss.eof()) {
-                  break;
-                }
-                yaccParms.yaccTokens.emplace_back(word);
+            int state = 0;
+            string startToken;
+            vector<string> nextTokens;
+
+            string str;
+            while (!ss.eof()) {
+              ss >> str;
+              if (str.length() == 0) {
+                break;
               }
-            } else if (word == "%start") {
-              ss >> word;
-              yaccParms.yaccStartToken = word;
+              switch (state) {
+                case 0:
+                  startToken = str;
+                  state = 1;
+                  break;
+                case 1:
+                  assert(str == ":");
+                  state = 2;
+                  break;
+                case 2:
+                  if (str == "|") {
+                    yaccParms.yaccProds.push_back({startToken, nextTokens});
+                    nextTokens.resize(0);
+                    state = 2;
+                  } else if (str == ";") {
+                    yaccParms.yaccProds.push_back({startToken, nextTokens});
+                    nextTokens.resize(0);
+                    state = 0;
+                  } else {
+                    nextTokens.emplace_back(str);
+                    state = 2;
+                  }
+                  break;
+              }
             }
-          }})(line),
-        // Prods <- ProdLine Prods
-        Production(Prods, {[](vector<YYSTATE> &v) {
-            string str = v[1].Get<string>("lval");
-            str += v[2].Get<string>("lval");
-            v[0].Set<string>("lval", str);
-          }})(ProdLine)(Prods),
-        // Prods <- 
-        Production(Prods, {[](vector<YYSTATE> &v) {
-          v[0].Set<string>("lval", "");
-          }}),
-        // ProdLine <- line
-        Production(ProdLine, {[&yaccParms](vector<YYSTATE> &v) {
-            v[0].Set<string>("lval", v[1].Get<string>("lval"));
-          }})(line),
-        // Sub <- SubLine Sub
-        Production(Sub, {[](vector<YYSTATE> &v) {
-          }})(SubLine)(Sub),
-         // Sub <- 
-        Production(Sub, {[](vector<YYSTATE> &v) {
-          }}),
-        // SubLine <- line {}
-        Production(SubLine, {[&yaccParms](vector<YYSTATE> &v) {
-            // Subline: copy code
-            // TODO
-            yaccParms.tailCodeblock += v[1].Get<string>("lval");
-          }})(line),
+          }
+        }})(Defs)(delim)(Prods)(delim)(Sub),
+      // Defs <- DefsLine Defs
+      Production(Defs, {[](vector<YYSTATE> &v) {
+        }})(DefsLine)(Defs),
+      // Defs <- 
+      Production(Defs, {[](vector<YYSTATE> &v) {
+        }}),
+      // DefsLine <- line
+      Production(DefsLine, {[&yaccParms](vector<YYSTATE> &v) {
+          // parse symbol definitions
+          // DefsLine: %token word word word ... / %start word
+          const string &str = v[1].Get<string>("lval");
+          stringstream ss;
+          ss.str(str);
+
+          string word;
+          ss >> word;
+          if (word == "%token") {
+            while (true) {
+              ss >> word;
+              if (word.length() == 0 || ss.eof()) {
+                break;
+              }
+              yaccParms.yaccTokens.emplace_back(word);
+            }
+          } else if (word == "%start") {
+            ss >> word;
+            yaccParms.yaccStartToken = word;
+          }
+        }})(line),
+      // Prods <- ProdLine Prods
+      Production(Prods, {[](vector<YYSTATE> &v) {
+          string str = v[1].Get<string>("lval");
+          str += v[2].Get<string>("lval");
+          v[0].Set<string>("lval", str);
+        }})(ProdLine)(Prods),
+      // Prods <- 
+      Production(Prods, {[](vector<YYSTATE> &v) {
+        v[0].Set<string>("lval", "");
+        }}),
+      // ProdLine <- line
+      Production(ProdLine, {[&yaccParms](vector<YYSTATE> &v) {
+          v[0].Set<string>("lval", v[1].Get<string>("lval"));
+        }})(line),
+      // Sub <- SubLine Sub
+      Production(Sub, {[](vector<YYSTATE> &v) {
+        }})(SubLine)(Sub),
+       // Sub <- 
+      Production(Sub, {[](vector<YYSTATE> &v) {
+        }}),
+      // SubLine <- line {}
+      Production(SubLine, {[&yaccParms](vector<YYSTATE> &v) {
+          // Subline: copy code
+          // TODO
+          yaccParms.tailCodeblock += v[1].Get<string>("lval");
+        }})(line),
     };
     sly::core::grammar::ContextFreeGrammar cfg(productions, YaccFile, ending);
     sly::core::grammar::Lr1 lr1;
@@ -509,7 +435,6 @@ YaccParms ParseYaccParameters(stringstream &file_stream) {
     auto table = cfg.GetLrTable();
     parser = LrParser(table);
 
-    // 定义词法 transition 和 state
     auto [transition, state] = sly::core::lexical::DfaModel::Merge({
         re_delim.GetDfaModel(),
         re_line.GetDfaModel(),
@@ -536,37 +461,73 @@ YaccParms ParseYaccParameters(stringstream &file_stream) {
   auto tree = parser.value().GetTree();
   tree.Annotate();
 
-  // cout << "\n\nAfter Annotate:" << endl;
-  // tree.Print(std::cout);
-
-  // cout << "Yacc Parameters:" << endl;
-  // yaccParms.Print(std::cout);
-
   return yaccParms;
 }
 
-inline std::string regex2code(const std::string &str) {
-  std::string res = str;
-  replace_all(res, "+", "\\+");
-  replace_all(res, "*", "\\*");
-  replace_all(res, "", "\\n");
-  return res;
-}
-
-void generateCodeFile(Parms parms, ostream &oss) {
-  
-  int num_lexical_tokens = parms.lexTokens.size();
-  int num_syntax_tokens = parms.terminalTokens.size() + parms.nonTerminalTokens.size();
-
-  int i = 0;
-  for (const string &tokenName : parms.terminalTokens) {
-    oss << "#define " << tokenName << i++ << endl;
+Parms ParseParameters(LexParms lexParms, YaccParms yaccParms) {
+  Parms parms;
+  auto lexRegex2regex = [](const string &exp) -> string {
+    // headache, fuck lex regex
+    // L?\"(\\.|[^\\"\n])*\"
+    stringstream ss;
+    bool isEscape = false;
+    bool isLiteral = false;
+    for (char c : exp) {
+      if (isEscape) {
+        if (c == '"') {
+          ss << c;
+        } else {
+          ss << '\\' << c;
+        }
+        isEscape = false;
+      } else if (c == '\\') {
+        isEscape = true;
+      } else if (c == '"') {
+        ss << (isLiteral ? ")" : "(");
+        isLiteral = !isLiteral;
+      } else {
+        if (isLiteral && (c == '(' || c == ')' || c == '[' || 
+            c == ']' || c == '^' || c == '*' || c == '.' ||
+            c == '+' || c == '|')) {
+          ss << '\\' << c;
+        } else {
+          ss << c;
+        }
+      }
+    }
+    return ss.str();
+  };
+  // initialize lexTokens
+  for (auto rule : lexParms.lexRules) {
+    // transform lex-regex to regex
+    rule.exp = lexRegex2regex(rule.exp);
+    // replace {D} with its regex
+    // inversely visit, to supoort recursive call
+    for (auto it = lexParms.lexDefs.rbegin(); it != lexParms.lexDefs.rend(); it++) {
+      auto &name = it->name;
+      auto &regex = it->regex;
+      replace_all(rule.exp, "{" + name + "}", regex);
+    }
+    parms.lexTokens.push_back({rule.exp, rule.code});
   }
-  for (const string &tokenName : parms.nonTerminalTokens) {
-    oss << "#define " << tokenName << i++ << endl;
+
+  parms.startToken = yaccParms.yaccStartToken;
+  // initialize terminalTokens, nonTerminalTokens
+  parms.terminalTokens.insert(yaccParms.yaccStartToken);
+  for (const string &tokenName : yaccParms.yaccTokens) {
+    parms.terminalTokens.insert(tokenName);
+  }
+  for (const auto &[startToken, nextTokens] : yaccParms.yaccProds) {
+    parms.terminalTokens.erase(startToken);
+    parms.nonTerminalTokens.insert(startToken);
   }
 
- 
+  /// initialize prods
+  for (const auto &[startToken, nextTokens] : yaccParms.yaccProds) {
+    parms.prods.push_back({startToken, nextTokens});
+  }
+
+  return parms;
 }
 
 int main() {
