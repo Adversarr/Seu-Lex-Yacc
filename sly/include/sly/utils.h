@@ -166,8 +166,36 @@ std::string to_string(const T& v) {
   return ss.str();
 }
 
-
+inline void ltrim(std::string &str, const string &val = " \r\n\0") {
+  str.erase(0, str.find_first_not_of(val));
 }
+
+inline void rtrim(std::string &str, const string &val = " \r\n\0") {
+  str.erase(str.find_last_not_of(val) + 1);
+}
+
+inline void trim(std::string &str, const string &val = " \r\n\0") {
+  ltrim(str, val);
+  rtrim(str, val);
+}
+
+inline void replace_all(std::string &str, const std::string &from, const std::string &to) {
+  for (std::string::size_type pos = str.find(from); 
+       pos != std::string::npos; 
+       pos = str.find(from)) {
+    str.replace(pos, from.length(), to);
+  }
+}
+
+inline std::string escape(const std::string &str) {
+  std::string res = str;
+  replace_all(res, "\t", "\\t");
+  replace_all(res, "\r", "\\r");
+  replace_all(res, "\n", "\\n");
+  return res;
+}
+} // namespace sly::utils
+
 #endif //SEULEXYACC_UTILS_H
 
 #pragma clang diagnostic pop

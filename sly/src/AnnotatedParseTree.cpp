@@ -75,7 +75,11 @@ void AnnotatedParseTree::Print(ostream &oss, int depth) const{
   if (!attrs_.empty()) {
     auto dict = attrs_[0].ToStrDict();
     for (const auto&[k, v]: dict) {
-      oss << k << ":" << v << "/";
+      if (typeid(v) == typeid(std::string)) {
+        oss << k << ":" << sly::utils::escape(v) << "/";
+      } else {
+        oss << k << ":" << v << "/";
+      }
     }
   }
   oss << ">";
