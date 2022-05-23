@@ -19,9 +19,10 @@ namespace sly::core::lexical {
 DfaModel re2dfa(string expr_);
 
 sly::core::lexical::RegEx::RegEx(std::string expr, bool compile)
-    : expr_(expr), dfa_model_(re2dfa(expr)) {}
+    : expr_(expr), compiled(false) {}
 
 bool RegEx::CanMatch(std::string str) {
+  Compile();
   DfaController dc(dfa_model_);
   for (auto c : str) {
     dc.Defer(c);
@@ -301,7 +302,12 @@ stream2token(std::istream &is) {
 }
 
 
-void RegEx::Compile() {}
+void RegEx::Compile() {
+  if (!compiled){
+    dfa_model_ = re2dfa(expr_);
+    compiled = true;
+  }
+}
 
 DfaModel re2dfa(string expr_) {
   std::istringstream is(expr_);

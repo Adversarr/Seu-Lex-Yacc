@@ -134,6 +134,8 @@ class DfaModel
   
   explicit DfaModel(NfaModel &nfa);
 
+  DfaModel() = default;
+
   DfaModel& operator=(const DfaModel& ) = default;
  
  public: // Getters

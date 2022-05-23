@@ -532,7 +532,7 @@ Parms ParseParameters(LexParms lexParms, YaccParms yaccParms) {
 
 int main() {
   // ignore warnings
-  sly::utils::Log::SetLogLevel(sly::utils::Log::kError);
+  sly::utils::Log::SetLogLevel(sly::utils::Log::kWarning);
 
   stringstream lex_file_stream;
   stringstream yacc_file_stream;
