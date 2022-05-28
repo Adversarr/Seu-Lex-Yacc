@@ -76,7 +76,7 @@ void LrParser::ParseOnce(const vector<Token> &token_stream, const vector<YYSTATE
         return;
       }
       if (action.action == ParsingTable::kError)
-        utils::Log::GetGlobalLogger().Err("Found invalid action.");
+        utils::Log::GetGlobalLogger().Err("Found invalid action. current token=", current_token);
       assert(false);
     }
   } else {

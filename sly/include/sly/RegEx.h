@@ -20,7 +20,7 @@ class RegEx {
   
   void Compile();
   
-  inline const DfaModel& GetDfaModel() const ;
+  const DfaModel& GetDfaModel();
 
  private:
 
@@ -28,11 +28,9 @@ class RegEx {
 
   DfaModel dfa_model_;
 
+  bool compiled = false;
 };
 
-const DfaModel& RegEx::GetDfaModel() const {
-  return dfa_model_;
-}
 
 
 }
