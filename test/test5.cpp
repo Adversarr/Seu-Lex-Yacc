@@ -1,3 +1,4 @@
+/* section 1 */
 #include "sly/AttrDict.h"
 #include "sly/FaModel.h"
 #include "sly/LrParser.h"
@@ -19,29 +20,20 @@ using sly::runtime::Stream2TokenPipe;
 using sly::core::grammar::LrParser;
 using namespace std;
 
+/* section 2 */
 //@variable
 const int num_lexical_tokens = 2;
 const int num_syntax_tokens = 3;
 
 auto ending = Token::Terminator("EOF_FLAG");
 
+// syntax token name
 //@variable
 #define AUTO 256
 #define primary_expression 257
 #define postfix_expression 258
 
-// lexical
-//@variable
-vector<RegEx> lexical_tokens_regex_str = {
-  "auto", 
-  "\\+", 
-};
-//@variable
-vector<Token> lexical_tokens = {
-  Token::Terminator("auto"), 
-  Token::Terminator("+"), 
-};
-
+/* section 3 */
 // syntax
 Token syntax_tokens[256 + num_syntax_tokens] = {
   Token::Terminator(string(1, 0)), 
@@ -307,6 +299,7 @@ Token syntax_tokens[256 + num_syntax_tokens] = {
 
 auto &start_syntax_token = syntax_tokens[primary_expression];
 
+/* section 4 */
 //@variable
 vector<Production> productions = {
   // primary_expression : AUTO postfix_expression ; 
@@ -319,27 +312,42 @@ vector<Production> productions = {
   }})(syntax_tokens[AUTO]), 
 };
 
+/* section 5 */
 void count() {
   // pass
 }
 
+/* section 6 */
 //@variable
 IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {
   string token_name = lexical_token.GetTokName();
-  if (token_name == "auto") {
+  if (token_name == R"(auto)") {
     { count(); return(AUTO); }
-  } else if (token_name == "+") {
+  } else if (token_name == R"(\+)") {
     { count(); return('+'); }
+  } else {
+    return 0;
   }
 }
 
+/* section 7 */
 int main() {
+  /* section 7.1 */
   sly::utils::Log::SetLogLevel(sly::utils::Log::kError);
-  // lexical
-  vector<RegEx> lexical_tokens_regex = {
-    RegEx("auto"), 
-    RegEx("\\+"), 
+
+  /* section 7.2 */
+  // lexical token
+  //@variable
+  vector<Token> lexical_tokens = {
+    Token::Terminator(R"(auto)"), 
+    Token::Terminator(R"(\+)"), 
   };
+  vector<RegEx> lexical_tokens_regex = {
+    RegEx(R"(auto)"), 
+    RegEx(R"(\+)"), 
+  };
+
+  /* section 7.3 */
   vector<DfaModel> lexical_tokens_dfa;
   for (auto regex : lexical_tokens_regex) {
     lexical_tokens_dfa.push_back(regex.GetDfaModel());
@@ -356,10 +364,15 @@ int main() {
 
   cout << start_syntax_token.GetTokName() << endl;
 
+  /* section 7.4 */
   // runtime
-  string input_string = "autoauto";
-  stringstream input_stream(input_string);
-
+  stringstream input_stream;
+  {
+    ifstream inputFile("../demo/1.in");
+    input_stream << inputFile.rdbuf();
+    inputFile.close();
+  }
+  
   vector<AttrDict> attributes;
   vector<Token> tokens;
   while (true) {
@@ -374,14 +387,12 @@ int main() {
 
     tokens.emplace_back(syntax_token);
     attributes.emplace_back(ad);
-    
   }
 
   cerr << "tokens: " << endl;
   for (auto token : tokens) {
     cerr << "  " << token.GetTokName() << endl;
   }
-
 
   parser.Parse(tokens, attributes);
   auto tree = parser.GetTree();

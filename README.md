@@ -33,3 +33,17 @@
 还差 Lex 和 Yacc 的实现
 
 参考：`test1.cpp` 的[实现](test/test1.cpp)。
+
+主要更新位于`test4.cpp`，该文件会读入`../demo/1.l`和`../demo/1.y`，然后将生成的代码写入`../test/out.cpp`。
+代码生成的规范可以参考`test5.cpp`。
+
+```
+$ cd build
+$ make test4
+$ ./test/test4
+$ make out
+$ gdb ./test/out
+```
+
+目前生成的`out.cpp`还未完成全部排障。
+
