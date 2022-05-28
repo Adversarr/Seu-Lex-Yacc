@@ -2,6 +2,7 @@
 // Created by Yang Jerry on 2022/3/30.
 //
 
+#include "sly/Production.h"
 #include <sly/TableGenerateMethod.h>
 #include <sly/def.h>
 #include <sly/utils.h>
@@ -221,7 +222,10 @@ ParsingTable::ParsingTable(
     Token augmented_token, Token epsilon_token)
     : productions_(productions), action_table_(action_table),
       goto_table_(goto_table), entry_token_(entry_token),
-      augmented_token_(augmented_token), epsilon_token_(epsilon_token) {}
+      augmented_token_(augmented_token), epsilon_token_(epsilon_token) {
+        productions_.insert(productions_.begin(), 
+          type::Production(augmented_token_)(entry_token));
+      }
 
 ostream &operator<<(ostream &os, const ParsingTable::CellTp &cell) {
   os << "sly::core::grammar::ParsingTable::CellTp{";

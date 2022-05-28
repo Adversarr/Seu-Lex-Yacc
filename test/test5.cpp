@@ -37,8 +37,8 @@ auto ending = Token::Terminator("EOF_FLAG");
 // lexical
 /* @variable */
 vector<RegEx> lexical_tokens_regex_str = {
-  "auto", 
-  "\\+", 
+  RegEx{"auto"}, 
+  RegEx{"\\+"}, 
 };
 /* @variable */
 vector<Token> lexical_tokens = {
