@@ -16,6 +16,12 @@
 #include <vector>
 
 namespace sly::core::lexical {
+
+const DfaModel& RegEx::GetDfaModel(){
+  Compile();
+  return dfa_model_;
+}
+
 DfaModel re2dfa(string expr_);
 
 sly::core::lexical::RegEx::RegEx(std::string expr, bool compile)
@@ -313,10 +319,13 @@ DfaModel re2dfa(string expr_) {
   std::istringstream is(expr_);
   static optional<grammar::ParsingTable> opt;
   if (!opt.has_value()) {
+    auto level = sly::utils::Log::GetGlobalLogger().level;
+    sly::utils::Log::SetLogLevel(utils::Log::kNone);
     sly::core::grammar::ContextFreeGrammar grammar{productions, seq, eof_token};
     sly::core::grammar::Lr1 lr1;
     grammar.Compile(lr1);
     opt = make_optional(move(lr1.GetParsingTable()));
+    sly::utils::Log::SetLogLevel(level);
   }
   LrParser parser(opt.value());
   vector<Token> token_input;

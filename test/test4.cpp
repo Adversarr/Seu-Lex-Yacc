@@ -537,12 +537,20 @@ int main() {
   stringstream lex_file_stream;
   stringstream yacc_file_stream;
   {
-    ifstream lexFile("../demo/c99.l");
+    ifstream lexFile("./demo/c99.l");
+    if (!lexFile.is_open()) {
+      sly::utils::Log::GetGlobalLogger().Err("Cannot find c99.l");
+      exit(-1);
+    }
     lex_file_stream << lexFile.rdbuf();
     lexFile.close();
 
-    ifstream yaccFile("../demo/c99.y");
+    ifstream yaccFile("./demo/c99.y");
     yacc_file_stream << yaccFile.rdbuf();
+    if (!yaccFile.is_open()) {
+      sly::utils::Log::GetGlobalLogger().Err("Cannot find c99.y");
+      exit(-1);
+    }
     yaccFile.close();
   }
 
@@ -558,6 +566,5 @@ int main() {
 
   auto parms = ParseParameters(lexParms, yaccParms);
   parms.Print(std::cout);
-
   return 0;
 }
