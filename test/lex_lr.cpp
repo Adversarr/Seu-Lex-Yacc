@@ -27,9 +27,8 @@ std::vector<Production> productions = {
   Production()
 };
 int main() {
-  sly::core::lexical::RegEx any_string(".?");
-  sly::core::lexical::RegEx c_section_begin("?");
-  cout << c_section_begin.CanMatch("?") << endl;
-  cout << any_string.CanMatch("1") << endl;
+  sly::core::lexical::RegEx any_string("[0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?");
+  any_string.Compile();
+  cout << any_string.CanMatch("1e9f") << endl;
   return 0;
 }
