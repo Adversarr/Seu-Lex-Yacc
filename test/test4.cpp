@@ -653,7 +653,8 @@ void comment() {
 int check_type(void)
 {
   return IDENTIFIER;
-}";
+})";
+
   oss << endl;
   oss << endl;
 
@@ -782,7 +783,7 @@ int main() {
   auto parms = ParseParameters(lexParms, yaccParms);
   parms.Print(std::cout);
 
-  ofstream output_file_stream("../out.cpp");
+  ofstream output_file_stream("../test/out.cpp");
   generateCodeFile(parms, output_file_stream);
 
   return 0;
