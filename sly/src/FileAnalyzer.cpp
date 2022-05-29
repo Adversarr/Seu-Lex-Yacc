@@ -217,6 +217,26 @@ struct __regex {
                        cs.insert(c);
                      }
                      v[0].Set("cs", cs);)"))(ch)(range_content),
+      Production(
+          range_content,
+          Action(
+              [](std::vector<YYSTATE> &v) { v[0].Set("cs", set<char>{'-'}); },
+              R"(v[0].Set("cs", set<char>{'-'});)"))(slash)(range_content),
+      Production(
+          range_content,
+          Action(
+              [](std::vector<YYSTATE> &v) { v[0].Set("cs", set<char>{'+'}); },
+              R"(v[0].Set("cs", set<char>{'+'});)"))(pl)(range_content),
+      Production(
+          range_content,
+          Action(
+              [](std::vector<YYSTATE> &v) { v[0].Set("cs", set<char>{'-'}); },
+              R"(v[0].Set("cs", set<char>{'-'});)"))(slash),
+      Production(
+          range_content,
+          Action(
+              [](std::vector<YYSTATE> &v) { v[0].Set("cs", set<char>{'+'}); },
+              R"(v[0].Set("cs", set<char>{'+'});)"))(pl),
       Production(range_content, Action(
                                     [](std::vector<YYSTATE> &v) {
                                       auto c_end = v[3].Get<char>("lval");
