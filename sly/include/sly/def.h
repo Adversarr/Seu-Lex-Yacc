@@ -18,33 +18,34 @@
 #ifndef YYSTATE
 #define YYSTATE sly::core::type::AttrDict
 #endif
-
-#define INT 258
-#define FLOAT 259
-#define NAME 260
-#define STRUCT 261
-#define IF 262
-#define ELSE 263
-#define RETURN 264
-#define NUMBER 265
-#define LPAR 266
-#define RPAR 267
-#define LBRACE 268
-#define RBRACE 269
-#define LBRACK 270
-#define RBRACK 271
-#define ASSIGN 272
-#define SEMICOLON 273
-#define COMMA 274
-#define DOT 275
-#define PLUS 276
-#define MINUS 277
-#define TIMES 278
-#define DIVIDE 279
-#define EQUAL 280
-#define LOW 281
-#define UMINUS 282
-
+namespace sly{
+// TODO: 这个好像根本不需要？
+constexpr int INT =  258;
+constexpr int FLOAT =  259;
+constexpr int NAME =  260;
+constexpr int STRUCT =  261;
+constexpr int IF =  262;
+constexpr int ELSE =  263;
+constexpr int RETURN =  264;
+constexpr int NUMBER =  265;
+constexpr int LPAR =  266;
+constexpr int RPAR =  267;
+constexpr int LBRACE =  268;
+constexpr int RBRACE =  269;
+constexpr int LBRACK =  270;
+constexpr int RBRACK =  271;
+constexpr int ASSIGN =  272;
+constexpr int SEMICOLON =  273;
+constexpr int COMMA =  274;
+constexpr int DOT =  275;
+constexpr int PLUS =  276;
+constexpr int MINUS =  277;
+constexpr int TIMES =  278;
+constexpr int DIVIDE =  279;
+constexpr int EQUAL =  280;
+constexpr int LOW =  281;
+constexpr int UMINUS =  282;
+}
 namespace sly {
 namespace core {
 
