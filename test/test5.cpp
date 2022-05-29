@@ -374,10 +374,14 @@ int main() {
     ad.Set("lval", s2ppl.buffer_); 
 
     IdType id = to_syntax_token_id(lexical_token, ad);
+    if (lexical_token == end_token) {
+      break;
+    }
     Token syntax_token = syntax_tokens[id];
 
     tokens.emplace_back(syntax_token);
     attributes.emplace_back(ad);
+    
     
   }
 

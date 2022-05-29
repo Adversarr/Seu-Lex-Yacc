@@ -1721,12 +1721,15 @@ IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {
 } else if (token_name == R"((?))") { 
     { { count(); return('?'); }}
 } else if (token_name == R"([ \t\v\n\f])") { 
-    { { count(); }}
+    { { count(); return 0; }}
 } else if (token_name == R"(.)") { 
-    { { /* Add code to complain about unmatched characters */ }}
+    { { cerr << "wrong lexical token matched: " << token_name << " " << ad.Get<string>("lval") << endl; assert(false); }}
 } else  {
+    cerr << "wrong lexical token matched: " << token_name << endl;
+    assert(false);
     return 0;
   }
+  return 0;
 }
 
 /* section 7 */
@@ -1782,12 +1785,12 @@ int main() {
     Token::Terminator(R"(0[0-7]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
     Token::Terminator(R"([1-9][0-9]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
     Token::Terminator(R"(L?'(\\.|[^\\'\n])+')"), 
-    Token::Terminator(R"([0-9]+([Ee][\+\-]?[0-9]+)(f|F|l|L)?)"), 
-    Token::Terminator(R"([0-9]*(\.)[0-9]+([Ee][\+\-]?[0-9]+)?(f|F|l|L)?)"), 
-    Token::Terminator(R"([0-9]+(\.)[0-9]*([Ee][\+\-]?[0-9]+)?(f|F|l|L)?)"), 
-    Token::Terminator(R"(0[xX][a-fA-F0-9]+([Pp][\+\-]?[0-9]+)(f|F|l|L)?)"), 
-    Token::Terminator(R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][\+\-]?[0-9]+)?(f|F|l|L)?)"), 
-    Token::Terminator(R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][\+\-]?[0-9]+)?(f|F|l|L)?)"), 
+    Token::Terminator(R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)"), 
+    Token::Terminator(R"([0-9]*(\.)[0-9]+([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
+    Token::Terminator(R"([0-9]+(\.)[0-9]*([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
+    Token::Terminator(R"(0[xX][a-fA-F0-9]+([Pp][+-]?[0-9]+)(f|F|l|L)?)"), 
+    Token::Terminator(R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
+    Token::Terminator(R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
     Token::Terminator(R"(L?"(\\.|[^\\"\n])*")"), 
     Token::Terminator(R"((\.\.\.))"), 
     Token::Terminator(R"((>>=))"), 
@@ -1951,9 +1954,9 @@ int main() {
   // syntax
   sly::core::grammar::ContextFreeGrammar cfg(productions, start_syntax_token, ending);
   sly::core::grammar::Lr1 lr1;
-  cfg.Compile(lr1);
-  auto table = cfg.GetLrTable();
-  LrParser parser(table);
+  // cfg.Compile(lr1);
+  // auto table = cfg.GetLrTable();
+  // LrParser parser(table);
 
   cout << start_syntax_token.GetTokName() << endl;
 
@@ -1976,6 +1979,11 @@ int main() {
     ad.Set("lval", s2ppl.buffer_); 
 
     IdType id = to_syntax_token_id(lexical_token, ad);
+    cerr << ad.Get<string>("lval") << " " << id << endl;
+    if (id == 0) {
+      continue;
+    }
+    
     Token syntax_token = syntax_tokens[id];
 
     tokens.emplace_back(syntax_token);
@@ -1987,10 +1995,10 @@ int main() {
     cerr << "  " << token.GetTokName() << endl;
   }
 
-  parser.Parse(tokens, attributes);
-  auto tree = parser.GetTree();
-  cerr << "parse tree: " << endl;
-  tree.Print(std::cerr);
+  // parser.Parse(tokens, attributes);
+  // auto tree = parser.GetTree();
+  // cerr << "parse tree: " << endl;
+  // tree.Print(std::cerr);
 
   return 0;
 }
