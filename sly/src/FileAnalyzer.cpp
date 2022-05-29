@@ -11,14 +11,13 @@
 #include <sly/TableGenerateMethod.h>
 #include <sly/TableGenerateMethodImpl.h>
 
-
 #include <sly/Token.h>
 #include <sstream>
 #include <vector>
 
 namespace sly::core::lexical {
 
-const DfaModel& RegEx::GetDfaModel(){
+const DfaModel &RegEx::GetDfaModel() {
   Compile();
   return dfa_model_;
 }
@@ -32,7 +31,7 @@ bool RegEx::CanMatch(std::string str) {
   Compile();
   DfaController dc(dfa_model_);
   for (auto c : str) {
-    dc.Defer(c);
+    dc = dc.Defer(c);
   }
   return dc.CanAccept();
 }
@@ -56,6 +55,7 @@ struct __regex {
   Token star = Token::Terminator("*");
   Token dot = Token::Terminator(".");
   Token slash = Token::Terminator("-");
+  Token qmark = Token::Terminator("?", 0, Token::Attr::kRightAssociative);
   Token pl = Token::Terminator("+");
   Token dash = Token::Terminator("|", 0, Token::Attr::kLeftAssociative);
   Token atom = Token::NonTerminator("atom");
@@ -115,6 +115,16 @@ struct __regex {
               },
               "v[0].Set(\"nfa\", v[1].Get<NfaModel>(\"nfa\").ToClosure());"))(
           atom)(star),
+      // closure: $?
+      Production(
+          closure,
+          Action(
+              [](std::vector<YYSTATE> &v) {
+                v[0].Set("nfa", v[1].Get<NfaModel>("nfa").Combine(
+                                    NfaModel(set<char>())));
+              },
+              R"(v[0].Set("nfa", v[1].Get<NfaModel>("nfa").Combine(NfaModel(set<char>())));)"))(
+          atom)(qmark),
       // an item can be an non empty_closure
       Production(item, Action(
                            [](std::vector<YYSTATE> &v) {
@@ -142,6 +152,12 @@ struct __regex {
                            "v[0].Set(\"nfa\", v[2].Get<NfaModel>(\"nfa\"));"))(
           lbrace)(seq)(rbrace),
       // an atom can be a char
+      Production(atom,
+                 Action(
+                     [](std::vector<YYSTATE> &v) {
+                       v[0].Set("nfa", NfaModel{set<char>{'?'}});
+                     },
+                     "v[0].Set(\"nfa\", v[1].Get<NfaModel>(\"nfa\"));"))(qmark),
       Production(atom,
                  Action(
                      [](std::vector<YYSTATE> &v) {
@@ -256,7 +272,8 @@ struct __regex {
       for (char c = 1; c < static_cast<char>(127); ++c) {
         cs.emplace(c);
       }
-      v[0].Set("nfa", NfaModel(cs));)"})(dot)};
+      v[0].Set("nfa", NfaModel(cs));)"})(dot),
+  };
 };
 
 static optional<__regex> opt_re{};
@@ -286,6 +303,8 @@ stream2token(std::istream &is) {
     return {{opt_re->dash, {}}};
   } else if (c == '-') {
     return {{opt_re->slash, {}}};
+  } else if (c == '?') {
+    return {{opt_re->qmark, {}}};
   } else if (c == '^') {
     return {{opt_re->anti, {}}};
   } else if (c == '+') {
@@ -298,6 +317,7 @@ stream2token(std::istream &is) {
         return {};
       }
       c = is.get();
+      // TODO: add if you need.
       // special escape character: \t, \v, \n, \f, \r
       if (c == 't') {
         c = '\t';
@@ -320,7 +340,11 @@ stream2token(std::istream &is) {
   return {};
 }
 
-void RegEx::Compile() {}
+void RegEx::Compile() {
+  if (compiled)
+    return;
+  dfa_model_ = re2dfa(expr_);
+}
 
 DfaModel re2dfa(string expr_) {
   static optional<grammar::ParsingTable> opt;
@@ -359,6 +383,7 @@ DfaModel re2dfa(string expr_) {
   parser.Parse(token_input, ad_input);
   auto tree = parser.GetTree();
   tree.Annotate();
+  tree.Print(cout);
   auto nfa = tree.GetRootAttributes()[0].Get<NfaModel>("nfa");
   return DfaModel(nfa);
 }
