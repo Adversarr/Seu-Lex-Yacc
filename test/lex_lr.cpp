@@ -27,8 +27,14 @@ std::vector<Production> productions = {
   Production()
 };
 int main() {
-  sly::core::lexical::RegEx any_string("[0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?");
-  any_string.Compile();
-  cout << any_string.CanMatch("1e9f") << endl;
+  sly::utils::Log::SetLogLevel(sly::utils::Log::kNone);
+  sly::core::lexical::RegEx float_with_exp("[0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?");
+  sly::core::lexical::RegEx s2("-=");
+  sly::core::lexical::RegEx s3("--");
+  sly::core::lexical::RegEx s4("->");
+  cout << boolalpha << float_with_exp.CanMatch("1e9f") << endl;
+  cout << boolalpha << s2.CanMatch("-=") << endl;
+  cout << boolalpha << s3.CanMatch("--") << endl;
+  cout << boolalpha << s4.CanMatch("->") << endl;
   return 0;
 }

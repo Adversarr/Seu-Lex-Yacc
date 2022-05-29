@@ -164,6 +164,12 @@ struct __regex {
                      },
                      "v[0].Set(\"nfa\", v[1].Get<NfaModel>(\"nfa\"));"))(qmark),
       Production(atom,
+                  Action(
+                     [](std::vector<YYSTATE> &v) {
+                       v[0].Set("nfa", NfaModel{set<char>{'-'}});
+                     },
+                     "v[0].Set(\"nfa\", v[1].Get<NfaModel>(\"nfa\"));"))(slash),
+      Production(atom,
                  Action(
                      [](std::vector<YYSTATE> &v) {
                        v[0].Set("nfa", v[1].Get<NfaModel>("nfa"));
@@ -415,7 +421,7 @@ DfaModel re2dfa(string expr_) {
   parser.Parse(token_input, ad_input);
   auto tree = parser.GetTree();
   tree.Annotate();
-  tree.Print(cout);
+  // tree.Print(cout);
   auto nfa = tree.GetRootAttributes()[0].Get<NfaModel>("nfa");
   return DfaModel(nfa);
 }
