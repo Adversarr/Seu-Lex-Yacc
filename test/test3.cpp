@@ -46,12 +46,12 @@ int main() {
   sly::utils::Log::SetLogLevel(sly::utils::Log::kError);
   auto ending = Token::Terminator("EOF_FLAG");
   vector<Token> lexical_tokens = {
-    Token::Terminator("word"), 
     Token::Terminator("any"), 
+    Token::Terminator("word"), 
   };
   vector<RegEx> lexical_tokens_regex = {
-    RegEx("[a-z]+"), 
     RegEx("."), 
+    RegEx("[a-z]+"), 
   };
   vector<DfaModel> lexical_tokens_dfa;
   for (auto regex : lexical_tokens_regex) {
@@ -61,8 +61,8 @@ int main() {
   auto s2ppl = Stream2TokenPipe(transition, state, lexical_tokens, ending);
 
 
-  string input_string;
-  cin >> input_string;
+  string input_string = "abc123";
+  // cin >> input_string;
   stringstream input_stream(input_string);
 
   vector<AttrDict> attributes;
