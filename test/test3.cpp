@@ -80,7 +80,7 @@ int main() {
     RegEx("="),
     RegEx("-="),
     RegEx(";"),
-    RegEx("++"),
+    RegEx("\\+\\+"),
     RegEx("\\)"),
     RegEx("\\("),
     RegEx("//[^\n]*"),

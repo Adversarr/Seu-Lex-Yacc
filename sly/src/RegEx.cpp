@@ -232,13 +232,39 @@ struct __regex {
                 cs.insert(c);
               }
               v[0].Set("cs", cs);)"))(ch)(slash)(ch)(range_content),
+      Production(
+          range_content,
+          Action(
+              [](std::vector<YYSTATE> &v) {
+                auto c_end = v[3].Get<char>("lval");
+                set<char> cs;
+                for (char c = v[1].Get<char>("lval"); c <= c_end; ++c) {
+                  cs.insert(c);
+                }
+                v[0].Set("cs", cs);
+              },
+              "auto c_end = v[3].Get<char>(\"lval\");"
+              "NfaModel nfa(c_end);"
+              "for (char c1 = v[1].Get<char>(\"lval\"); c1 < c_end; ++c1) {"
+              "nfa = nfa.Combine(NfaModel(c1));"
+              "}"
+              "v[0].Set(\"nfa\", nfa);"))(ch)(slash)(ch),
       Production(range_content,
                  Action(
                      [](std::vector<YYSTATE> &v) {
                        v[0].Set("cs", set<char>{v[1].Get<char>("lval")});
                      },
-                     R"(v[0].Set("cs", set<char>{v[1].Get<char>("lval")});)"))(
-          ch),
+                     R"(v[0].Set("cs", set<char>{v[1].Get<char>("lval")});)")
+            )(ch),
+      Production(range_content,
+                 Action(
+                     [](std::vector<YYSTATE> &v) {
+                      auto cs = v[2].Get<set<char>>("cs");
+                      cs.insert(v[1].Get<char>("lval"));
+                       v[0].Set("cs", cs);
+                     },
+                     R"(v[0].Set("cs", set<char>{v[1].Get<char>("lval")});)")
+            )(ch)(range_content),
       Production(
         range_content,
         Action{
@@ -257,6 +283,13 @@ struct __regex {
             v[0].Set("cs", cs);
           }
         })(char_in_range_content)(range_content),
+      // Production(char_in_range_content,
+      //            Action(
+      //                [](std::vector<YYSTATE> &v) {
+      //                  v[0].Set("cs", set<char>{v[1].Get<char>("lval")});
+      //                },
+      //                R"(v[0].Set("cs", set<char>{v[1].Get<char>("lval")});)")
+      //       )(ch),
       Production(
         char_in_range_content,
         Action{
@@ -271,24 +304,6 @@ struct __regex {
              v[0].Set("cs", set<char>{'+'});
           }
         })(pl),
-      Production(
-          range_content,
-          Action(
-              [](std::vector<YYSTATE> &v) {
-                auto c_end = v[3].Get<char>("lval");
-                set<char> cs;
-                for (char c = v[1].Get<char>("lval"); c <= c_end; ++c) {
-                  cs.insert(c);
-                }
-                v[0].Set("cs", cs);
-              },
-              "auto c_end = v[3].Get<char>(\"lval\");"
-              "NfaModel nfa(c_end);"
-              "for (char c1 = v[1].Get<char>(\"lval\"); c1 < c_end; ++c1) {"
-              "nfa = nfa.Combine(NfaModel(c1));"
-              "}"
-              "v[0].Set(\"nfa\", nfa);"))(ch)(slash)(ch),
-
       Production(atom, Action{[](std::vector<YYSTATE> &v) {
                                 set<char> cs;
                                 for (char c = 32; c < static_cast<char>(127);
@@ -380,7 +395,6 @@ void RegEx::Compile() {
 }
 
 DfaModel re2dfa(string expr_) {
-  // cout << "parsing..." << expr_ << endl;
   static optional<grammar::ParsingTable> opt;
   if (!opt_re.has_value()) {
     opt_re.emplace();
