@@ -19,7 +19,7 @@ LrParser::LrParser(ParsingTable &parsing_table) :
 
 void LrParser::Parse(vector<Token> token_stream, vector<YYSTATE> yylval_stream) {
   if (token_stream.back() != pt_.GetEndingToken()) {
-    spdlog::info("Input token stream does not end with {} so add to it.", pt_.GetEndingToken().ToString());
+    spdlog::debug("Input token stream does not end with {} so add to it.", pt_.GetEndingToken().ToString());
     token_stream.push_back(pt_.GetEndingToken());
     yylval_stream.emplace_back();
   }
@@ -51,7 +51,7 @@ void LrParser::ParseOnce(const vector<Token> &token_stream, const vector<YYSTATE
       current_offset_ += 1;
       // 当前状态更新
       state_stack_.emplace_back(action.id);
-      spdlog::info("Shift In [{}]], Go state {}", current_token.ToString(), state_stack_.back());
+      spdlog::debug("Shift In [{}]], Go state {}", current_token.ToString(), state_stack_.back());
     } else if (action.action == ParsingTable::kReduce) {
       // 按照 id 进行规约
       const auto& prod = pt_.GetProductions()[action.id];
@@ -68,7 +68,7 @@ void LrParser::ParseOnce(const vector<Token> &token_stream, const vector<YYSTATE
         assert(false);
       }
       state_stack_.emplace_back(go[0]);
-      spdlog::info("Reduce [{}], Go state {}", current_token.ToString(), state_stack_.back());
+      spdlog::debug("Reduce [{}], Go state {}", current_token.ToString(), state_stack_.back());
       
     } else {
       if (action.action == ParsingTable::kAccept) {

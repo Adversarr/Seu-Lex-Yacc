@@ -299,9 +299,9 @@ public:
 // #define FUNC_START_INFO sly::utils::Log::GetGlobalLogger().Info(__FILE__, __LINE__, __FUNCTION__, "Start.")
 
 
-#define FUNC_END_INFO spdlog::info("{} {} {} {}",__FILE__, __LINE__, __FUNCTION__, "Done.")
+#define FUNC_END_INFO spdlog::debug("{} {} {} {}",__FILE__, __LINE__, __FUNCTION__, "Done.")
 
-#define FUNC_START_INFO spdlog::info("{} {} {} {}",__FILE__, __LINE__, __FUNCTION__, "Start.")
+#define FUNC_START_INFO spdlog::debug("{} {} {} {}",__FILE__, __LINE__, __FUNCTION__, "Start.")
 
 
 template<typename T>

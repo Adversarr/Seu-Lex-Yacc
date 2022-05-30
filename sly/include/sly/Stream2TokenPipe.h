@@ -27,6 +27,8 @@ class Stream2TokenPipe {
 
  private:
 
+  std::string history_;
+  int history_count_;
 
   std::vector<std::vector<int>> table_;
   

@@ -290,7 +290,7 @@ int main() {
       token_input.push_back(token.value().first);
       ad_input.push_back(token.value().second);
     } else {
-      spdlog::info("Done");
+      spdlog::debug("Done");
       token_input.push_back(epsilon);
       ad_input.push_back({});
       break;

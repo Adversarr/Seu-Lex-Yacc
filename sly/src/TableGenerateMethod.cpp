@@ -43,8 +43,8 @@ bool ParsingTable::PutAction(IdType lhs, const Token &tok,
     acts = "Acc";
   else
     acts = "Err";
-  spdlog::info("Putting ACTION: StateID: {} Token: {}\t Action: {} {}", lhs,
-               tok.ToString(), acts, action.id);
+  spdlog::debug("Putting ACTION: StateID: {} Token: {}\t Action: {} {}", lhs,
+                tok.ToString(), acts, action.id);
 
   return true;
 }
@@ -58,8 +58,8 @@ bool ParsingTable::PutGoto(IdType lhs, const Token &tok, IdType rhs) {
   if (f != goto_table_[lhs].end())
     f->second.push_back(rhs);
   goto_table_[lhs].insert({tok, {rhs}});
-  spdlog::info("Putting  GOTO : From: {} To: {} \t Token{}", lhs, rhs,
-               utils::ToString{}(tok));
+  spdlog::debug("Putting  GOTO : From: {} To: {} \t Token{}", lhs, rhs,
+                utils::ToString{}(tok));
 
   return true;
 }

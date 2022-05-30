@@ -73,7 +73,7 @@ void Lr1::GenFirst() {
     ostringstream ss;
     ss << "First [" << k << "]: ";
     copy(v.begin(), v.end(), ostream_iterator<decltype(v)::value_type>(ss));
-    spdlog::info("{}",ss.str());
+    spdlog::debug("{}",ss.str());
   }
   FUNC_END_INFO;
 }
@@ -118,7 +118,7 @@ void Lr1::GenFollow() {
     ostringstream ss;
     ss << "Follow [" << k << "]: ";
     copy(v.begin(), v.end(), ostream_iterator<decltype(v)::value_type>(ss));
-    spdlog::info("{}", ss.str());
+    spdlog::debug("{}", ss.str());
   }
   FUNC_END_INFO;
 }
@@ -157,7 +157,7 @@ void Lr1::GenItemGo() {
       }
       if (curr_go.find(tok) != curr_go.end())
         throw runtime_error("Found shift-in <> shift-in conflict in: " + tok.GetTokName());
-      spdlog::info("GO[ {} ; {} ] = {}",i, tok.ToString(), new_id);
+      spdlog::debug("GO[ {} ; {} ] = {}",i, tok.ToString(), new_id);
       curr_go.insert({tok, new_id});
     };
     
@@ -184,7 +184,7 @@ void Lr1::GenItemGo() {
     }
   }
   
-  spdlog::info("LRItem Set is as follow:\n{}\n----------", ss.str());
+  spdlog::debug("LRItem Set is as follow:\n{}\n----------", ss.str());
   FUNC_END_INFO;
 }
 

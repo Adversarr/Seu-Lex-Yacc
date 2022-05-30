@@ -416,11 +416,11 @@ DfaModel re2dfa(string expr_) {
   for (;;) {
     auto token = stream2token(is);
     if (token.has_value()) {
-      spdlog::info("Caught {}", token.value().first.ToString());
+      spdlog::debug("Caught {}", token.value().first.ToString());
       token_input.push_back(token.value().first);
       ad_input.push_back(token.value().second);
     } else {
-      spdlog::info("Done");
+      spdlog::debug("Done");
       token_input.push_back(opt_re->epsilon);
       ad_input.push_back({});
       break;
