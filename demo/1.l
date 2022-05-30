@@ -15,7 +15,7 @@ void count(void);
 
 %%
 "/*"			{ comment(); }
-"//"[^\n]*              { /* consume //-comment */ }
+"//"[^\r\n]*              { /* consume //-comment */ }
 
 
 "auto"			{ count(); return(AUTO); }
@@ -61,7 +61,7 @@ void count(void);
 0[xX]{H}+{IS}?		{ count(); return(CONSTANT); }
 0[0-7]*{IS}?		{ count(); return(CONSTANT); }
 [1-9]{D}*{IS}?		{ count(); return(CONSTANT); }
-L?'(\\.|[^\\'\n])+'	{ count(); return(CONSTANT); }
+L?'(\\.|[^\\'\r\n])+'	{ count(); return(CONSTANT); }
 
 {D}+{E}{FS}?		{ count(); return(CONSTANT); }
 {D}*"."{D}+{E}?{FS}?	{ count(); return(CONSTANT); }
@@ -71,7 +71,7 @@ L?'(\\.|[^\\'\n])+'	{ count(); return(CONSTANT); }
 0[xX]{H}+"."{H}*{P}?{FS}?     { count(); return(CONSTANT); }
 
 
-L?\"(\\.|[^\\\"\n])*\"	{ count(); return(STRING_LITERAL); }
+L?\"(\\.|[^\\\"\r\n])*\"	{ count(); return(STRING_LITERAL); }
 
 "..."			{ count(); return(ELLIPSIS); }
 ">>="			{ count(); return(RIGHT_ASSIGN); }
@@ -120,7 +120,7 @@ L?\"(\\.|[^\\\"\n])*\"	{ count(); return(STRING_LITERAL); }
 "|"			{ count(); return('|'); }
 "?"			{ count(); return('?'); }
 
-[ \t\v\n\f]		{ count(); }
+[ \t\v\r\n\f]		{ count(); }
 .			{ /* Add code to complain about unmatched characters */ }
 
 %%
@@ -152,7 +152,7 @@ void count(void)
 	int i;
 
 	for (i = 0; yytext[i] != '\0'; i++)
-		if (yytext[i] == '\n')
+		if (yytext[i] == '\r' || yytext[i] == '\n')
 			column = 0;
 		else if (yytext[i] == '\t')
 			column += 8 - (column % 8);

@@ -256,10 +256,10 @@ LexParms ParseLexParameters(stringstream &file_stream) {
     auto rbrace = Token::Terminator("rbrace");
     auto line   = Token::Terminator("line");
     // auto ending = Token::Terminator("EOF_FLAG");
-    RegEx re_delim("%%[\r\n]+");
-    RegEx re_lbrace("%{[\r\n]+");
-    RegEx re_rbrace("%}[\r\n]+");
-    RegEx re_line(".*[\r\n]+");
+    RegEx re_delim  {R"(%%[\r\n]+)"};
+    RegEx re_lbrace {R"(%{[\r\n]+)"};
+    RegEx re_rbrace {R"(%}[\r\n]+)"};
+    RegEx re_line   {R"([^\r\n]*[\r\n]+)"};
     auto LexFile   = Token::NonTerminator("LexFile");
     auto Defs      = Token::NonTerminator("Defs");
     auto DefsLine  = Token::NonTerminator("DefsLine");
@@ -362,6 +362,7 @@ LexParms ParseLexParameters(stringstream &file_stream) {
     auto token = s2ppl.value().Defer(file_stream);
     AttrDict ad;
     ad.Set("lval", s2ppl.value().buffer_); 
+
     tokens.emplace_back(token);
     attributes.emplace_back(ad);
     if (token == ending)
@@ -393,8 +394,8 @@ YaccParms ParseYaccParameters(stringstream &file_stream) {
     auto delim  = Token::Terminator("delim");
     auto line   = Token::Terminator("line");
     // auto ending = Token::Terminator("EOF_FLAG");
-    RegEx re_delim("%%[\r\n]+");
-    RegEx re_line(".*[\r\n]+");
+    RegEx re_delim {R"(%%[\r\n]+)"};
+    RegEx re_line  {R"([^\r\n]*[\r\n]+)"};
     auto YaccFile  = Token::NonTerminator("YaccFile");
     auto Defs      = Token::NonTerminator("Defs");
     auto DefsLine  = Token::NonTerminator("DefsLine");
@@ -631,7 +632,7 @@ using namespace std;)";
     oss << ";" << endl;
     oss << "  Production(syntax_tokens[" << prod.startToken << "], {[](vector<YYSTATE> &v) {" << endl;
     oss << "      // action ..." << endl;
-    oss << "  }})";
+    oss << "    }})";
     for (const string &nextToken : prod.nextTokens) {
       oss << "(syntax_tokens[" << nextToken << "])";
     }
@@ -667,11 +668,12 @@ int check_type(void)
   for (const auto &[regex, action] : parms.lexTokens) {
     oss << "if (token_name == R\"(" << regex << ")\") { " << endl;
     oss << "    { " << action << "}" << endl;
-    oss << "} else ";
+    oss << "  } else ";
   }
   oss << " {" << endl;
   oss << "    return 0;" << endl;
   oss << "  }" << endl;
+  oss << "  return 0;" << endl;
   oss << "}" << endl;
   oss << endl;
 
@@ -681,7 +683,7 @@ int check_type(void)
 
   /* section 7.1 */
   oss << "  /* section 7.1 */" << endl;
-  oss << "  sly::utils::Log::SetLogLevel(sly::utils::Log::kError);" << endl;
+  oss << "  spdlog::set_level(spdlog::level::info);" << endl;
   oss << "  " << endl;
   
   /* section 7.2 */
@@ -740,6 +742,8 @@ int check_type(void)
     ad.Set("lval", s2ppl.buffer_); 
 
     IdType id = to_syntax_token_id(lexical_token, ad);
+    if (id == 0) 
+      continue;
     Token syntax_token = syntax_tokens[id];
 
     tokens.emplace_back(syntax_token);
@@ -747,8 +751,10 @@ int check_type(void)
   }
 
   cerr << "tokens: " << endl;
-  for (auto token : tokens) {
-    cerr << "  " << token.GetTokName() << endl;
+  for (int i = 0; i < tokens.size(); i++) {
+    auto token = tokens[i];
+    auto ad = attributes[i];
+    cerr << "  " << ad.Get<string>("lval") << " : " << token.GetTokName() << endl;
   }
 
   parser.Parse(tokens, attributes);
@@ -764,7 +770,7 @@ int check_type(void)
 
 int main() {
   // ignore warnings
-  sly::utils::Log::SetLogLevel(sly::utils::Log::kError);
+  spdlog::set_level(spdlog::level::err);
 
   stringstream lex_file_stream;
   stringstream yacc_file_stream;
@@ -779,7 +785,9 @@ int main() {
   }
 
   auto lexParms = ParseLexParameters(lex_file_stream);
+  // lexParms.Print(std::cout);
   auto yaccParms = ParseYaccParameters(yacc_file_stream);
+  // yaccParms.Print(std::cout);
   auto parms = ParseParameters(lexParms, yaccParms);
   parms.Print(std::cout);
 

@@ -561,951 +561,951 @@ vector<Production> productions = {
   // primary_expression : IDENTIFIER ;
   Production(syntax_tokens[primary_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[IDENTIFIER]), 
+    }})(syntax_tokens[IDENTIFIER]), 
   // primary_expression : CONSTANT ;
   Production(syntax_tokens[primary_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[CONSTANT]), 
+    }})(syntax_tokens[CONSTANT]), 
   // primary_expression : STRING_LITERAL ;
   Production(syntax_tokens[primary_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[STRING_LITERAL]), 
+    }})(syntax_tokens[STRING_LITERAL]), 
   // primary_expression : '(' expression ')' ;
   Production(syntax_tokens[primary_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['('])(syntax_tokens[expression])(syntax_tokens[')']), 
+    }})(syntax_tokens['('])(syntax_tokens[expression])(syntax_tokens[')']), 
   // postfix_expression : primary_expression ;
   Production(syntax_tokens[postfix_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[primary_expression]), 
+    }})(syntax_tokens[primary_expression]), 
   // postfix_expression : postfix_expression '[' expression ']' ;
   Production(syntax_tokens[postfix_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[postfix_expression])(syntax_tokens['['])(syntax_tokens[expression])(syntax_tokens[']']), 
+    }})(syntax_tokens[postfix_expression])(syntax_tokens['['])(syntax_tokens[expression])(syntax_tokens[']']), 
   // postfix_expression : postfix_expression '(' ')' ;
   Production(syntax_tokens[postfix_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[postfix_expression])(syntax_tokens['('])(syntax_tokens[')']), 
+    }})(syntax_tokens[postfix_expression])(syntax_tokens['('])(syntax_tokens[')']), 
   // postfix_expression : postfix_expression '(' argument_expression_list ')' ;
   Production(syntax_tokens[postfix_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[postfix_expression])(syntax_tokens['('])(syntax_tokens[argument_expression_list])(syntax_tokens[')']), 
+    }})(syntax_tokens[postfix_expression])(syntax_tokens['('])(syntax_tokens[argument_expression_list])(syntax_tokens[')']), 
   // postfix_expression : postfix_expression '.' IDENTIFIER ;
   Production(syntax_tokens[postfix_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[postfix_expression])(syntax_tokens['.'])(syntax_tokens[IDENTIFIER]), 
+    }})(syntax_tokens[postfix_expression])(syntax_tokens['.'])(syntax_tokens[IDENTIFIER]), 
   // postfix_expression : postfix_expression PTR_OP IDENTIFIER ;
   Production(syntax_tokens[postfix_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[postfix_expression])(syntax_tokens[PTR_OP])(syntax_tokens[IDENTIFIER]), 
+    }})(syntax_tokens[postfix_expression])(syntax_tokens[PTR_OP])(syntax_tokens[IDENTIFIER]), 
   // postfix_expression : postfix_expression INC_OP ;
   Production(syntax_tokens[postfix_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[postfix_expression])(syntax_tokens[INC_OP]), 
+    }})(syntax_tokens[postfix_expression])(syntax_tokens[INC_OP]), 
   // postfix_expression : postfix_expression DEC_OP ;
   Production(syntax_tokens[postfix_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[postfix_expression])(syntax_tokens[DEC_OP]), 
+    }})(syntax_tokens[postfix_expression])(syntax_tokens[DEC_OP]), 
   // postfix_expression : '(' type_name ')' '{' initializer_list '}' ;
   Production(syntax_tokens[postfix_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['('])(syntax_tokens[type_name])(syntax_tokens[')'])(syntax_tokens['{'])(syntax_tokens[initializer_list])(syntax_tokens['}']), 
+    }})(syntax_tokens['('])(syntax_tokens[type_name])(syntax_tokens[')'])(syntax_tokens['{'])(syntax_tokens[initializer_list])(syntax_tokens['}']), 
   // postfix_expression : '(' type_name ')' '{' initializer_list ',' '}' ;
   Production(syntax_tokens[postfix_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['('])(syntax_tokens[type_name])(syntax_tokens[')'])(syntax_tokens['{'])(syntax_tokens[initializer_list])(syntax_tokens[','])(syntax_tokens['}']), 
+    }})(syntax_tokens['('])(syntax_tokens[type_name])(syntax_tokens[')'])(syntax_tokens['{'])(syntax_tokens[initializer_list])(syntax_tokens[','])(syntax_tokens['}']), 
   // argument_expression_list : assignment_expression ;
   Production(syntax_tokens[argument_expression_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[assignment_expression]), 
+    }})(syntax_tokens[assignment_expression]), 
   // argument_expression_list : argument_expression_list ',' assignment_expression ;
   Production(syntax_tokens[argument_expression_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[argument_expression_list])(syntax_tokens[','])(syntax_tokens[assignment_expression]), 
+    }})(syntax_tokens[argument_expression_list])(syntax_tokens[','])(syntax_tokens[assignment_expression]), 
   // unary_expression : postfix_expression ;
   Production(syntax_tokens[unary_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[postfix_expression]), 
+    }})(syntax_tokens[postfix_expression]), 
   // unary_expression : INC_OP unary_expression ;
   Production(syntax_tokens[unary_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[INC_OP])(syntax_tokens[unary_expression]), 
+    }})(syntax_tokens[INC_OP])(syntax_tokens[unary_expression]), 
   // unary_expression : DEC_OP unary_expression ;
   Production(syntax_tokens[unary_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[DEC_OP])(syntax_tokens[unary_expression]), 
+    }})(syntax_tokens[DEC_OP])(syntax_tokens[unary_expression]), 
   // unary_expression : unary_operator cast_expression ;
   Production(syntax_tokens[unary_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[unary_operator])(syntax_tokens[cast_expression]), 
+    }})(syntax_tokens[unary_operator])(syntax_tokens[cast_expression]), 
   // unary_expression : SIZEOF unary_expression ;
   Production(syntax_tokens[unary_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[SIZEOF])(syntax_tokens[unary_expression]), 
+    }})(syntax_tokens[SIZEOF])(syntax_tokens[unary_expression]), 
   // unary_expression : SIZEOF '(' type_name ')' ;
   Production(syntax_tokens[unary_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[SIZEOF])(syntax_tokens['('])(syntax_tokens[type_name])(syntax_tokens[')']), 
+    }})(syntax_tokens[SIZEOF])(syntax_tokens['('])(syntax_tokens[type_name])(syntax_tokens[')']), 
   // unary_operator : '&' ;
   Production(syntax_tokens[unary_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['&']), 
+    }})(syntax_tokens['&']), 
   // unary_operator : '*' ;
   Production(syntax_tokens[unary_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['*']), 
+    }})(syntax_tokens['*']), 
   // unary_operator : '+' ;
   Production(syntax_tokens[unary_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['+']), 
+    }})(syntax_tokens['+']), 
   // unary_operator : '-' ;
   Production(syntax_tokens[unary_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['-']), 
+    }})(syntax_tokens['-']), 
   // unary_operator : '~' ;
   Production(syntax_tokens[unary_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['~']), 
+    }})(syntax_tokens['~']), 
   // unary_operator : '!' ;
   Production(syntax_tokens[unary_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['!']), 
+    }})(syntax_tokens['!']), 
   // cast_expression : unary_expression ;
   Production(syntax_tokens[cast_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[unary_expression]), 
+    }})(syntax_tokens[unary_expression]), 
   // cast_expression : '(' type_name ')' cast_expression ;
   Production(syntax_tokens[cast_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['('])(syntax_tokens[type_name])(syntax_tokens[')'])(syntax_tokens[cast_expression]), 
+    }})(syntax_tokens['('])(syntax_tokens[type_name])(syntax_tokens[')'])(syntax_tokens[cast_expression]), 
   // multiplicative_expression : cast_expression ;
   Production(syntax_tokens[multiplicative_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[cast_expression]), 
+    }})(syntax_tokens[cast_expression]), 
   // multiplicative_expression : multiplicative_expression '*' cast_expression ;
   Production(syntax_tokens[multiplicative_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[multiplicative_expression])(syntax_tokens['*'])(syntax_tokens[cast_expression]), 
+    }})(syntax_tokens[multiplicative_expression])(syntax_tokens['*'])(syntax_tokens[cast_expression]), 
   // multiplicative_expression : multiplicative_expression '/' cast_expression ;
   Production(syntax_tokens[multiplicative_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[multiplicative_expression])(syntax_tokens['/'])(syntax_tokens[cast_expression]), 
+    }})(syntax_tokens[multiplicative_expression])(syntax_tokens['/'])(syntax_tokens[cast_expression]), 
   // multiplicative_expression : multiplicative_expression '%' cast_expression ;
   Production(syntax_tokens[multiplicative_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[multiplicative_expression])(syntax_tokens['%'])(syntax_tokens[cast_expression]), 
+    }})(syntax_tokens[multiplicative_expression])(syntax_tokens['%'])(syntax_tokens[cast_expression]), 
   // additive_expression : multiplicative_expression ;
   Production(syntax_tokens[additive_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[multiplicative_expression]), 
+    }})(syntax_tokens[multiplicative_expression]), 
   // additive_expression : additive_expression '+' multiplicative_expression ;
   Production(syntax_tokens[additive_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[additive_expression])(syntax_tokens['+'])(syntax_tokens[multiplicative_expression]), 
+    }})(syntax_tokens[additive_expression])(syntax_tokens['+'])(syntax_tokens[multiplicative_expression]), 
   // additive_expression : additive_expression '-' multiplicative_expression ;
   Production(syntax_tokens[additive_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[additive_expression])(syntax_tokens['-'])(syntax_tokens[multiplicative_expression]), 
+    }})(syntax_tokens[additive_expression])(syntax_tokens['-'])(syntax_tokens[multiplicative_expression]), 
   // shift_expression : additive_expression ;
   Production(syntax_tokens[shift_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[additive_expression]), 
+    }})(syntax_tokens[additive_expression]), 
   // shift_expression : shift_expression LEFT_OP additive_expression ;
   Production(syntax_tokens[shift_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[shift_expression])(syntax_tokens[LEFT_OP])(syntax_tokens[additive_expression]), 
+    }})(syntax_tokens[shift_expression])(syntax_tokens[LEFT_OP])(syntax_tokens[additive_expression]), 
   // shift_expression : shift_expression RIGHT_OP additive_expression ;
   Production(syntax_tokens[shift_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[shift_expression])(syntax_tokens[RIGHT_OP])(syntax_tokens[additive_expression]), 
+    }})(syntax_tokens[shift_expression])(syntax_tokens[RIGHT_OP])(syntax_tokens[additive_expression]), 
   // relational_expression : shift_expression ;
   Production(syntax_tokens[relational_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[shift_expression]), 
+    }})(syntax_tokens[shift_expression]), 
   // relational_expression : relational_expression '<' shift_expression ;
   Production(syntax_tokens[relational_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[relational_expression])(syntax_tokens['<'])(syntax_tokens[shift_expression]), 
+    }})(syntax_tokens[relational_expression])(syntax_tokens['<'])(syntax_tokens[shift_expression]), 
   // relational_expression : relational_expression '>' shift_expression ;
   Production(syntax_tokens[relational_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[relational_expression])(syntax_tokens['>'])(syntax_tokens[shift_expression]), 
+    }})(syntax_tokens[relational_expression])(syntax_tokens['>'])(syntax_tokens[shift_expression]), 
   // relational_expression : relational_expression LE_OP shift_expression ;
   Production(syntax_tokens[relational_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[relational_expression])(syntax_tokens[LE_OP])(syntax_tokens[shift_expression]), 
+    }})(syntax_tokens[relational_expression])(syntax_tokens[LE_OP])(syntax_tokens[shift_expression]), 
   // relational_expression : relational_expression GE_OP shift_expression ;
   Production(syntax_tokens[relational_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[relational_expression])(syntax_tokens[GE_OP])(syntax_tokens[shift_expression]), 
+    }})(syntax_tokens[relational_expression])(syntax_tokens[GE_OP])(syntax_tokens[shift_expression]), 
   // equality_expression : relational_expression ;
   Production(syntax_tokens[equality_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[relational_expression]), 
+    }})(syntax_tokens[relational_expression]), 
   // equality_expression : equality_expression EQ_OP relational_expression ;
   Production(syntax_tokens[equality_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[equality_expression])(syntax_tokens[EQ_OP])(syntax_tokens[relational_expression]), 
+    }})(syntax_tokens[equality_expression])(syntax_tokens[EQ_OP])(syntax_tokens[relational_expression]), 
   // equality_expression : equality_expression NE_OP relational_expression ;
   Production(syntax_tokens[equality_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[equality_expression])(syntax_tokens[NE_OP])(syntax_tokens[relational_expression]), 
+    }})(syntax_tokens[equality_expression])(syntax_tokens[NE_OP])(syntax_tokens[relational_expression]), 
   // and_expression : equality_expression ;
   Production(syntax_tokens[and_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[equality_expression]), 
+    }})(syntax_tokens[equality_expression]), 
   // and_expression : and_expression '&' equality_expression ;
   Production(syntax_tokens[and_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[and_expression])(syntax_tokens['&'])(syntax_tokens[equality_expression]), 
+    }})(syntax_tokens[and_expression])(syntax_tokens['&'])(syntax_tokens[equality_expression]), 
   // exclusive_or_expression : and_expression ;
   Production(syntax_tokens[exclusive_or_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[and_expression]), 
+    }})(syntax_tokens[and_expression]), 
   // exclusive_or_expression : exclusive_or_expression '^' and_expression ;
   Production(syntax_tokens[exclusive_or_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[exclusive_or_expression])(syntax_tokens['^'])(syntax_tokens[and_expression]), 
+    }})(syntax_tokens[exclusive_or_expression])(syntax_tokens['^'])(syntax_tokens[and_expression]), 
   // inclusive_or_expression : exclusive_or_expression ;
   Production(syntax_tokens[inclusive_or_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[exclusive_or_expression]), 
+    }})(syntax_tokens[exclusive_or_expression]), 
   // inclusive_or_expression : inclusive_or_expression '|' exclusive_or_expression ;
   Production(syntax_tokens[inclusive_or_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[inclusive_or_expression])(syntax_tokens['|'])(syntax_tokens[exclusive_or_expression]), 
+    }})(syntax_tokens[inclusive_or_expression])(syntax_tokens['|'])(syntax_tokens[exclusive_or_expression]), 
   // logical_and_expression : inclusive_or_expression ;
   Production(syntax_tokens[logical_and_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[inclusive_or_expression]), 
+    }})(syntax_tokens[inclusive_or_expression]), 
   // logical_and_expression : logical_and_expression AND_OP inclusive_or_expression ;
   Production(syntax_tokens[logical_and_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[logical_and_expression])(syntax_tokens[AND_OP])(syntax_tokens[inclusive_or_expression]), 
+    }})(syntax_tokens[logical_and_expression])(syntax_tokens[AND_OP])(syntax_tokens[inclusive_or_expression]), 
   // logical_or_expression : logical_and_expression ;
   Production(syntax_tokens[logical_or_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[logical_and_expression]), 
+    }})(syntax_tokens[logical_and_expression]), 
   // logical_or_expression : logical_or_expression OR_OP logical_and_expression ;
   Production(syntax_tokens[logical_or_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[logical_or_expression])(syntax_tokens[OR_OP])(syntax_tokens[logical_and_expression]), 
+    }})(syntax_tokens[logical_or_expression])(syntax_tokens[OR_OP])(syntax_tokens[logical_and_expression]), 
   // conditional_expression : logical_or_expression ;
   Production(syntax_tokens[conditional_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[logical_or_expression]), 
+    }})(syntax_tokens[logical_or_expression]), 
   // conditional_expression : logical_or_expression '?' expression ':' conditional_expression ;
   Production(syntax_tokens[conditional_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[logical_or_expression])(syntax_tokens['?'])(syntax_tokens[expression])(syntax_tokens[':'])(syntax_tokens[conditional_expression]), 
+    }})(syntax_tokens[logical_or_expression])(syntax_tokens['?'])(syntax_tokens[expression])(syntax_tokens[':'])(syntax_tokens[conditional_expression]), 
   // assignment_expression : conditional_expression ;
   Production(syntax_tokens[assignment_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[conditional_expression]), 
+    }})(syntax_tokens[conditional_expression]), 
   // assignment_expression : unary_expression assignment_operator assignment_expression ;
   Production(syntax_tokens[assignment_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[unary_expression])(syntax_tokens[assignment_operator])(syntax_tokens[assignment_expression]), 
+    }})(syntax_tokens[unary_expression])(syntax_tokens[assignment_operator])(syntax_tokens[assignment_expression]), 
   // assignment_operator : '=' ;
   Production(syntax_tokens[assignment_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['=']), 
+    }})(syntax_tokens['=']), 
   // assignment_operator : MUL_ASSIGN ;
   Production(syntax_tokens[assignment_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[MUL_ASSIGN]), 
+    }})(syntax_tokens[MUL_ASSIGN]), 
   // assignment_operator : DIV_ASSIGN ;
   Production(syntax_tokens[assignment_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[DIV_ASSIGN]), 
+    }})(syntax_tokens[DIV_ASSIGN]), 
   // assignment_operator : MOD_ASSIGN ;
   Production(syntax_tokens[assignment_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[MOD_ASSIGN]), 
+    }})(syntax_tokens[MOD_ASSIGN]), 
   // assignment_operator : ADD_ASSIGN ;
   Production(syntax_tokens[assignment_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[ADD_ASSIGN]), 
+    }})(syntax_tokens[ADD_ASSIGN]), 
   // assignment_operator : SUB_ASSIGN ;
   Production(syntax_tokens[assignment_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[SUB_ASSIGN]), 
+    }})(syntax_tokens[SUB_ASSIGN]), 
   // assignment_operator : LEFT_ASSIGN ;
   Production(syntax_tokens[assignment_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[LEFT_ASSIGN]), 
+    }})(syntax_tokens[LEFT_ASSIGN]), 
   // assignment_operator : RIGHT_ASSIGN ;
   Production(syntax_tokens[assignment_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[RIGHT_ASSIGN]), 
+    }})(syntax_tokens[RIGHT_ASSIGN]), 
   // assignment_operator : AND_ASSIGN ;
   Production(syntax_tokens[assignment_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[AND_ASSIGN]), 
+    }})(syntax_tokens[AND_ASSIGN]), 
   // assignment_operator : XOR_ASSIGN ;
   Production(syntax_tokens[assignment_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[XOR_ASSIGN]), 
+    }})(syntax_tokens[XOR_ASSIGN]), 
   // assignment_operator : OR_ASSIGN ;
   Production(syntax_tokens[assignment_operator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[OR_ASSIGN]), 
+    }})(syntax_tokens[OR_ASSIGN]), 
   // expression : assignment_expression ;
   Production(syntax_tokens[expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[assignment_expression]), 
+    }})(syntax_tokens[assignment_expression]), 
   // expression : expression ',' assignment_expression ;
   Production(syntax_tokens[expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[expression])(syntax_tokens[','])(syntax_tokens[assignment_expression]), 
+    }})(syntax_tokens[expression])(syntax_tokens[','])(syntax_tokens[assignment_expression]), 
   // constant_expression : conditional_expression ;
   Production(syntax_tokens[constant_expression], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[conditional_expression]), 
+    }})(syntax_tokens[conditional_expression]), 
   // declaration : declaration_specifiers ';' ;
   Production(syntax_tokens[declaration], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declaration_specifiers])(syntax_tokens[';']), 
+    }})(syntax_tokens[declaration_specifiers])(syntax_tokens[';']), 
   // declaration : declaration_specifiers init_declarator_list ';' ;
   Production(syntax_tokens[declaration], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declaration_specifiers])(syntax_tokens[init_declarator_list])(syntax_tokens[';']), 
+    }})(syntax_tokens[declaration_specifiers])(syntax_tokens[init_declarator_list])(syntax_tokens[';']), 
   // declaration_specifiers : storage_class_specifier ;
   Production(syntax_tokens[declaration_specifiers], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[storage_class_specifier]), 
+    }})(syntax_tokens[storage_class_specifier]), 
   // declaration_specifiers : storage_class_specifier declaration_specifiers ;
   Production(syntax_tokens[declaration_specifiers], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[storage_class_specifier])(syntax_tokens[declaration_specifiers]), 
+    }})(syntax_tokens[storage_class_specifier])(syntax_tokens[declaration_specifiers]), 
   // declaration_specifiers : type_specifier ;
   Production(syntax_tokens[declaration_specifiers], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[type_specifier]), 
+    }})(syntax_tokens[type_specifier]), 
   // declaration_specifiers : type_specifier declaration_specifiers ;
   Production(syntax_tokens[declaration_specifiers], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[type_specifier])(syntax_tokens[declaration_specifiers]), 
+    }})(syntax_tokens[type_specifier])(syntax_tokens[declaration_specifiers]), 
   // declaration_specifiers : type_qualifier ;
   Production(syntax_tokens[declaration_specifiers], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[type_qualifier]), 
+    }})(syntax_tokens[type_qualifier]), 
   // declaration_specifiers : type_qualifier declaration_specifiers ;
   Production(syntax_tokens[declaration_specifiers], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[type_qualifier])(syntax_tokens[declaration_specifiers]), 
+    }})(syntax_tokens[type_qualifier])(syntax_tokens[declaration_specifiers]), 
   // declaration_specifiers : function_specifier ;
   Production(syntax_tokens[declaration_specifiers], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[function_specifier]), 
+    }})(syntax_tokens[function_specifier]), 
   // declaration_specifiers : function_specifier declaration_specifiers ;
   Production(syntax_tokens[declaration_specifiers], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[function_specifier])(syntax_tokens[declaration_specifiers]), 
+    }})(syntax_tokens[function_specifier])(syntax_tokens[declaration_specifiers]), 
   // init_declarator_list : init_declarator ;
   Production(syntax_tokens[init_declarator_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[init_declarator]), 
+    }})(syntax_tokens[init_declarator]), 
   // init_declarator_list : init_declarator_list ',' init_declarator ;
   Production(syntax_tokens[init_declarator_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[init_declarator_list])(syntax_tokens[','])(syntax_tokens[init_declarator]), 
+    }})(syntax_tokens[init_declarator_list])(syntax_tokens[','])(syntax_tokens[init_declarator]), 
   // init_declarator : declarator ;
   Production(syntax_tokens[init_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declarator]), 
+    }})(syntax_tokens[declarator]), 
   // init_declarator : declarator '=' initializer ;
   Production(syntax_tokens[init_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declarator])(syntax_tokens['='])(syntax_tokens[initializer]), 
+    }})(syntax_tokens[declarator])(syntax_tokens['='])(syntax_tokens[initializer]), 
   // storage_class_specifier : TYPEDEF ;
   Production(syntax_tokens[storage_class_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[TYPEDEF]), 
+    }})(syntax_tokens[TYPEDEF]), 
   // storage_class_specifier : EXTERN ;
   Production(syntax_tokens[storage_class_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[EXTERN]), 
+    }})(syntax_tokens[EXTERN]), 
   // storage_class_specifier : STATIC ;
   Production(syntax_tokens[storage_class_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[STATIC]), 
+    }})(syntax_tokens[STATIC]), 
   // storage_class_specifier : AUTO ;
   Production(syntax_tokens[storage_class_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[AUTO]), 
+    }})(syntax_tokens[AUTO]), 
   // storage_class_specifier : REGISTER ;
   Production(syntax_tokens[storage_class_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[REGISTER]), 
+    }})(syntax_tokens[REGISTER]), 
   // type_specifier : VOID ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[VOID]), 
+    }})(syntax_tokens[VOID]), 
   // type_specifier : CHAR ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[CHAR]), 
+    }})(syntax_tokens[CHAR]), 
   // type_specifier : SHORT ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[SHORT]), 
+    }})(syntax_tokens[SHORT]), 
   // type_specifier : INT ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[INT]), 
+    }})(syntax_tokens[INT]), 
   // type_specifier : LONG ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[LONG]), 
+    }})(syntax_tokens[LONG]), 
   // type_specifier : FLOAT ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[FLOAT]), 
+    }})(syntax_tokens[FLOAT]), 
   // type_specifier : DOUBLE ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[DOUBLE]), 
+    }})(syntax_tokens[DOUBLE]), 
   // type_specifier : SIGNED ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[SIGNED]), 
+    }})(syntax_tokens[SIGNED]), 
   // type_specifier : UNSIGNED ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[UNSIGNED]), 
+    }})(syntax_tokens[UNSIGNED]), 
   // type_specifier : BOOL ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[BOOL]), 
+    }})(syntax_tokens[BOOL]), 
   // type_specifier : COMPLEX ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[COMPLEX]), 
+    }})(syntax_tokens[COMPLEX]), 
   // type_specifier : IMAGINARY ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[IMAGINARY]), 
+    }})(syntax_tokens[IMAGINARY]), 
   // type_specifier : struct_or_union_specifier ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[struct_or_union_specifier]), 
+    }})(syntax_tokens[struct_or_union_specifier]), 
   // type_specifier : enum_specifier ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[enum_specifier]), 
+    }})(syntax_tokens[enum_specifier]), 
   // type_specifier : TYPE_NAME ;
   Production(syntax_tokens[type_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[TYPE_NAME]), 
+    }})(syntax_tokens[TYPE_NAME]), 
   // struct_or_union_specifier : struct_or_union IDENTIFIER '{' struct_declaration_list '}' ;
   Production(syntax_tokens[struct_or_union_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[struct_or_union])(syntax_tokens[IDENTIFIER])(syntax_tokens['{'])(syntax_tokens[struct_declaration_list])(syntax_tokens['}']), 
+    }})(syntax_tokens[struct_or_union])(syntax_tokens[IDENTIFIER])(syntax_tokens['{'])(syntax_tokens[struct_declaration_list])(syntax_tokens['}']), 
   // struct_or_union_specifier : struct_or_union '{' struct_declaration_list '}' ;
   Production(syntax_tokens[struct_or_union_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[struct_or_union])(syntax_tokens['{'])(syntax_tokens[struct_declaration_list])(syntax_tokens['}']), 
+    }})(syntax_tokens[struct_or_union])(syntax_tokens['{'])(syntax_tokens[struct_declaration_list])(syntax_tokens['}']), 
   // struct_or_union_specifier : struct_or_union IDENTIFIER ;
   Production(syntax_tokens[struct_or_union_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[struct_or_union])(syntax_tokens[IDENTIFIER]), 
+    }})(syntax_tokens[struct_or_union])(syntax_tokens[IDENTIFIER]), 
   // struct_or_union : STRUCT ;
   Production(syntax_tokens[struct_or_union], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[STRUCT]), 
+    }})(syntax_tokens[STRUCT]), 
   // struct_or_union : UNION ;
   Production(syntax_tokens[struct_or_union], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[UNION]), 
+    }})(syntax_tokens[UNION]), 
   // struct_declaration_list : struct_declaration ;
   Production(syntax_tokens[struct_declaration_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[struct_declaration]), 
+    }})(syntax_tokens[struct_declaration]), 
   // struct_declaration_list : struct_declaration_list struct_declaration ;
   Production(syntax_tokens[struct_declaration_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[struct_declaration_list])(syntax_tokens[struct_declaration]), 
+    }})(syntax_tokens[struct_declaration_list])(syntax_tokens[struct_declaration]), 
   // struct_declaration : specifier_qualifier_list struct_declarator_list ';' ;
   Production(syntax_tokens[struct_declaration], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[specifier_qualifier_list])(syntax_tokens[struct_declarator_list])(syntax_tokens[';']), 
+    }})(syntax_tokens[specifier_qualifier_list])(syntax_tokens[struct_declarator_list])(syntax_tokens[';']), 
   // specifier_qualifier_list : type_specifier specifier_qualifier_list ;
   Production(syntax_tokens[specifier_qualifier_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[type_specifier])(syntax_tokens[specifier_qualifier_list]), 
+    }})(syntax_tokens[type_specifier])(syntax_tokens[specifier_qualifier_list]), 
   // specifier_qualifier_list : type_specifier ;
   Production(syntax_tokens[specifier_qualifier_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[type_specifier]), 
+    }})(syntax_tokens[type_specifier]), 
   // specifier_qualifier_list : type_qualifier specifier_qualifier_list ;
   Production(syntax_tokens[specifier_qualifier_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[type_qualifier])(syntax_tokens[specifier_qualifier_list]), 
+    }})(syntax_tokens[type_qualifier])(syntax_tokens[specifier_qualifier_list]), 
   // specifier_qualifier_list : type_qualifier ;
   Production(syntax_tokens[specifier_qualifier_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[type_qualifier]), 
+    }})(syntax_tokens[type_qualifier]), 
   // struct_declarator_list : struct_declarator ;
   Production(syntax_tokens[struct_declarator_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[struct_declarator]), 
+    }})(syntax_tokens[struct_declarator]), 
   // struct_declarator_list : struct_declarator_list ',' struct_declarator ;
   Production(syntax_tokens[struct_declarator_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[struct_declarator_list])(syntax_tokens[','])(syntax_tokens[struct_declarator]), 
+    }})(syntax_tokens[struct_declarator_list])(syntax_tokens[','])(syntax_tokens[struct_declarator]), 
   // struct_declarator : declarator ;
   Production(syntax_tokens[struct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declarator]), 
+    }})(syntax_tokens[declarator]), 
   // struct_declarator : ':' constant_expression ;
   Production(syntax_tokens[struct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[':'])(syntax_tokens[constant_expression]), 
+    }})(syntax_tokens[':'])(syntax_tokens[constant_expression]), 
   // struct_declarator : declarator ':' constant_expression ;
   Production(syntax_tokens[struct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declarator])(syntax_tokens[':'])(syntax_tokens[constant_expression]), 
+    }})(syntax_tokens[declarator])(syntax_tokens[':'])(syntax_tokens[constant_expression]), 
   // enum_specifier : ENUM '{' enumerator_list '}' ;
   Production(syntax_tokens[enum_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[ENUM])(syntax_tokens['{'])(syntax_tokens[enumerator_list])(syntax_tokens['}']), 
+    }})(syntax_tokens[ENUM])(syntax_tokens['{'])(syntax_tokens[enumerator_list])(syntax_tokens['}']), 
   // enum_specifier : ENUM IDENTIFIER '{' enumerator_list '}' ;
   Production(syntax_tokens[enum_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[ENUM])(syntax_tokens[IDENTIFIER])(syntax_tokens['{'])(syntax_tokens[enumerator_list])(syntax_tokens['}']), 
+    }})(syntax_tokens[ENUM])(syntax_tokens[IDENTIFIER])(syntax_tokens['{'])(syntax_tokens[enumerator_list])(syntax_tokens['}']), 
   // enum_specifier : ENUM '{' enumerator_list ',' '}' ;
   Production(syntax_tokens[enum_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[ENUM])(syntax_tokens['{'])(syntax_tokens[enumerator_list])(syntax_tokens[','])(syntax_tokens['}']), 
+    }})(syntax_tokens[ENUM])(syntax_tokens['{'])(syntax_tokens[enumerator_list])(syntax_tokens[','])(syntax_tokens['}']), 
   // enum_specifier : ENUM IDENTIFIER '{' enumerator_list ',' '}' ;
   Production(syntax_tokens[enum_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[ENUM])(syntax_tokens[IDENTIFIER])(syntax_tokens['{'])(syntax_tokens[enumerator_list])(syntax_tokens[','])(syntax_tokens['}']), 
+    }})(syntax_tokens[ENUM])(syntax_tokens[IDENTIFIER])(syntax_tokens['{'])(syntax_tokens[enumerator_list])(syntax_tokens[','])(syntax_tokens['}']), 
   // enum_specifier : ENUM IDENTIFIER ;
   Production(syntax_tokens[enum_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[ENUM])(syntax_tokens[IDENTIFIER]), 
+    }})(syntax_tokens[ENUM])(syntax_tokens[IDENTIFIER]), 
   // enumerator_list : enumerator ;
   Production(syntax_tokens[enumerator_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[enumerator]), 
+    }})(syntax_tokens[enumerator]), 
   // enumerator_list : enumerator_list ',' enumerator ;
   Production(syntax_tokens[enumerator_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[enumerator_list])(syntax_tokens[','])(syntax_tokens[enumerator]), 
+    }})(syntax_tokens[enumerator_list])(syntax_tokens[','])(syntax_tokens[enumerator]), 
   // enumerator : IDENTIFIER ;
   Production(syntax_tokens[enumerator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[IDENTIFIER]), 
+    }})(syntax_tokens[IDENTIFIER]), 
   // enumerator : IDENTIFIER '=' constant_expression ;
   Production(syntax_tokens[enumerator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[IDENTIFIER])(syntax_tokens['='])(syntax_tokens[constant_expression]), 
+    }})(syntax_tokens[IDENTIFIER])(syntax_tokens['='])(syntax_tokens[constant_expression]), 
   // type_qualifier : CONST ;
   Production(syntax_tokens[type_qualifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[CONST]), 
+    }})(syntax_tokens[CONST]), 
   // type_qualifier : RESTRICT ;
   Production(syntax_tokens[type_qualifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[RESTRICT]), 
+    }})(syntax_tokens[RESTRICT]), 
   // type_qualifier : VOLATILE ;
   Production(syntax_tokens[type_qualifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[VOLATILE]), 
+    }})(syntax_tokens[VOLATILE]), 
   // function_specifier : INLINE ;
   Production(syntax_tokens[function_specifier], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[INLINE]), 
+    }})(syntax_tokens[INLINE]), 
   // declarator : pointer direct_declarator ;
   Production(syntax_tokens[declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[pointer])(syntax_tokens[direct_declarator]), 
+    }})(syntax_tokens[pointer])(syntax_tokens[direct_declarator]), 
   // declarator : direct_declarator ;
   Production(syntax_tokens[declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_declarator]), 
+    }})(syntax_tokens[direct_declarator]), 
   // direct_declarator : IDENTIFIER ;
   Production(syntax_tokens[direct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[IDENTIFIER]), 
+    }})(syntax_tokens[IDENTIFIER]), 
   // direct_declarator : '(' declarator ')' ;
   Production(syntax_tokens[direct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['('])(syntax_tokens[declarator])(syntax_tokens[')']), 
+    }})(syntax_tokens['('])(syntax_tokens[declarator])(syntax_tokens[')']), 
   // direct_declarator : direct_declarator '[' type_qualifier_list assignment_expression ']' ;
   Production(syntax_tokens[direct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens[type_qualifier_list])(syntax_tokens[assignment_expression])(syntax_tokens[']']), 
+    }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens[type_qualifier_list])(syntax_tokens[assignment_expression])(syntax_tokens[']']), 
   // direct_declarator : direct_declarator '[' type_qualifier_list ']' ;
   Production(syntax_tokens[direct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens[type_qualifier_list])(syntax_tokens[']']), 
+    }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens[type_qualifier_list])(syntax_tokens[']']), 
   // direct_declarator : direct_declarator '[' assignment_expression ']' ;
   Production(syntax_tokens[direct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens[assignment_expression])(syntax_tokens[']']), 
+    }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens[assignment_expression])(syntax_tokens[']']), 
   // direct_declarator : direct_declarator '[' STATIC type_qualifier_list assignment_expression ']' ;
   Production(syntax_tokens[direct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens[STATIC])(syntax_tokens[type_qualifier_list])(syntax_tokens[assignment_expression])(syntax_tokens[']']), 
+    }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens[STATIC])(syntax_tokens[type_qualifier_list])(syntax_tokens[assignment_expression])(syntax_tokens[']']), 
   // direct_declarator : direct_declarator '[' type_qualifier_list STATIC assignment_expression ']' ;
   Production(syntax_tokens[direct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens[type_qualifier_list])(syntax_tokens[STATIC])(syntax_tokens[assignment_expression])(syntax_tokens[']']), 
+    }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens[type_qualifier_list])(syntax_tokens[STATIC])(syntax_tokens[assignment_expression])(syntax_tokens[']']), 
   // direct_declarator : direct_declarator '[' type_qualifier_list '*' ']' ;
   Production(syntax_tokens[direct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens[type_qualifier_list])(syntax_tokens['*'])(syntax_tokens[']']), 
+    }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens[type_qualifier_list])(syntax_tokens['*'])(syntax_tokens[']']), 
   // direct_declarator : direct_declarator '[' '*' ']' ;
   Production(syntax_tokens[direct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens['*'])(syntax_tokens[']']), 
+    }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens['*'])(syntax_tokens[']']), 
   // direct_declarator : direct_declarator '[' ']' ;
   Production(syntax_tokens[direct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens[']']), 
+    }})(syntax_tokens[direct_declarator])(syntax_tokens['['])(syntax_tokens[']']), 
   // direct_declarator : direct_declarator '(' parameter_type_list ')' ;
   Production(syntax_tokens[direct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_declarator])(syntax_tokens['('])(syntax_tokens[parameter_type_list])(syntax_tokens[')']), 
+    }})(syntax_tokens[direct_declarator])(syntax_tokens['('])(syntax_tokens[parameter_type_list])(syntax_tokens[')']), 
   // direct_declarator : direct_declarator '(' identifier_list ')' ;
   Production(syntax_tokens[direct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_declarator])(syntax_tokens['('])(syntax_tokens[identifier_list])(syntax_tokens[')']), 
+    }})(syntax_tokens[direct_declarator])(syntax_tokens['('])(syntax_tokens[identifier_list])(syntax_tokens[')']), 
   // direct_declarator : direct_declarator '(' ')' ;
   Production(syntax_tokens[direct_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_declarator])(syntax_tokens['('])(syntax_tokens[')']), 
+    }})(syntax_tokens[direct_declarator])(syntax_tokens['('])(syntax_tokens[')']), 
   // pointer : '*' ;
   Production(syntax_tokens[pointer], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['*']), 
+    }})(syntax_tokens['*']), 
   // pointer : '*' type_qualifier_list ;
   Production(syntax_tokens[pointer], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['*'])(syntax_tokens[type_qualifier_list]), 
+    }})(syntax_tokens['*'])(syntax_tokens[type_qualifier_list]), 
   // pointer : '*' pointer ;
   Production(syntax_tokens[pointer], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['*'])(syntax_tokens[pointer]), 
+    }})(syntax_tokens['*'])(syntax_tokens[pointer]), 
   // pointer : '*' type_qualifier_list pointer ;
   Production(syntax_tokens[pointer], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['*'])(syntax_tokens[type_qualifier_list])(syntax_tokens[pointer]), 
+    }})(syntax_tokens['*'])(syntax_tokens[type_qualifier_list])(syntax_tokens[pointer]), 
   // type_qualifier_list : type_qualifier ;
   Production(syntax_tokens[type_qualifier_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[type_qualifier]), 
+    }})(syntax_tokens[type_qualifier]), 
   // type_qualifier_list : type_qualifier_list type_qualifier ;
   Production(syntax_tokens[type_qualifier_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[type_qualifier_list])(syntax_tokens[type_qualifier]), 
+    }})(syntax_tokens[type_qualifier_list])(syntax_tokens[type_qualifier]), 
   // parameter_type_list : parameter_list ;
   Production(syntax_tokens[parameter_type_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[parameter_list]), 
+    }})(syntax_tokens[parameter_list]), 
   // parameter_type_list : parameter_list ',' ELLIPSIS ;
   Production(syntax_tokens[parameter_type_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[parameter_list])(syntax_tokens[','])(syntax_tokens[ELLIPSIS]), 
+    }})(syntax_tokens[parameter_list])(syntax_tokens[','])(syntax_tokens[ELLIPSIS]), 
   // parameter_list : parameter_declaration ;
   Production(syntax_tokens[parameter_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[parameter_declaration]), 
+    }})(syntax_tokens[parameter_declaration]), 
   // parameter_list : parameter_list ',' parameter_declaration ;
   Production(syntax_tokens[parameter_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[parameter_list])(syntax_tokens[','])(syntax_tokens[parameter_declaration]), 
+    }})(syntax_tokens[parameter_list])(syntax_tokens[','])(syntax_tokens[parameter_declaration]), 
   // parameter_declaration : declaration_specifiers declarator ;
   Production(syntax_tokens[parameter_declaration], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declaration_specifiers])(syntax_tokens[declarator]), 
+    }})(syntax_tokens[declaration_specifiers])(syntax_tokens[declarator]), 
   // parameter_declaration : declaration_specifiers abstract_declarator ;
   Production(syntax_tokens[parameter_declaration], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declaration_specifiers])(syntax_tokens[abstract_declarator]), 
+    }})(syntax_tokens[declaration_specifiers])(syntax_tokens[abstract_declarator]), 
   // parameter_declaration : declaration_specifiers ;
   Production(syntax_tokens[parameter_declaration], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declaration_specifiers]), 
+    }})(syntax_tokens[declaration_specifiers]), 
   // identifier_list : IDENTIFIER ;
   Production(syntax_tokens[identifier_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[IDENTIFIER]), 
+    }})(syntax_tokens[IDENTIFIER]), 
   // identifier_list : identifier_list ',' IDENTIFIER ;
   Production(syntax_tokens[identifier_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[identifier_list])(syntax_tokens[','])(syntax_tokens[IDENTIFIER]), 
+    }})(syntax_tokens[identifier_list])(syntax_tokens[','])(syntax_tokens[IDENTIFIER]), 
   // type_name : specifier_qualifier_list ;
   Production(syntax_tokens[type_name], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[specifier_qualifier_list]), 
+    }})(syntax_tokens[specifier_qualifier_list]), 
   // type_name : specifier_qualifier_list abstract_declarator ;
   Production(syntax_tokens[type_name], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[specifier_qualifier_list])(syntax_tokens[abstract_declarator]), 
+    }})(syntax_tokens[specifier_qualifier_list])(syntax_tokens[abstract_declarator]), 
   // abstract_declarator : pointer ;
   Production(syntax_tokens[abstract_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[pointer]), 
+    }})(syntax_tokens[pointer]), 
   // abstract_declarator : direct_abstract_declarator ;
   Production(syntax_tokens[abstract_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_abstract_declarator]), 
+    }})(syntax_tokens[direct_abstract_declarator]), 
   // abstract_declarator : pointer direct_abstract_declarator ;
   Production(syntax_tokens[abstract_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[pointer])(syntax_tokens[direct_abstract_declarator]), 
+    }})(syntax_tokens[pointer])(syntax_tokens[direct_abstract_declarator]), 
   // direct_abstract_declarator : '(' abstract_declarator ')' ;
   Production(syntax_tokens[direct_abstract_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['('])(syntax_tokens[abstract_declarator])(syntax_tokens[')']), 
+    }})(syntax_tokens['('])(syntax_tokens[abstract_declarator])(syntax_tokens[')']), 
   // direct_abstract_declarator : '[' ']' ;
   Production(syntax_tokens[direct_abstract_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['['])(syntax_tokens[']']), 
+    }})(syntax_tokens['['])(syntax_tokens[']']), 
   // direct_abstract_declarator : '[' assignment_expression ']' ;
   Production(syntax_tokens[direct_abstract_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['['])(syntax_tokens[assignment_expression])(syntax_tokens[']']), 
+    }})(syntax_tokens['['])(syntax_tokens[assignment_expression])(syntax_tokens[']']), 
   // direct_abstract_declarator : direct_abstract_declarator '[' ']' ;
   Production(syntax_tokens[direct_abstract_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_abstract_declarator])(syntax_tokens['['])(syntax_tokens[']']), 
+    }})(syntax_tokens[direct_abstract_declarator])(syntax_tokens['['])(syntax_tokens[']']), 
   // direct_abstract_declarator : direct_abstract_declarator '[' assignment_expression ']' ;
   Production(syntax_tokens[direct_abstract_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_abstract_declarator])(syntax_tokens['['])(syntax_tokens[assignment_expression])(syntax_tokens[']']), 
+    }})(syntax_tokens[direct_abstract_declarator])(syntax_tokens['['])(syntax_tokens[assignment_expression])(syntax_tokens[']']), 
   // direct_abstract_declarator : '[' '*' ']' ;
   Production(syntax_tokens[direct_abstract_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['['])(syntax_tokens['*'])(syntax_tokens[']']), 
+    }})(syntax_tokens['['])(syntax_tokens['*'])(syntax_tokens[']']), 
   // direct_abstract_declarator : direct_abstract_declarator '[' '*' ']' ;
   Production(syntax_tokens[direct_abstract_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_abstract_declarator])(syntax_tokens['['])(syntax_tokens['*'])(syntax_tokens[']']), 
+    }})(syntax_tokens[direct_abstract_declarator])(syntax_tokens['['])(syntax_tokens['*'])(syntax_tokens[']']), 
   // direct_abstract_declarator : '(' ')' ;
   Production(syntax_tokens[direct_abstract_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['('])(syntax_tokens[')']), 
+    }})(syntax_tokens['('])(syntax_tokens[')']), 
   // direct_abstract_declarator : '(' parameter_type_list ')' ;
   Production(syntax_tokens[direct_abstract_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['('])(syntax_tokens[parameter_type_list])(syntax_tokens[')']), 
+    }})(syntax_tokens['('])(syntax_tokens[parameter_type_list])(syntax_tokens[')']), 
   // direct_abstract_declarator : direct_abstract_declarator '(' ')' ;
   Production(syntax_tokens[direct_abstract_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_abstract_declarator])(syntax_tokens['('])(syntax_tokens[')']), 
+    }})(syntax_tokens[direct_abstract_declarator])(syntax_tokens['('])(syntax_tokens[')']), 
   // direct_abstract_declarator : direct_abstract_declarator '(' parameter_type_list ')' ;
   Production(syntax_tokens[direct_abstract_declarator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[direct_abstract_declarator])(syntax_tokens['('])(syntax_tokens[parameter_type_list])(syntax_tokens[')']), 
+    }})(syntax_tokens[direct_abstract_declarator])(syntax_tokens['('])(syntax_tokens[parameter_type_list])(syntax_tokens[')']), 
   // initializer : assignment_expression ;
   Production(syntax_tokens[initializer], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[assignment_expression]), 
+    }})(syntax_tokens[assignment_expression]), 
   // initializer : '{' initializer_list '}' ;
   Production(syntax_tokens[initializer], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['{'])(syntax_tokens[initializer_list])(syntax_tokens['}']), 
+    }})(syntax_tokens['{'])(syntax_tokens[initializer_list])(syntax_tokens['}']), 
   // initializer : '{' initializer_list ',' '}' ;
   Production(syntax_tokens[initializer], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['{'])(syntax_tokens[initializer_list])(syntax_tokens[','])(syntax_tokens['}']), 
+    }})(syntax_tokens['{'])(syntax_tokens[initializer_list])(syntax_tokens[','])(syntax_tokens['}']), 
   // initializer_list : initializer ;
   Production(syntax_tokens[initializer_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[initializer]), 
+    }})(syntax_tokens[initializer]), 
   // initializer_list : designation initializer ;
   Production(syntax_tokens[initializer_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[designation])(syntax_tokens[initializer]), 
+    }})(syntax_tokens[designation])(syntax_tokens[initializer]), 
   // initializer_list : initializer_list ',' initializer ;
   Production(syntax_tokens[initializer_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[initializer_list])(syntax_tokens[','])(syntax_tokens[initializer]), 
+    }})(syntax_tokens[initializer_list])(syntax_tokens[','])(syntax_tokens[initializer]), 
   // initializer_list : initializer_list ',' designation initializer ;
   Production(syntax_tokens[initializer_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[initializer_list])(syntax_tokens[','])(syntax_tokens[designation])(syntax_tokens[initializer]), 
+    }})(syntax_tokens[initializer_list])(syntax_tokens[','])(syntax_tokens[designation])(syntax_tokens[initializer]), 
   // designation : designator_list '=' ;
   Production(syntax_tokens[designation], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[designator_list])(syntax_tokens['=']), 
+    }})(syntax_tokens[designator_list])(syntax_tokens['=']), 
   // designator_list : designator ;
   Production(syntax_tokens[designator_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[designator]), 
+    }})(syntax_tokens[designator]), 
   // designator_list : designator_list designator ;
   Production(syntax_tokens[designator_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[designator_list])(syntax_tokens[designator]), 
+    }})(syntax_tokens[designator_list])(syntax_tokens[designator]), 
   // designator : '[' constant_expression ']' ;
   Production(syntax_tokens[designator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['['])(syntax_tokens[constant_expression])(syntax_tokens[']']), 
+    }})(syntax_tokens['['])(syntax_tokens[constant_expression])(syntax_tokens[']']), 
   // designator : '.' IDENTIFIER ;
   Production(syntax_tokens[designator], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['.'])(syntax_tokens[IDENTIFIER]), 
+    }})(syntax_tokens['.'])(syntax_tokens[IDENTIFIER]), 
   // statement : labeled_statement ;
   Production(syntax_tokens[statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[labeled_statement]), 
+    }})(syntax_tokens[labeled_statement]), 
   // statement : compound_statement ;
   Production(syntax_tokens[statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[compound_statement]), 
+    }})(syntax_tokens[compound_statement]), 
   // statement : expression_statement ;
   Production(syntax_tokens[statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[expression_statement]), 
+    }})(syntax_tokens[expression_statement]), 
   // statement : selection_statement ;
   Production(syntax_tokens[statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[selection_statement]), 
+    }})(syntax_tokens[selection_statement]), 
   // statement : iteration_statement ;
   Production(syntax_tokens[statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[iteration_statement]), 
+    }})(syntax_tokens[iteration_statement]), 
   // statement : jump_statement ;
   Production(syntax_tokens[statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[jump_statement]), 
+    }})(syntax_tokens[jump_statement]), 
   // labeled_statement : IDENTIFIER ':' statement ;
   Production(syntax_tokens[labeled_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[IDENTIFIER])(syntax_tokens[':'])(syntax_tokens[statement]), 
+    }})(syntax_tokens[IDENTIFIER])(syntax_tokens[':'])(syntax_tokens[statement]), 
   // labeled_statement : CASE constant_expression ':' statement ;
   Production(syntax_tokens[labeled_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[CASE])(syntax_tokens[constant_expression])(syntax_tokens[':'])(syntax_tokens[statement]), 
+    }})(syntax_tokens[CASE])(syntax_tokens[constant_expression])(syntax_tokens[':'])(syntax_tokens[statement]), 
   // labeled_statement : DEFAULT ':' statement ;
   Production(syntax_tokens[labeled_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[DEFAULT])(syntax_tokens[':'])(syntax_tokens[statement]), 
+    }})(syntax_tokens[DEFAULT])(syntax_tokens[':'])(syntax_tokens[statement]), 
   // compound_statement : '{' '}' ;
   Production(syntax_tokens[compound_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['{'])(syntax_tokens['}']), 
+    }})(syntax_tokens['{'])(syntax_tokens['}']), 
   // compound_statement : '{' block_item_list '}' ;
   Production(syntax_tokens[compound_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens['{'])(syntax_tokens[block_item_list])(syntax_tokens['}']), 
+    }})(syntax_tokens['{'])(syntax_tokens[block_item_list])(syntax_tokens['}']), 
   // block_item_list : block_item ;
   Production(syntax_tokens[block_item_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[block_item]), 
+    }})(syntax_tokens[block_item]), 
   // block_item_list : block_item_list block_item ;
   Production(syntax_tokens[block_item_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[block_item_list])(syntax_tokens[block_item]), 
+    }})(syntax_tokens[block_item_list])(syntax_tokens[block_item]), 
   // block_item : declaration ;
   Production(syntax_tokens[block_item], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declaration]), 
+    }})(syntax_tokens[declaration]), 
   // block_item : statement ;
   Production(syntax_tokens[block_item], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[statement]), 
+    }})(syntax_tokens[statement]), 
   // expression_statement : ';' ;
   Production(syntax_tokens[expression_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[';']), 
+    }})(syntax_tokens[';']), 
   // expression_statement : expression ';' ;
   Production(syntax_tokens[expression_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[expression])(syntax_tokens[';']), 
+    }})(syntax_tokens[expression])(syntax_tokens[';']), 
   // selection_statement : IF '(' expression ')' statement ;
   Production(syntax_tokens[selection_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[IF])(syntax_tokens['('])(syntax_tokens[expression])(syntax_tokens[')'])(syntax_tokens[statement]), 
+    }})(syntax_tokens[IF])(syntax_tokens['('])(syntax_tokens[expression])(syntax_tokens[')'])(syntax_tokens[statement]), 
   // selection_statement : IF '(' expression ')' statement ELSE statement ;
   Production(syntax_tokens[selection_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[IF])(syntax_tokens['('])(syntax_tokens[expression])(syntax_tokens[')'])(syntax_tokens[statement])(syntax_tokens[ELSE])(syntax_tokens[statement]), 
+    }})(syntax_tokens[IF])(syntax_tokens['('])(syntax_tokens[expression])(syntax_tokens[')'])(syntax_tokens[statement])(syntax_tokens[ELSE])(syntax_tokens[statement]), 
   // selection_statement : SWITCH '(' expression ')' statement ;
   Production(syntax_tokens[selection_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[SWITCH])(syntax_tokens['('])(syntax_tokens[expression])(syntax_tokens[')'])(syntax_tokens[statement]), 
+    }})(syntax_tokens[SWITCH])(syntax_tokens['('])(syntax_tokens[expression])(syntax_tokens[')'])(syntax_tokens[statement]), 
   // iteration_statement : WHILE '(' expression ')' statement ;
   Production(syntax_tokens[iteration_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[WHILE])(syntax_tokens['('])(syntax_tokens[expression])(syntax_tokens[')'])(syntax_tokens[statement]), 
+    }})(syntax_tokens[WHILE])(syntax_tokens['('])(syntax_tokens[expression])(syntax_tokens[')'])(syntax_tokens[statement]), 
   // iteration_statement : DO statement WHILE '(' expression ')' ';' ;
   Production(syntax_tokens[iteration_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[DO])(syntax_tokens[statement])(syntax_tokens[WHILE])(syntax_tokens['('])(syntax_tokens[expression])(syntax_tokens[')'])(syntax_tokens[';']), 
+    }})(syntax_tokens[DO])(syntax_tokens[statement])(syntax_tokens[WHILE])(syntax_tokens['('])(syntax_tokens[expression])(syntax_tokens[')'])(syntax_tokens[';']), 
   // iteration_statement : FOR '(' expression_statement expression_statement ')' statement ;
   Production(syntax_tokens[iteration_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[FOR])(syntax_tokens['('])(syntax_tokens[expression_statement])(syntax_tokens[expression_statement])(syntax_tokens[')'])(syntax_tokens[statement]), 
+    }})(syntax_tokens[FOR])(syntax_tokens['('])(syntax_tokens[expression_statement])(syntax_tokens[expression_statement])(syntax_tokens[')'])(syntax_tokens[statement]), 
   // iteration_statement : FOR '(' expression_statement expression_statement expression ')' statement ;
   Production(syntax_tokens[iteration_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[FOR])(syntax_tokens['('])(syntax_tokens[expression_statement])(syntax_tokens[expression_statement])(syntax_tokens[expression])(syntax_tokens[')'])(syntax_tokens[statement]), 
+    }})(syntax_tokens[FOR])(syntax_tokens['('])(syntax_tokens[expression_statement])(syntax_tokens[expression_statement])(syntax_tokens[expression])(syntax_tokens[')'])(syntax_tokens[statement]), 
   // iteration_statement : FOR '(' declaration expression_statement ')' statement ;
   Production(syntax_tokens[iteration_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[FOR])(syntax_tokens['('])(syntax_tokens[declaration])(syntax_tokens[expression_statement])(syntax_tokens[')'])(syntax_tokens[statement]), 
+    }})(syntax_tokens[FOR])(syntax_tokens['('])(syntax_tokens[declaration])(syntax_tokens[expression_statement])(syntax_tokens[')'])(syntax_tokens[statement]), 
   // iteration_statement : FOR '(' declaration expression_statement expression ')' statement ;
   Production(syntax_tokens[iteration_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[FOR])(syntax_tokens['('])(syntax_tokens[declaration])(syntax_tokens[expression_statement])(syntax_tokens[expression])(syntax_tokens[')'])(syntax_tokens[statement]), 
+    }})(syntax_tokens[FOR])(syntax_tokens['('])(syntax_tokens[declaration])(syntax_tokens[expression_statement])(syntax_tokens[expression])(syntax_tokens[')'])(syntax_tokens[statement]), 
   // jump_statement : GOTO IDENTIFIER ';' ;
   Production(syntax_tokens[jump_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[GOTO])(syntax_tokens[IDENTIFIER])(syntax_tokens[';']), 
+    }})(syntax_tokens[GOTO])(syntax_tokens[IDENTIFIER])(syntax_tokens[';']), 
   // jump_statement : CONTINUE ';' ;
   Production(syntax_tokens[jump_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[CONTINUE])(syntax_tokens[';']), 
+    }})(syntax_tokens[CONTINUE])(syntax_tokens[';']), 
   // jump_statement : BREAK ';' ;
   Production(syntax_tokens[jump_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[BREAK])(syntax_tokens[';']), 
+    }})(syntax_tokens[BREAK])(syntax_tokens[';']), 
   // jump_statement : RETURN ';' ;
   Production(syntax_tokens[jump_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[RETURN])(syntax_tokens[';']), 
+    }})(syntax_tokens[RETURN])(syntax_tokens[';']), 
   // jump_statement : RETURN expression ';' ;
   Production(syntax_tokens[jump_statement], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[RETURN])(syntax_tokens[expression])(syntax_tokens[';']), 
+    }})(syntax_tokens[RETURN])(syntax_tokens[expression])(syntax_tokens[';']), 
   // translation_unit : external_declaration ;
   Production(syntax_tokens[translation_unit], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[external_declaration]), 
+    }})(syntax_tokens[external_declaration]), 
   // translation_unit : translation_unit external_declaration ;
   Production(syntax_tokens[translation_unit], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[translation_unit])(syntax_tokens[external_declaration]), 
+    }})(syntax_tokens[translation_unit])(syntax_tokens[external_declaration]), 
   // external_declaration : function_definition ;
   Production(syntax_tokens[external_declaration], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[function_definition]), 
+    }})(syntax_tokens[function_definition]), 
   // external_declaration : declaration ;
   Production(syntax_tokens[external_declaration], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declaration]), 
+    }})(syntax_tokens[declaration]), 
   // function_definition : declaration_specifiers declarator declaration_list compound_statement ;
   Production(syntax_tokens[function_definition], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declaration_specifiers])(syntax_tokens[declarator])(syntax_tokens[declaration_list])(syntax_tokens[compound_statement]), 
+    }})(syntax_tokens[declaration_specifiers])(syntax_tokens[declarator])(syntax_tokens[declaration_list])(syntax_tokens[compound_statement]), 
   // function_definition : declaration_specifiers declarator compound_statement ;
   Production(syntax_tokens[function_definition], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declaration_specifiers])(syntax_tokens[declarator])(syntax_tokens[compound_statement]), 
+    }})(syntax_tokens[declaration_specifiers])(syntax_tokens[declarator])(syntax_tokens[compound_statement]), 
   // declaration_list : declaration ;
   Production(syntax_tokens[declaration_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declaration]), 
+    }})(syntax_tokens[declaration]), 
   // declaration_list : declaration_list declaration ;
   Production(syntax_tokens[declaration_list], {[](vector<YYSTATE> &v) {
       // action ...
-  }})(syntax_tokens[declaration_list])(syntax_tokens[declaration]), 
+    }})(syntax_tokens[declaration_list])(syntax_tokens[declaration]), 
 };
 
 /* section 5 */
@@ -1528,205 +1528,203 @@ IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {
   string token_name = lexical_token.GetTokName();
   if (token_name == R"((/\*))") { 
     { { comment(); }}
-} else if (token_name == R"((//)[^\n]*)") { 
+  } else if (token_name == R"((//)[^\r\n]*)") { 
     { { /* consume //-comment */ }}
-} else if (token_name == R"((auto))") { 
+  } else if (token_name == R"((auto))") { 
     { { count(); return(AUTO); }}
-} else if (token_name == R"((_Bool))") { 
+  } else if (token_name == R"((_Bool))") { 
     { { count(); return(BOOL); }}
-} else if (token_name == R"((break))") { 
+  } else if (token_name == R"((break))") { 
     { { count(); return(BREAK); }}
-} else if (token_name == R"((case))") { 
+  } else if (token_name == R"((case))") { 
     { { count(); return(CASE); }}
-} else if (token_name == R"((char))") { 
+  } else if (token_name == R"((char))") { 
     { { count(); return(CHAR); }}
-} else if (token_name == R"((_Complex))") { 
+  } else if (token_name == R"((_Complex))") { 
     { { count(); return(COMPLEX); }}
-} else if (token_name == R"((const))") { 
+  } else if (token_name == R"((const))") { 
     { { count(); return(CONST); }}
-} else if (token_name == R"((continue))") { 
+  } else if (token_name == R"((continue))") { 
     { { count(); return(CONTINUE); }}
-} else if (token_name == R"((default))") { 
+  } else if (token_name == R"((default))") { 
     { { count(); return(DEFAULT); }}
-} else if (token_name == R"((do))") { 
+  } else if (token_name == R"((do))") { 
     { { count(); return(DO); }}
-} else if (token_name == R"((double))") { 
+  } else if (token_name == R"((double))") { 
     { { count(); return(DOUBLE); }}
-} else if (token_name == R"((else))") { 
+  } else if (token_name == R"((else))") { 
     { { count(); return(ELSE); }}
-} else if (token_name == R"((enum))") { 
+  } else if (token_name == R"((enum))") { 
     { { count(); return(ENUM); }}
-} else if (token_name == R"((extern))") { 
+  } else if (token_name == R"((extern))") { 
     { { count(); return(EXTERN); }}
-} else if (token_name == R"((float))") { 
+  } else if (token_name == R"((float))") { 
     { { count(); return(FLOAT); }}
-} else if (token_name == R"((for))") { 
+  } else if (token_name == R"((for))") { 
     { { count(); return(FOR); }}
-} else if (token_name == R"((goto))") { 
+  } else if (token_name == R"((goto))") { 
     { { count(); return(GOTO); }}
-} else if (token_name == R"((if))") { 
+  } else if (token_name == R"((if))") { 
     { { count(); return(IF); }}
-} else if (token_name == R"((_Imaginary))") { 
+  } else if (token_name == R"((_Imaginary))") { 
     { { count(); return(IMAGINARY); }}
-} else if (token_name == R"((inline))") { 
+  } else if (token_name == R"((inline))") { 
     { { count(); return(INLINE); }}
-} else if (token_name == R"((int))") { 
+  } else if (token_name == R"((int))") { 
     { { count(); return(INT); }}
-} else if (token_name == R"((long))") { 
+  } else if (token_name == R"((long))") { 
     { { count(); return(LONG); }}
-} else if (token_name == R"((register))") { 
+  } else if (token_name == R"((register))") { 
     { { count(); return(REGISTER); }}
-} else if (token_name == R"((restrict))") { 
+  } else if (token_name == R"((restrict))") { 
     { { count(); return(RESTRICT); }}
-} else if (token_name == R"((return))") { 
+  } else if (token_name == R"((return))") { 
     { { count(); return(RETURN); }}
-} else if (token_name == R"((short))") { 
+  } else if (token_name == R"((short))") { 
     { { count(); return(SHORT); }}
-} else if (token_name == R"((signed))") { 
+  } else if (token_name == R"((signed))") { 
     { { count(); return(SIGNED); }}
-} else if (token_name == R"((sizeof))") { 
+  } else if (token_name == R"((sizeof))") { 
     { { count(); return(SIZEOF); }}
-} else if (token_name == R"((static))") { 
+  } else if (token_name == R"((static))") { 
     { { count(); return(STATIC); }}
-} else if (token_name == R"((struct))") { 
+  } else if (token_name == R"((struct))") { 
     { { count(); return(STRUCT); }}
-} else if (token_name == R"((switch))") { 
+  } else if (token_name == R"((switch))") { 
     { { count(); return(SWITCH); }}
-} else if (token_name == R"((typedef))") { 
+  } else if (token_name == R"((typedef))") { 
     { { count(); return(TYPEDEF); }}
-} else if (token_name == R"((union))") { 
+  } else if (token_name == R"((union))") { 
     { { count(); return(UNION); }}
-} else if (token_name == R"((unsigned))") { 
+  } else if (token_name == R"((unsigned))") { 
     { { count(); return(UNSIGNED); }}
-} else if (token_name == R"((void))") { 
+  } else if (token_name == R"((void))") { 
     { { count(); return(VOID); }}
-} else if (token_name == R"((volatile))") { 
+  } else if (token_name == R"((volatile))") { 
     { { count(); return(VOLATILE); }}
-} else if (token_name == R"((while))") { 
+  } else if (token_name == R"((while))") { 
     { { count(); return(WHILE); }}
-} else if (token_name == R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)") { 
+  } else if (token_name == R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)") { 
     { { count(); return(check_type()); }}
-} else if (token_name == R"(0[xX][a-fA-F0-9]+((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
+  } else if (token_name == R"(0[xX][a-fA-F0-9]+((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
     { { count(); return(CONSTANT); }}
-} else if (token_name == R"(0[0-7]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
+  } else if (token_name == R"(0[0-7]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
     { { count(); return(CONSTANT); }}
-} else if (token_name == R"([1-9][0-9]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
+  } else if (token_name == R"([1-9][0-9]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
     { { count(); return(CONSTANT); }}
-} else if (token_name == R"(L?'(\\.|[^\\'\n])+')") { 
+  } else if (token_name == R"(L?'(\\.|[^\\'\r\n])+')") { 
     { { count(); return(CONSTANT); }}
-} else if (token_name == R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)") { 
+  } else if (token_name == R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)") { 
     { { count(); return(CONSTANT); }}
-} else if (token_name == R"([0-9]*(\.)[0-9]+([Ee][+-]?[0-9]+)?(f|F|l|L)?)") { 
+  } else if (token_name == R"([0-9]*(\.)[0-9]+([Ee][+-]?[0-9]+)?(f|F|l|L)?)") { 
     { { count(); return(CONSTANT); }}
-} else if (token_name == R"([0-9]+(\.)[0-9]*([Ee][+-]?[0-9]+)?(f|F|l|L)?)") { 
+  } else if (token_name == R"([0-9]+(\.)[0-9]*([Ee][+-]?[0-9]+)?(f|F|l|L)?)") { 
     { { count(); return(CONSTANT); }}
-} else if (token_name == R"(0[xX][a-fA-F0-9]+([Pp][+-]?[0-9]+)(f|F|l|L)?)") { 
+  } else if (token_name == R"(0[xX][a-fA-F0-9]+([Pp][+-]?[0-9]+)(f|F|l|L)?)") { 
     { { count(); return(CONSTANT); }}
-} else if (token_name == R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][+-]?[0-9]+)?(f|F|l|L)?)") { 
+  } else if (token_name == R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][+-]?[0-9]+)?(f|F|l|L)?)") { 
     { { count(); return(CONSTANT); }}
-} else if (token_name == R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][+-]?[0-9]+)?(f|F|l|L)?)") { 
+  } else if (token_name == R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][+-]?[0-9]+)?(f|F|l|L)?)") { 
     { { count(); return(CONSTANT); }}
-} else if (token_name == R"(L?"(\\.|[^\\"\n])*")") { 
+  } else if (token_name == R"(L?"(\\.|[^\\"\r\n])*")") { 
     { { count(); return(STRING_LITERAL); }}
-} else if (token_name == R"((\.\.\.))") { 
+  } else if (token_name == R"((\.\.\.))") { 
     { { count(); return(ELLIPSIS); }}
-} else if (token_name == R"((>>=))") { 
+  } else if (token_name == R"((>>=))") { 
     { { count(); return(RIGHT_ASSIGN); }}
-} else if (token_name == R"((<<=))") { 
+  } else if (token_name == R"((<<=))") { 
     { { count(); return(LEFT_ASSIGN); }}
-} else if (token_name == R"((\+=))") { 
+  } else if (token_name == R"((\+=))") { 
     { { count(); return(ADD_ASSIGN); }}
-} else if (token_name == R"((-=))") { 
+  } else if (token_name == R"((-=))") { 
     { { count(); return(SUB_ASSIGN); }}
-} else if (token_name == R"((\*=))") { 
+  } else if (token_name == R"((\*=))") { 
     { { count(); return(MUL_ASSIGN); }}
-} else if (token_name == R"((/=))") { 
+  } else if (token_name == R"((/=))") { 
     { { count(); return(DIV_ASSIGN); }}
-} else if (token_name == R"((%=))") { 
+  } else if (token_name == R"((%=))") { 
     { { count(); return(MOD_ASSIGN); }}
-} else if (token_name == R"((&=))") { 
+  } else if (token_name == R"((&=))") { 
     { { count(); return(AND_ASSIGN); }}
-} else if (token_name == R"((\^=))") { 
+  } else if (token_name == R"((\^=))") { 
     { { count(); return(XOR_ASSIGN); }}
-} else if (token_name == R"((\|=))") { 
+  } else if (token_name == R"((\|=))") { 
     { { count(); return(OR_ASSIGN); }}
-} else if (token_name == R"((>>))") { 
+  } else if (token_name == R"((>>))") { 
     { { count(); return(RIGHT_OP); }}
-} else if (token_name == R"((<<))") { 
+  } else if (token_name == R"((<<))") { 
     { { count(); return(LEFT_OP); }}
-} else if (token_name == R"((\+\+))") { 
+  } else if (token_name == R"((\+\+))") { 
     { { count(); return(INC_OP); }}
-} else if (token_name == R"((--))") { 
+  } else if (token_name == R"((--))") { 
     { { count(); return(DEC_OP); }}
-} else if (token_name == R"((->))") { 
+  } else if (token_name == R"((->))") { 
     { { count(); return(PTR_OP); }}
-} else if (token_name == R"((&&))") { 
+  } else if (token_name == R"((&&))") { 
     { { count(); return(AND_OP); }}
-} else if (token_name == R"((\|\|))") { 
+  } else if (token_name == R"((\|\|))") { 
     { { count(); return(OR_OP); }}
-} else if (token_name == R"((<=))") { 
+  } else if (token_name == R"((<=))") { 
     { { count(); return(LE_OP); }}
-} else if (token_name == R"((>=))") { 
+  } else if (token_name == R"((>=))") { 
     { { count(); return(GE_OP); }}
-} else if (token_name == R"((==))") { 
+  } else if (token_name == R"((==))") { 
     { { count(); return(EQ_OP); }}
-} else if (token_name == R"((!=))") { 
+  } else if (token_name == R"((!=))") { 
     { { count(); return(NE_OP); }}
-} else if (token_name == R"((;))") { 
+  } else if (token_name == R"((;))") { 
     { { count(); return(';'); }}
-} else if (token_name == R"((({)|(<%)))") { 
+  } else if (token_name == R"((({)|(<%)))") { 
     { { count(); return('{'); }}
-} else if (token_name == R"(((})|(%>)))") { 
+  } else if (token_name == R"(((})|(%>)))") { 
     { { count(); return('}'); }}
-} else if (token_name == R"((,))") { 
+  } else if (token_name == R"((,))") { 
     { { count(); return(','); }}
-} else if (token_name == R"((:))") { 
+  } else if (token_name == R"((:))") { 
     { { count(); return(':'); }}
-} else if (token_name == R"((=))") { 
+  } else if (token_name == R"((=))") { 
     { { count(); return('='); }}
-} else if (token_name == R"((\())") { 
+  } else if (token_name == R"((\())") { 
     { { count(); return('('); }}
-} else if (token_name == R"((\)))") { 
+  } else if (token_name == R"((\)))") { 
     { { count(); return(')'); }}
-} else if (token_name == R"(((\[)|(<:)))") { 
+  } else if (token_name == R"(((\[)|(<:)))") { 
     { { count(); return('['); }}
-} else if (token_name == R"(((\])|(:>)))") { 
+  } else if (token_name == R"(((\])|(:>)))") { 
     { { count(); return(']'); }}
-} else if (token_name == R"((\.))") { 
+  } else if (token_name == R"((\.))") { 
     { { count(); return('.'); }}
-} else if (token_name == R"((&))") { 
+  } else if (token_name == R"((&))") { 
     { { count(); return('&'); }}
-} else if (token_name == R"((!))") { 
+  } else if (token_name == R"((!))") { 
     { { count(); return('!'); }}
-} else if (token_name == R"((~))") { 
+  } else if (token_name == R"((~))") { 
     { { count(); return('~'); }}
-} else if (token_name == R"((-))") { 
+  } else if (token_name == R"((-))") { 
     { { count(); return('-'); }}
-} else if (token_name == R"((\+))") { 
+  } else if (token_name == R"((\+))") { 
     { { count(); return('+'); }}
-} else if (token_name == R"((\*))") { 
+  } else if (token_name == R"((\*))") { 
     { { count(); return('*'); }}
-} else if (token_name == R"((/))") { 
+  } else if (token_name == R"((/))") { 
     { { count(); return('/'); }}
-} else if (token_name == R"((%))") { 
+  } else if (token_name == R"((%))") { 
     { { count(); return('%'); }}
-} else if (token_name == R"((<))") { 
+  } else if (token_name == R"((<))") { 
     { { count(); return('<'); }}
-} else if (token_name == R"((>))") { 
+  } else if (token_name == R"((>))") { 
     { { count(); return('>'); }}
-} else if (token_name == R"((\^))") { 
+  } else if (token_name == R"((\^))") { 
     { { count(); return('^'); }}
-} else if (token_name == R"((\|))") { 
+  } else if (token_name == R"((\|))") { 
     { { count(); return('|'); }}
-} else if (token_name == R"((?))") { 
+  } else if (token_name == R"((?))") { 
     { { count(); return('?'); }}
-} else if (token_name == R"([ \t\v\n\f])") { 
-    { { count(); return 0; }}
-} else if (token_name == R"(.)") { 
-    { { cerr << "wrong lexical token matched: " << token_name << " " << ad.Get<string>("lval") << endl; assert(false); }}
-} else  {
-    cerr << "wrong lexical token matched: " << token_name << endl;
-    assert(false);
+  } else if (token_name == R"([ \t\v\r\n\f])") { 
+    { { count(); }}
+  } else if (token_name == R"(.)") { 
+    { { /* Add code to complain about unmatched characters */ }}
+  } else  {
     return 0;
   }
   return 0;
@@ -1735,14 +1733,14 @@ IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {
 /* section 7 */
 int main() {
   /* section 7.1 */
-  sly::utils::Log::SetLogLevel(sly::utils::Log::kError);
+  spdlog::set_level(spdlog::level::info);
   
   /* section 7.2 */
   // lexical token
   //@variable
   vector<Token> lexical_tokens = {
     Token::Terminator(R"((/\*))"), 
-    Token::Terminator(R"((//)[^\n]*)"), 
+    Token::Terminator(R"((//)[^\r\n]*)"), 
     Token::Terminator(R"((auto))"), 
     Token::Terminator(R"((_Bool))"), 
     Token::Terminator(R"((break))"), 
@@ -1784,14 +1782,14 @@ int main() {
     Token::Terminator(R"(0[xX][a-fA-F0-9]+((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
     Token::Terminator(R"(0[0-7]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
     Token::Terminator(R"([1-9][0-9]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
-    Token::Terminator(R"(L?'(\\.|[^\\'\n])+')"), 
+    Token::Terminator(R"(L?'(\\.|[^\\'\r\n])+')"), 
     Token::Terminator(R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)"), 
     Token::Terminator(R"([0-9]*(\.)[0-9]+([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
     Token::Terminator(R"([0-9]+(\.)[0-9]*([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
     Token::Terminator(R"(0[xX][a-fA-F0-9]+([Pp][+-]?[0-9]+)(f|F|l|L)?)"), 
     Token::Terminator(R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
     Token::Terminator(R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
-    Token::Terminator(R"(L?"(\\.|[^\\"\n])*")"), 
+    Token::Terminator(R"(L?"(\\.|[^\\"\r\n])*")"), 
     Token::Terminator(R"((\.\.\.))"), 
     Token::Terminator(R"((>>=))"), 
     Token::Terminator(R"((<<=))"), 
@@ -1838,12 +1836,12 @@ int main() {
     Token::Terminator(R"((\^))"), 
     Token::Terminator(R"((\|))"), 
     Token::Terminator(R"((?))"), 
-    Token::Terminator(R"([ \t\v\n\f])"), 
+    Token::Terminator(R"([ \t\v\r\n\f])"), 
     Token::Terminator(R"(.)"), 
   };
   vector<RegEx> lexical_tokens_regex = {
     RegEx(R"((/\*))"), 
-    RegEx(R"((//)[^\n]*)"), 
+    RegEx(R"((//)[^\r\n]*)"), 
     RegEx(R"((auto))"), 
     RegEx(R"((_Bool))"), 
     RegEx(R"((break))"), 
@@ -1885,14 +1883,14 @@ int main() {
     RegEx(R"(0[xX][a-fA-F0-9]+((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
     RegEx(R"(0[0-7]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
     RegEx(R"([1-9][0-9]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
-    RegEx(R"(L?'(\\.|[^\\'\n])+')"), 
+    RegEx(R"(L?'(\\.|[^\\'\r\n])+')"), 
     RegEx(R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)"), 
     RegEx(R"([0-9]*(\.)[0-9]+([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
     RegEx(R"([0-9]+(\.)[0-9]*([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
     RegEx(R"(0[xX][a-fA-F0-9]+([Pp][+-]?[0-9]+)(f|F|l|L)?)"), 
     RegEx(R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
     RegEx(R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
-    RegEx(R"(L?"(\\.|[^\\"\n])*")"), 
+    RegEx(R"(L?"(\\.|[^\\"\r\n])*")"), 
     RegEx(R"((\.\.\.))"), 
     RegEx(R"((>>=))"), 
     RegEx(R"((<<=))"), 
@@ -1939,7 +1937,7 @@ int main() {
     RegEx(R"((\^))"), 
     RegEx(R"((\|))"), 
     RegEx(R"((?))"), 
-    RegEx(R"([ \t\v\n\f])"), 
+    RegEx(R"([ \t\v\r\n\f])"), 
     RegEx(R"(.)"), 
   };
 
@@ -1954,11 +1952,11 @@ int main() {
   // syntax
   sly::core::grammar::ContextFreeGrammar cfg(productions, start_syntax_token, ending);
   sly::core::grammar::Lr1 lr1;
-  // cfg.Compile(lr1);
-  // auto table = cfg.GetLrTable();
-  // LrParser parser(table);
+  cfg.Compile(lr1);
+  auto table = cfg.GetLrTable();
+  LrParser parser(table);
 
-  cout << start_syntax_token.GetTokName() << endl;
+  // cout << start_syntax_token.GetTokName() << endl;
 
   /* section 7.4 */
   // runtime
@@ -1979,11 +1977,8 @@ int main() {
     ad.Set("lval", s2ppl.buffer_); 
 
     IdType id = to_syntax_token_id(lexical_token, ad);
-    cerr << ad.Get<string>("lval") << " " << id << endl;
-    if (id == 0) {
+    if (id == 0) 
       continue;
-    }
-    
     Token syntax_token = syntax_tokens[id];
 
     tokens.emplace_back(syntax_token);
@@ -1991,14 +1986,16 @@ int main() {
   }
 
   cerr << "tokens: " << endl;
-  for (auto token : tokens) {
-    cerr << "  " << token.GetTokName() << endl;
+  for (int i = 0; i < tokens.size(); i++) {
+    auto token = tokens[i];
+    auto ad = attributes[i];
+    cerr << "  " << ad.Get<string>("lval") << " : " << token.GetTokName() << endl;
   }
 
-  // parser.Parse(tokens, attributes);
-  // auto tree = parser.GetTree();
-  // cerr << "parse tree: " << endl;
-  // tree.Print(std::cerr);
+  parser.Parse(tokens, attributes);
+  auto tree = parser.GetTree();
+  cerr << "parse tree: " << endl;
+  tree.Print(std::cerr);
 
   return 0;
 }
