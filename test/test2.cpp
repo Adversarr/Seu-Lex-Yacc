@@ -12,6 +12,7 @@
 #include "sly/FaModel.h"
 #include "sly/RegEx.h"
 #include "sly/Stream2TokenPipe.h"
+#include "spdlog/spdlog.h"
 #include <sly/sly.h>
 #include <iostream>
 #include <sstream>
@@ -19,10 +20,10 @@
 using namespace std;
 
 int main() {
-  sly::core::lexical::RegEx r1("123", true);
-  sly::core::lexical::RegEx r2("ab*d+", true);
-  sly::core::lexical::RegEx r3("[a-z]+", true);
-  sly::core::lexical::RegEx r4(" |\n", true);
+  sly::core::lexical::RegEx r1("123");
+  sly::core::lexical::RegEx r2("ab*d+");
+  sly::core::lexical::RegEx r3("[a-z]+");
+  sly::core::lexical::RegEx r4(" |\n");
   auto end_token = Token::Terminator("end");
   auto ret = sly::core::lexical::DfaModel::Merge({r1.GetDfaModel(), r2.GetDfaModel(), 
     r3.GetDfaModel(), r4.GetDfaModel()});
@@ -39,7 +40,7 @@ int main() {
     auto tok = s2ppl.Defer(iss);
     cout << tok << endl;
     if (tok == end_token) {
-      sly::utils::Log::GetGlobalLogger().Info("Done.");
+      spdlog::info("Done.");
       return 0;
     }
   }

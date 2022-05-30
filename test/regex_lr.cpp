@@ -7,6 +7,7 @@
 #include "sly/RegEx.h"
 #include "sly/TableGenerateMethodImpl.h"
 #include "sly/Token.h"
+#include "spdlog/spdlog.h"
 #include <ios>
 #include <iostream>
 #include <sly/sly.h>
@@ -289,7 +290,7 @@ int main() {
       token_input.push_back(token.value().first);
       ad_input.push_back(token.value().second);
     } else {
-      sly::utils::Log::GetGlobalLogger().Info("Done");
+      spdlog::info("Done");
       token_input.push_back(epsilon);
       ad_input.push_back({});
       break;

@@ -1,6 +1,7 @@
 
 #include "sly/FaModel.h"
 #include "sly/LrParser.h"
+#include "spdlog/spdlog.h"
 #include <array>
 #include <cstddef>
 #include <optional>
@@ -404,13 +405,10 @@ DfaModel re2dfa(string expr_) {
   auto &eof_token = opt_re->eof_token;
   std::istringstream is(expr_);
   if (!opt.has_value()) {
-    auto level = sly::utils::Log::GetGlobalLogger().level;
-    sly::utils::Log::SetLogLevel(utils::Log::kNone);
     sly::core::grammar::ContextFreeGrammar grammar{productions, seq, eof_token};
     sly::core::grammar::Lr1 lr1;
     grammar.Compile(lr1);
     opt = make_optional(move(lr1.GetParsingTable()));
-    sly::utils::Log::SetLogLevel(level);
   }
   LrParser parser(opt.value());
   vector<Token> token_input;
@@ -418,11 +416,11 @@ DfaModel re2dfa(string expr_) {
   for (;;) {
     auto token = stream2token(is);
     if (token.has_value()) {
-      sly::utils::Log::GetGlobalLogger().Info("Caught ", token.value().first);
+      spdlog::info("Caught {}", token.value().first.ToString());
       token_input.push_back(token.value().first);
       ad_input.push_back(token.value().second);
     } else {
-      sly::utils::Log::GetGlobalLogger().Info("Done");
+      spdlog::info("Done");
       token_input.push_back(opt_re->epsilon);
       ad_input.push_back({});
       break;

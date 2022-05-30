@@ -5,6 +5,7 @@
 #include <sly/Token.h>
 #include <sly/utils.h>
 #include <cassert>
+#include <sstream>
 
 namespace sly::core::type {
 
@@ -114,7 +115,7 @@ ostream &operator<<(ostream &os, const Token::Attr& attr) {
   } else if (attr == Token::Attr::kNone) {
     os << "sly::core::type::Token::Attr::kNone";
   } else {
-    utils::Log::GetGlobalLogger().Err((int) attr);
+    spdlog::error("{}",(int) attr);
     assert(false);
   }
   return os;
@@ -155,10 +156,16 @@ void Token::PrintImpl(std::ostream& os) const {
   } else if (attr == Token::Attr::kNone) {
     os << "sly::core::type::Token::Attr::kNone";
   } else {
-    utils::Log::GetGlobalLogger().Err((int) attr);
+    spdlog::error("{}",(int) attr);
     assert(false);
   }
   os << ")";
+}
+
+string Token::ToString() const{
+  stringstream ss;
+  ss << *this;
+  return ss.str();
 }
 
 }

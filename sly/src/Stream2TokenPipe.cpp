@@ -26,10 +26,10 @@ core::type::Token Stream2TokenPipe::Defer(std::istream& is) {
   }
   while (is.good() && !is.eof() && !is.fail()) {
     c = is.get();
-    utils::Log::GetGlobalLogger().Info("Caught ", static_cast<int>(c) , " From stream.");
+    spdlog::info("Caught {} From stream.", static_cast<int>(c));
     // 1. 测试是否是可行的
     if (!(c > static_cast<int8_t>(0) && c <= static_cast<int8_t>(127))) {
-      utils::Log::GetGlobalLogger().Info("Handling the eof flag.");
+      spdlog::info("Handling the eof flag.");
       if (buffer_.length() == 0) {
         // 如果 buffer 是空的，直接返回 eof 标志
         return end_token_;
@@ -46,7 +46,7 @@ core::type::Token Stream2TokenPipe::Defer(std::istream& is) {
       is.putback(c);
       break;
     } else {
-    utils::Log::GetGlobalLogger().Info("Push to buffer.");
+      spdlog::info("Push to buffer.");
       buffer_.push_back(c);
       current_state = next_state;
     }
@@ -55,10 +55,10 @@ core::type::Token Stream2TokenPipe::Defer(std::istream& is) {
   // 显然当前 buffer 不空
   int return_token_id = accept_states_[current_state];
   if (return_token_id < 0) {
-    utils::Log::GetGlobalLogger().Err("Caught invalid lexical element(", c , "/ascii=", static_cast<int>(c), "), current buffer = ", buffer_);
+    spdlog::info("Caught invalid lexical element(", c , "/ascii=", static_cast<int>(c), "), current buffer = ", buffer_);
     assert(false);
   } else {
-    utils::Log::GetGlobalLogger().Info("buffer=", buffer_);
+    spdlog::info("buffer=", buffer_);
     return token_list_[return_token_id];
   }
 }

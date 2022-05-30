@@ -1,3 +1,4 @@
+#include "spdlog/spdlog.h"
 #include <sly/LrParser.h>
 #include <sly/utils.h>
 
@@ -18,8 +19,7 @@ LrParser::LrParser(ParsingTable &parsing_table) :
 
 void LrParser::Parse(vector<Token> token_stream, vector<YYSTATE> yylval_stream) {
   if (token_stream.back() != pt_.GetEndingToken()) {
-    utils::Log::GetGlobalLogger().Warn("Input token stream does not end with ", pt_.GetEndingToken(),
-                                       ", so add to it.");
+    spdlog::info("Input token stream does not end with {} so add to it.", pt_.GetEndingToken().ToString());
     token_stream.push_back(pt_.GetEndingToken());
     yylval_stream.emplace_back();
   }
@@ -40,7 +40,7 @@ void LrParser::ParseOnce(const vector<Token> &token_stream, const vector<YYSTATE
   } else if (current_token.GetTokenType() == Token::Type::kTerminator) {
     const auto& act= pt_.GetAction(state_stack_.back(), current_token);
     if (act.size() != 1) {
-      utils::Log::GetGlobalLogger().Err("Found invalid action table.");
+      spdlog::error("Found invalid action table.");
       assert(false);
     }
     const auto& action = act[0];
@@ -51,7 +51,7 @@ void LrParser::ParseOnce(const vector<Token> &token_stream, const vector<YYSTATE
       current_offset_ += 1;
       // 当前状态更新
       state_stack_.emplace_back(action.id);
-      utils::Log::GetGlobalLogger().Info("Shift In [", current_token, "], Go state ",state_stack_.back());
+      spdlog::info("Shift In [{}]], Go state {}", current_token.ToString(), state_stack_.back());
     } else if (action.action == ParsingTable::kReduce) {
       // 按照 id 进行规约
       const auto& prod = pt_.GetProductions()[action.id];
@@ -64,11 +64,11 @@ void LrParser::ParseOnce(const vector<Token> &token_stream, const vector<YYSTATE
       apt_stack_.emplace_back(apt);
       const auto& go = pt_.GetGoto(state_stack_.back(), prod.GetTokens().front());
       if (go.size() != 1) {
-        utils::Log::GetGlobalLogger().Err("Found invalid goto. from ", state_stack_.back(), " to ", prod.GetTokens().front());
+        spdlog::error("Found invalid goto. from {} to {}", state_stack_.back(), prod.GetTokens().front().ToString());
         assert(false);
       }
       state_stack_.emplace_back(go[0]);
-      utils::Log::GetGlobalLogger().Info("Reduce [", current_token, "], Go state ",state_stack_.back());
+      spdlog::info("Reduce [{}], Go state {}", current_token.ToString(), state_stack_.back());
       
     } else {
       if (action.action == ParsingTable::kAccept) {
@@ -76,11 +76,11 @@ void LrParser::ParseOnce(const vector<Token> &token_stream, const vector<YYSTATE
         return;
       }
       if (action.action == ParsingTable::kError)
-        utils::Log::GetGlobalLogger().Err("Found invalid action. current token=", current_token);
+        spdlog::error("Found invalid action. current token={}", current_token.ToString());
       assert(false);
     }
   } else {
-    utils::Log::GetGlobalLogger().Err("found non terminator in token_stream.");
+    spdlog::error("found non terminator in token_stream.");
     assert(false);
   }
   

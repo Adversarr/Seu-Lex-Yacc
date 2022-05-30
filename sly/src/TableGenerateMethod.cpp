@@ -3,6 +3,7 @@
 //
 
 #include "sly/Production.h"
+#include "spdlog/spdlog.h"
 #include <sly/TableGenerateMethod.h>
 #include <sly/def.h>
 #include <sly/utils.h>
@@ -42,9 +43,8 @@ bool ParsingTable::PutAction(IdType lhs, const Token &tok,
     acts = "Acc";
   else
     acts = "Err";
-  sly::utils::Log::GetGlobalLogger().Info("Putting ACTION: StateID: ", lhs,
-                                          " Token: ", tok, "\tAction: ", acts,
-                                          action.id);
+  spdlog::info("Putting ACTION: StateID: {} Token: {}\t Action: {} {}", lhs,
+               tok.ToString(), acts, action.id);
 
   return true;
 }
@@ -58,8 +58,8 @@ bool ParsingTable::PutGoto(IdType lhs, const Token &tok, IdType rhs) {
   if (f != goto_table_[lhs].end())
     f->second.push_back(rhs);
   goto_table_[lhs].insert({tok, {rhs}});
-  sly::utils::Log::GetGlobalLogger().Info("Putting  GOTO : From: ", lhs,
-                                          " To:", rhs, "\tToken", tok);
+  spdlog::info("Putting  GOTO : From: {} To: {} \t Token{}", lhs, rhs,
+               utils::ToString{}(tok));
 
   return true;
 }
@@ -223,9 +223,9 @@ ParsingTable::ParsingTable(
     : productions_(productions), action_table_(action_table),
       goto_table_(goto_table), entry_token_(entry_token),
       augmented_token_(augmented_token), epsilon_token_(epsilon_token) {
-        productions_.insert(productions_.begin(), 
-          type::Production(augmented_token_)(entry_token));
-      }
+  productions_.insert(productions_.begin(),
+                      type::Production(augmented_token_)(entry_token));
+}
 
 ostream &operator<<(ostream &os, const ParsingTable::CellTp &cell) {
   os << "sly::core::grammar::ParsingTable::CellTp{";

@@ -13,7 +13,7 @@
 #include <memory>
 #include <vector>
 #include <deque>
-
+#include <string>
 
 using namespace std;
 
@@ -42,6 +42,8 @@ class AnnotatedParseTree {
   explicit AnnotatedParseTree(const Production& prod);
   
   void Print(ostream& oss, int depth=0) const;
+
+  string ToString() const;
   
  private:
   Type type_;

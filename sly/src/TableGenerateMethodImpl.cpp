@@ -2,6 +2,7 @@
 // Created by Yang Jerry on 2022/3/30.
 //
 
+#include "spdlog/spdlog.h"
 #include <sly/TableGenerateMethodImpl.h>
 #include <sly/utils.h>
 #include <iostream>
@@ -68,12 +69,11 @@ void Lr1::GenFirst() {
     }
   }
   
-  const auto &logger = utils::Log::GetGlobalLogger();
   for (const auto&[k, v]: first_set_) {
     ostringstream ss;
     ss << "First [" << k << "]: ";
     copy(v.begin(), v.end(), ostream_iterator<decltype(v)::value_type>(ss));
-    logger.Info(ss.str());
+    spdlog::info("{}",ss.str());
   }
   FUNC_END_INFO;
 }
@@ -114,12 +114,11 @@ void Lr1::GenFollow() {
     }
   }
   
-  const auto &logger = utils::Log::GetGlobalLogger();
   for (const auto&[k, v]: follow_set_) {
     ostringstream ss;
     ss << "Follow [" << k << "]: ";
     copy(v.begin(), v.end(), ostream_iterator<decltype(v)::value_type>(ss));
-    logger.Info(ss.str());
+    spdlog::info("{}", ss.str());
   }
   FUNC_END_INFO;
 }
@@ -158,7 +157,7 @@ void Lr1::GenItemGo() {
       }
       if (curr_go.find(tok) != curr_go.end())
         throw runtime_error("Found shift-in <> shift-in conflict in: " + tok.GetTokName());
-      utils::Log::GetGlobalLogger().Info("GO[ ", i, " ; ", tok, " ] = ", new_id);
+      spdlog::info("GO[ {} ; {} ] = {}",i, tok.ToString(), new_id);
       curr_go.insert({tok, new_id});
     };
     
@@ -185,7 +184,7 @@ void Lr1::GenItemGo() {
     }
   }
   
-  sly::utils::Log::GetGlobalLogger().Info("LRItem Set is as follow:\n" + ss.str(), "\n----------");
+  spdlog::info("LRItem Set is as follow:\n{}\n----------", ss.str());
   FUNC_END_INFO;
 }
 
@@ -329,15 +328,14 @@ void Lr1::GenTable() {
           auto pid = prod_id.value();
           if (reduce.action != ParsingTable::AutomataAction::kEmpty) {
             // 已经赋值
-            utils::Log::GetGlobalLogger().Warn("Found Reduce <> Reduce conflict:\n\t",
-                                        pid, ": ", p_grammar->GetProductions()[pid],
-                                        "\n- with\n",
-                                        reduce.id, ": ", p_grammar->GetProductions()[reduce.id]);
+            spdlog::warn("Found Reduce <> Reduce conflict:\n\t{}: \n- with\n{}: {}",
+                                        pid, p_grammar->GetProductions()[pid].ToString(),
+                                        reduce.id, p_grammar->GetProductions()[reduce.id].ToString());
             if (pid < reduce.id) {
               reduce.id = pid;
-              utils::Log::GetGlobalLogger().Warn("Replace!");
+              spdlog::warn("Replace!");
             } else {
-              utils::Log::GetGlobalLogger().Warn("Do nothing!");
+              spdlog::warn("Do nothing!");
             }
           }
           
@@ -364,7 +362,7 @@ void Lr1::GenTable() {
         for_each(shift_in.cause.begin(), shift_in.cause.end(),
                  [&ss, this](const auto &v) { ss << "\t" << v << ": " << p_grammar->GetProductions()[v] << endl; });
         ss << "Reduce:" << endl << "\t" << reduce.id << ": " << p_grammar->GetProductions()[reduce.id] << endl;
-        utils::Log::GetGlobalLogger().Warn("Found Shift-In <> Reduce Conflict!\n" + ss.str());
+        spdlog::warn("Found Shift-In <> Reduce Conflict!\n{}", ss.str());
         
         // 处理冲突：
         // 1. 用结合律分析
@@ -380,10 +378,10 @@ void Lr1::GenTable() {
                    })) {
           // 可以通过结合律解决
           if (tok.GetAttr() == Token::Attr::kLeftAssociative) {
-            utils::Log::GetGlobalLogger().Warn("Reduce. because ", tok, " Has LeftAssociative.");
+            spdlog::warn("Reduce. because {} Has LeftAssociative.", tok.ToString());
             lr_table_.PutAction(i, tok, reduce);
           } else {
-            utils::Log::GetGlobalLogger().Warn("Shift In. because ", tok, " Has RightAssociative.");
+            spdlog::warn("Shift In. because {} Has RightAssociative.", tok.ToString());
             lr_table_.PutAction(i, tok, shift_in);
           }
         }
@@ -392,22 +390,21 @@ void Lr1::GenTable() {
         else if (all_of(shift_in.cause.cbegin(), shift_in.cause.cend(),
                         [&reduce](const auto &v) { return reduce.id < v; })) {
           // 执行reduce
-          utils::Log::GetGlobalLogger().Warn("Reduce. because of prio");
+          spdlog::warn("Reduce. because of prio");
           lr_table_.PutAction(i, tok, reduce);
         } else if (all_of(shift_in.cause.cbegin(), shift_in.cause.cend(),
                           [&reduce](const auto &v) { return reduce.id > v; })) {
           // 执行 shift in
-          utils::Log::GetGlobalLogger().Warn("ShiftIn. because of prio");
+          spdlog::warn("ShiftIn. because of prio");
           lr_table_.PutAction(i, tok, shift_in);
         } else {
           stringstream ss;
           for_each(shift_in.cause.begin(), shift_in.cause.end(), [&ss, this](const auto &v) {
             ss << p_grammar->GetProductions()[v] << endl;
           });
-          utils::Log::GetGlobalLogger().Err("Cannot Decide shift-in or reduce:\nShift In:\n",
+          spdlog::error("Cannot Decide shift-in or reduce:\nShift In:\n{}\nReduce:\n{}",
                                      ss.str(),
-                                     "\nReduce:\n",
-                                     p_grammar->GetProductions()[reduce.id]);
+                                     p_grammar->GetProductions()[reduce.id].ToString());
           throw runtime_error("Cannot Decide when generating LR Table!");
         }
       }

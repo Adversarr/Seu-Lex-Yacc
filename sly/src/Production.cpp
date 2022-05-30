@@ -51,6 +51,12 @@ Production::Production(Token start) : tokens_{start}, actions_{Action()} {}
 Production::Production(Token start, Action act)
     : tokens_{start}, actions_{act} {}
 
+string Production::ToString() const{
+  stringstream ss; ss << *this;
+  return "Production{" + ss.str() + "}";
+}
+
+
 vector<Token> &Production::GetTokens() { return tokens_; }
 
 const vector<Action> &Production::GetActions() const { return actions_; }

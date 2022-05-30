@@ -339,7 +339,7 @@ pair<vector<vector<int>>, vector<int>> DfaModel::Merge(const std::vector<DfaMode
   for (int i = 0; i < states.size(); ++i) {
     // 获取当前状态
     vector<int> current = states[i];
-    utils::Log::GetGlobalLogger().Info("state", i);
+    spdlog::debug("state {}", i);
     // 在返回值中添加状态是否可以作为结束的标记
     accept.push_back(determine_can_accept(current));
     vector<int> tran(128, -1);

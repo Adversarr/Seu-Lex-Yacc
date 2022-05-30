@@ -31,4 +31,9 @@ map<string, string> AttrDict::ToStrDict() const {
   return move(retval);
 }
 
+string AttrDict::ToString() const {
+  return "AttrDict{" + utils::ToString{}(ToStrDict()) + "}";
+}
+
+
 }

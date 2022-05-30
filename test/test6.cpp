@@ -2,6 +2,8 @@
 #include "sly/RegEx.h"
 #include "sly/Stream2TokenPipe.h"
 #include "sly/Token.h"
+#include "spdlog/common.h"
+#include "spdlog/spdlog.h"
 #include <ios>
 #include <iostream>
 #include <sly/sly.h>
@@ -118,9 +120,11 @@ vector<string> regex_strings = {
     R"(.)",
 };
 
-int main() {
-  sly::utils::Log::SetLogLevel(sly::utils::Log::kError);
 
+
+int main() {
+  spdlog::set_level(spdlog::level::warn);
+  sly::utils::Log::SetLogLevel(sly::utils::Log::kError);
   auto ending = Token::Terminator("EOF_FLAG");
   vector<Token> lexical_tokens;
   vector<DfaModel> lexical_tokens_dfa;
@@ -138,9 +142,7 @@ int main() {
     string input_string;
     getline(cin, input_string);
     stringstream input_stream(input_string);
-
     cerr << input_string << endl;
-
     while (true) {
       auto token = s2ppl.Defer(input_stream);
       if (token == ending)
