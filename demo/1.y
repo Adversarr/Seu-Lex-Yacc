@@ -14,7 +14,7 @@ external_declaration
 	;
 
 function_definition
-	: declaration_specifiers IDENTIFIER compound_statement
+	: declaration_specifiers IDENTIFIER '(' ')' compound_statement
 	;
 
 compound_statement

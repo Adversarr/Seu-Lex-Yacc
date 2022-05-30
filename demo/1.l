@@ -8,9 +8,7 @@ IS          ((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))
 
 %%
 
-"if"            { count(); return(IF); }
 "int"           { count(); return(INT); }
-"return"        { count(); return(RETURN); }
 {L}({L}|{D})*       { count(); return(IDENTIFIER); }
 {D}+{E}{FS}?        { count(); return(CONSTANT); }
 
@@ -24,8 +22,6 @@ L?\"(\\.|[^\\\"\r\n])*\"    { count(); return(STRING_LITERAL); }
 ")"         { count(); return(')'); }
 "-"         { count(); return('-'); }
 "+"         { count(); return('+'); }
-"*"         { count(); return('*'); }
-"/"         { count(); return('/'); }
 
 [ \t\v\r\n\f]       { count(); }
 .           { /* Add code to complain about unmatched characters */ }

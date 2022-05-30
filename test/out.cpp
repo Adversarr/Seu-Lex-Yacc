@@ -346,10 +346,10 @@ vector<Production> productions = {
   Production(syntax_tokens[external_declaration], {[](vector<YYSTATE> &v) {
       // action ...
     }})(syntax_tokens[declaration]), 
-  // function_definition : declaration_specifiers IDENTIFIER compound_statement ;
+  // function_definition : declaration_specifiers IDENTIFIER '(' ')' compound_statement ;
   Production(syntax_tokens[function_definition], {[](vector<YYSTATE> &v) {
       // action ...
-    }})(syntax_tokens[declaration_specifiers])(syntax_tokens[IDENTIFIER])(syntax_tokens[compound_statement]), 
+    }})(syntax_tokens[declaration_specifiers])(syntax_tokens[IDENTIFIER])(syntax_tokens['('])(syntax_tokens[')'])(syntax_tokens[compound_statement]), 
   // compound_statement : '{' '}' ;
   Production(syntax_tokens[compound_statement], {[](vector<YYSTATE> &v) {
       // action ...
