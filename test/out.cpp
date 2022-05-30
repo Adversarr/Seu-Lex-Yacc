@@ -1526,207 +1526,205 @@ int check_type(void)
 //@variable
 IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {
   string token_name = lexical_token.GetTokName();
-  if (token_name == R"((/\*))") { 
-    { { comment(); }}
-} else if (token_name == R"((//)[^\n]*)") { 
-    { { /* consume //-comment */ }}
-} else if (token_name == R"((auto))") { 
-    { { count(); return(AUTO); }}
-} else if (token_name == R"((_Bool))") { 
-    { { count(); return(BOOL); }}
-} else if (token_name == R"((break))") { 
-    { { count(); return(BREAK); }}
-} else if (token_name == R"((case))") { 
-    { { count(); return(CASE); }}
-} else if (token_name == R"((char))") { 
-    { { count(); return(CHAR); }}
-} else if (token_name == R"((_Complex))") { 
-    { { count(); return(COMPLEX); }}
-} else if (token_name == R"((const))") { 
-    { { count(); return(CONST); }}
-} else if (token_name == R"((continue))") { 
-    { { count(); return(CONTINUE); }}
-} else if (token_name == R"((default))") { 
-    { { count(); return(DEFAULT); }}
-} else if (token_name == R"((do))") { 
-    { { count(); return(DO); }}
-} else if (token_name == R"((double))") { 
-    { { count(); return(DOUBLE); }}
-} else if (token_name == R"((else))") { 
-    { { count(); return(ELSE); }}
-} else if (token_name == R"((enum))") { 
-    { { count(); return(ENUM); }}
-} else if (token_name == R"((extern))") { 
-    { { count(); return(EXTERN); }}
-} else if (token_name == R"((float))") { 
-    { { count(); return(FLOAT); }}
-} else if (token_name == R"((for))") { 
-    { { count(); return(FOR); }}
-} else if (token_name == R"((goto))") { 
-    { { count(); return(GOTO); }}
-} else if (token_name == R"((if))") { 
-    { { count(); return(IF); }}
-} else if (token_name == R"((_Imaginary))") { 
-    { { count(); return(IMAGINARY); }}
-} else if (token_name == R"((inline))") { 
-    { { count(); return(INLINE); }}
-} else if (token_name == R"((int))") { 
-    { { count(); return(INT); }}
-} else if (token_name == R"((long))") { 
-    { { count(); return(LONG); }}
-} else if (token_name == R"((register))") { 
-    { { count(); return(REGISTER); }}
-} else if (token_name == R"((restrict))") { 
-    { { count(); return(RESTRICT); }}
-} else if (token_name == R"((return))") { 
-    { { count(); return(RETURN); }}
-} else if (token_name == R"((short))") { 
-    { { count(); return(SHORT); }}
-} else if (token_name == R"((signed))") { 
-    { { count(); return(SIGNED); }}
-} else if (token_name == R"((sizeof))") { 
-    { { count(); return(SIZEOF); }}
-} else if (token_name == R"((static))") { 
-    { { count(); return(STATIC); }}
-} else if (token_name == R"((struct))") { 
-    { { count(); return(STRUCT); }}
-} else if (token_name == R"((switch))") { 
-    { { count(); return(SWITCH); }}
-} else if (token_name == R"((typedef))") { 
-    { { count(); return(TYPEDEF); }}
-} else if (token_name == R"((union))") { 
-    { { count(); return(UNION); }}
-} else if (token_name == R"((unsigned))") { 
-    { { count(); return(UNSIGNED); }}
-} else if (token_name == R"((void))") { 
-    { { count(); return(VOID); }}
-} else if (token_name == R"((volatile))") { 
-    { { count(); return(VOLATILE); }}
-} else if (token_name == R"((while))") { 
-    { { count(); return(WHILE); }}
-} else if (token_name == R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)") { 
-    { { count(); return(check_type()); }}
-} else if (token_name == R"(0[xX][a-fA-F0-9]+((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
-    { { count(); return(CONSTANT); }}
-} else if (token_name == R"(0[0-7]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
-    { { count(); return(CONSTANT); }}
-} else if (token_name == R"([1-9][0-9]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
-    { { count(); return(CONSTANT); }}
-} else if (token_name == R"(L?'(\\.|[^\\'\n])+')") { 
-    { { count(); return(CONSTANT); }}
-} else if (token_name == R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)") { 
-    { { count(); return(CONSTANT); }}
-} else if (token_name == R"([0-9]*(\.)[0-9]+([Ee][+-]?[0-9]+)?(f|F|l|L)?)") { 
-    { { count(); return(CONSTANT); }}
-} else if (token_name == R"([0-9]+(\.)[0-9]*([Ee][+-]?[0-9]+)?(f|F|l|L)?)") { 
-    { { count(); return(CONSTANT); }}
-} else if (token_name == R"(0[xX][a-fA-F0-9]+([Pp][+-]?[0-9]+)(f|F|l|L)?)") { 
-    { { count(); return(CONSTANT); }}
-} else if (token_name == R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][+-]?[0-9]+)?(f|F|l|L)?)") { 
-    { { count(); return(CONSTANT); }}
-} else if (token_name == R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][+-]?[0-9]+)?(f|F|l|L)?)") { 
-    { { count(); return(CONSTANT); }}
-} else if (token_name == R"(L?"(\\.|[^\\"\n])*")") { 
-    { { count(); return(STRING_LITERAL); }}
-} else if (token_name == R"((\.\.\.))") { 
-    { { count(); return(ELLIPSIS); }}
-} else if (token_name == R"((>>=))") { 
-    { { count(); return(RIGHT_ASSIGN); }}
-} else if (token_name == R"((<<=))") { 
-    { { count(); return(LEFT_ASSIGN); }}
-} else if (token_name == R"((\+=))") { 
-    { { count(); return(ADD_ASSIGN); }}
-} else if (token_name == R"((-=))") { 
-    { { count(); return(SUB_ASSIGN); }}
-} else if (token_name == R"((\*=))") { 
-    { { count(); return(MUL_ASSIGN); }}
-} else if (token_name == R"((/=))") { 
-    { { count(); return(DIV_ASSIGN); }}
-} else if (token_name == R"((%=))") { 
-    { { count(); return(MOD_ASSIGN); }}
-} else if (token_name == R"((&=))") { 
-    { { count(); return(AND_ASSIGN); }}
-} else if (token_name == R"((\^=))") { 
-    { { count(); return(XOR_ASSIGN); }}
-} else if (token_name == R"((\|=))") { 
-    { { count(); return(OR_ASSIGN); }}
-} else if (token_name == R"((>>))") { 
-    { { count(); return(RIGHT_OP); }}
-} else if (token_name == R"((<<))") { 
-    { { count(); return(LEFT_OP); }}
-} else if (token_name == R"((\+\+))") { 
-    { { count(); return(INC_OP); }}
-} else if (token_name == R"((--))") { 
-    { { count(); return(DEC_OP); }}
-} else if (token_name == R"((->))") { 
-    { { count(); return(PTR_OP); }}
-} else if (token_name == R"((&&))") { 
-    { { count(); return(AND_OP); }}
-} else if (token_name == R"((\|\|))") { 
-    { { count(); return(OR_OP); }}
-} else if (token_name == R"((<=))") { 
-    { { count(); return(LE_OP); }}
-} else if (token_name == R"((>=))") { 
-    { { count(); return(GE_OP); }}
-} else if (token_name == R"((==))") { 
-    { { count(); return(EQ_OP); }}
-} else if (token_name == R"((!=))") { 
-    { { count(); return(NE_OP); }}
-} else if (token_name == R"((;))") { 
-    { { count(); return(';'); }}
-} else if (token_name == R"((({)|(<%)))") { 
-    { { count(); return('{'); }}
-} else if (token_name == R"(((})|(%>)))") { 
-    { { count(); return('}'); }}
-} else if (token_name == R"((,))") { 
-    { { count(); return(','); }}
-} else if (token_name == R"((:))") { 
-    { { count(); return(':'); }}
-} else if (token_name == R"((=))") { 
-    { { count(); return('='); }}
-} else if (token_name == R"((\())") { 
-    { { count(); return('('); }}
-} else if (token_name == R"((\)))") { 
-    { { count(); return(')'); }}
-} else if (token_name == R"(((\[)|(<:)))") { 
-    { { count(); return('['); }}
-} else if (token_name == R"(((\])|(:>)))") { 
-    { { count(); return(']'); }}
-} else if (token_name == R"((\.))") { 
-    { { count(); return('.'); }}
-} else if (token_name == R"((&))") { 
-    { { count(); return('&'); }}
-} else if (token_name == R"((!))") { 
-    { { count(); return('!'); }}
-} else if (token_name == R"((~))") { 
-    { { count(); return('~'); }}
-} else if (token_name == R"((-))") { 
-    { { count(); return('-'); }}
-} else if (token_name == R"((\+))") { 
-    { { count(); return('+'); }}
-} else if (token_name == R"((\*))") { 
-    { { count(); return('*'); }}
-} else if (token_name == R"((/))") { 
-    { { count(); return('/'); }}
-} else if (token_name == R"((%))") { 
-    { { count(); return('%'); }}
-} else if (token_name == R"((<))") { 
-    { { count(); return('<'); }}
-} else if (token_name == R"((>))") { 
-    { { count(); return('>'); }}
-} else if (token_name == R"((\^))") { 
-    { { count(); return('^'); }}
-} else if (token_name == R"((\|))") { 
-    { { count(); return('|'); }}
-} else if (token_name == R"((?))") { 
+  if (token_name == R"(.)") { 
+    { { /* Add code to complain about unmatched characters */ }}
+  } else if (token_name == R"([ \t\v\n\f])") { 
+    { { count(); }}
+  } else if (token_name == R"((?))") { 
     { { count(); return('?'); }}
-} else if (token_name == R"([ \t\v\n\f])") { 
-    { { count(); return 0; }}
-} else if (token_name == R"(.)") { 
-    { { cerr << "wrong lexical token matched: " << token_name << " " << ad.Get<string>("lval") << endl; assert(false); }}
-} else  {
-    cerr << "wrong lexical token matched: " << token_name << endl;
-    assert(false);
+  } else if (token_name == R"((\|))") { 
+    { { count(); return('|'); }}
+  } else if (token_name == R"((\^))") { 
+    { { count(); return('^'); }}
+  } else if (token_name == R"((>))") { 
+    { { count(); return('>'); }}
+  } else if (token_name == R"((<))") { 
+    { { count(); return('<'); }}
+  } else if (token_name == R"((%))") { 
+    { { count(); return('%'); }}
+  } else if (token_name == R"((/))") { 
+    { { count(); return('/'); }}
+  } else if (token_name == R"((\*))") { 
+    { { count(); return('*'); }}
+  } else if (token_name == R"((\+))") { 
+    { { count(); return('+'); }}
+  } else if (token_name == R"((-))") { 
+    { { count(); return('-'); }}
+  } else if (token_name == R"((~))") { 
+    { { count(); return('~'); }}
+  } else if (token_name == R"((!))") { 
+    { { count(); return('!'); }}
+  } else if (token_name == R"((&))") { 
+    { { count(); return('&'); }}
+  } else if (token_name == R"((\.))") { 
+    { { count(); return('.'); }}
+  } else if (token_name == R"(((\])|(:>)))") { 
+    { { count(); return(']'); }}
+  } else if (token_name == R"(((\[)|(<:)))") { 
+    { { count(); return('['); }}
+  } else if (token_name == R"((\)))") { 
+    { { count(); return(')'); }}
+  } else if (token_name == R"((\())") { 
+    { { count(); return('('); }}
+  } else if (token_name == R"((=))") { 
+    { { count(); return('='); }}
+  } else if (token_name == R"((:))") { 
+    { { count(); return(':'); }}
+  } else if (token_name == R"((,))") { 
+    { { count(); return(','); }}
+  } else if (token_name == R"(((})|(%>)))") { 
+    { { count(); return('}'); }}
+  } else if (token_name == R"((({)|(<%)))") { 
+    { { count(); return('{'); }}
+  } else if (token_name == R"((;))") { 
+    { { count(); return(';'); }}
+  } else if (token_name == R"((!=))") { 
+    { { count(); return(NE_OP); }}
+  } else if (token_name == R"((==))") { 
+    { { count(); return(EQ_OP); }}
+  } else if (token_name == R"((>=))") { 
+    { { count(); return(GE_OP); }}
+  } else if (token_name == R"((<=))") { 
+    { { count(); return(LE_OP); }}
+  } else if (token_name == R"((\|\|))") { 
+    { { count(); return(OR_OP); }}
+  } else if (token_name == R"((&&))") { 
+    { { count(); return(AND_OP); }}
+  } else if (token_name == R"((->))") { 
+    { { count(); return(PTR_OP); }}
+  } else if (token_name == R"((--))") { 
+    { { count(); return(DEC_OP); }}
+  } else if (token_name == R"((\+\+))") { 
+    { { count(); return(INC_OP); }}
+  } else if (token_name == R"((<<))") { 
+    { { count(); return(LEFT_OP); }}
+  } else if (token_name == R"((>>))") { 
+    { { count(); return(RIGHT_OP); }}
+  } else if (token_name == R"((\|=))") { 
+    { { count(); return(OR_ASSIGN); }}
+  } else if (token_name == R"((\^=))") { 
+    { { count(); return(XOR_ASSIGN); }}
+  } else if (token_name == R"((&=))") { 
+    { { count(); return(AND_ASSIGN); }}
+  } else if (token_name == R"((%=))") { 
+    { { count(); return(MOD_ASSIGN); }}
+  } else if (token_name == R"((/=))") { 
+    { { count(); return(DIV_ASSIGN); }}
+  } else if (token_name == R"((\*=))") { 
+    { { count(); return(MUL_ASSIGN); }}
+  } else if (token_name == R"((-=))") { 
+    { { count(); return(SUB_ASSIGN); }}
+  } else if (token_name == R"((\+=))") { 
+    { { count(); return(ADD_ASSIGN); }}
+  } else if (token_name == R"((<<=))") { 
+    { { count(); return(LEFT_ASSIGN); }}
+  } else if (token_name == R"((>>=))") { 
+    { { count(); return(RIGHT_ASSIGN); }}
+  } else if (token_name == R"((\.\.\.))") { 
+    { { count(); return(ELLIPSIS); }}
+  } else if (token_name == R"(L?"(\\.|[^\\"\n])*")") { 
+    { { count(); return(STRING_LITERAL); }}
+  } else if (token_name == R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][+-]?[0-9]+)?(f|F|l|L)?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][+-]?[0-9]+)?(f|F|l|L)?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"(0[xX][a-fA-F0-9]+([Pp][+-]?[0-9]+)(f|F|l|L)?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"([0-9]+(\.)[0-9]*([Ee][+-]?[0-9]+)?(f|F|l|L)?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"([0-9]*(\.)[0-9]+([Ee][+-]?[0-9]+)?(f|F|l|L)?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"(L?'(\\.|[^\\'\n])+')") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"([1-9][0-9]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"(0[0-7]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"(0[xX][a-fA-F0-9]+((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)") { 
+    { { count(); return(check_type()); }}
+  } else if (token_name == R"((while))") { 
+    { { count(); return(WHILE); }}
+  } else if (token_name == R"((volatile))") { 
+    { { count(); return(VOLATILE); }}
+  } else if (token_name == R"((void))") { 
+    { { count(); return(VOID); }}
+  } else if (token_name == R"((unsigned))") { 
+    { { count(); return(UNSIGNED); }}
+  } else if (token_name == R"((union))") { 
+    { { count(); return(UNION); }}
+  } else if (token_name == R"((typedef))") { 
+    { { count(); return(TYPEDEF); }}
+  } else if (token_name == R"((switch))") { 
+    { { count(); return(SWITCH); }}
+  } else if (token_name == R"((struct))") { 
+    { { count(); return(STRUCT); }}
+  } else if (token_name == R"((static))") { 
+    { { count(); return(STATIC); }}
+  } else if (token_name == R"((sizeof))") { 
+    { { count(); return(SIZEOF); }}
+  } else if (token_name == R"((signed))") { 
+    { { count(); return(SIGNED); }}
+  } else if (token_name == R"((short))") { 
+    { { count(); return(SHORT); }}
+  } else if (token_name == R"((return))") { 
+    { { count(); return(RETURN); }}
+  } else if (token_name == R"((restrict))") { 
+    { { count(); return(RESTRICT); }}
+  } else if (token_name == R"((register))") { 
+    { { count(); return(REGISTER); }}
+  } else if (token_name == R"((long))") { 
+    { { count(); return(LONG); }}
+  } else if (token_name == R"((int))") { 
+    { { count(); return(INT); }}
+  } else if (token_name == R"((inline))") { 
+    { { count(); return(INLINE); }}
+  } else if (token_name == R"((_Imaginary))") { 
+    { { count(); return(IMAGINARY); }}
+  } else if (token_name == R"((if))") { 
+    { { count(); return(IF); }}
+  } else if (token_name == R"((goto))") { 
+    { { count(); return(GOTO); }}
+  } else if (token_name == R"((for))") { 
+    { { count(); return(FOR); }}
+  } else if (token_name == R"((float))") { 
+    { { count(); return(FLOAT); }}
+  } else if (token_name == R"((extern))") { 
+    { { count(); return(EXTERN); }}
+  } else if (token_name == R"((enum))") { 
+    { { count(); return(ENUM); }}
+  } else if (token_name == R"((else))") { 
+    { { count(); return(ELSE); }}
+  } else if (token_name == R"((double))") { 
+    { { count(); return(DOUBLE); }}
+  } else if (token_name == R"((do))") { 
+    { { count(); return(DO); }}
+  } else if (token_name == R"((default))") { 
+    { { count(); return(DEFAULT); }}
+  } else if (token_name == R"((continue))") { 
+    { { count(); return(CONTINUE); }}
+  } else if (token_name == R"((const))") { 
+    { { count(); return(CONST); }}
+  } else if (token_name == R"((_Complex))") { 
+    { { count(); return(COMPLEX); }}
+  } else if (token_name == R"((char))") { 
+    { { count(); return(CHAR); }}
+  } else if (token_name == R"((case))") { 
+    { { count(); return(CASE); }}
+  } else if (token_name == R"((break))") { 
+    { { count(); return(BREAK); }}
+  } else if (token_name == R"((_Bool))") { 
+    { { count(); return(BOOL); }}
+  } else if (token_name == R"((auto))") { 
+    { { count(); return(AUTO); }}
+  } else if (token_name == R"((//)[^\n]*)") { 
+    { { /* consume //-comment */ }}
+  } else if (token_name == R"((/\*))") { 
+    { { comment(); }}
+  } else  {
     return 0;
   }
   return 0;
@@ -1741,206 +1739,206 @@ int main() {
   // lexical token
   //@variable
   vector<Token> lexical_tokens = {
-    Token::Terminator(R"((/\*))"), 
-    Token::Terminator(R"((//)[^\n]*)"), 
-    Token::Terminator(R"((auto))"), 
-    Token::Terminator(R"((_Bool))"), 
-    Token::Terminator(R"((break))"), 
-    Token::Terminator(R"((case))"), 
-    Token::Terminator(R"((char))"), 
-    Token::Terminator(R"((_Complex))"), 
-    Token::Terminator(R"((const))"), 
-    Token::Terminator(R"((continue))"), 
-    Token::Terminator(R"((default))"), 
-    Token::Terminator(R"((do))"), 
-    Token::Terminator(R"((double))"), 
-    Token::Terminator(R"((else))"), 
-    Token::Terminator(R"((enum))"), 
-    Token::Terminator(R"((extern))"), 
-    Token::Terminator(R"((float))"), 
-    Token::Terminator(R"((for))"), 
-    Token::Terminator(R"((goto))"), 
-    Token::Terminator(R"((if))"), 
-    Token::Terminator(R"((_Imaginary))"), 
-    Token::Terminator(R"((inline))"), 
-    Token::Terminator(R"((int))"), 
-    Token::Terminator(R"((long))"), 
-    Token::Terminator(R"((register))"), 
-    Token::Terminator(R"((restrict))"), 
-    Token::Terminator(R"((return))"), 
-    Token::Terminator(R"((short))"), 
-    Token::Terminator(R"((signed))"), 
-    Token::Terminator(R"((sizeof))"), 
-    Token::Terminator(R"((static))"), 
-    Token::Terminator(R"((struct))"), 
-    Token::Terminator(R"((switch))"), 
-    Token::Terminator(R"((typedef))"), 
-    Token::Terminator(R"((union))"), 
-    Token::Terminator(R"((unsigned))"), 
-    Token::Terminator(R"((void))"), 
-    Token::Terminator(R"((volatile))"), 
-    Token::Terminator(R"((while))"), 
-    Token::Terminator(R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)"), 
-    Token::Terminator(R"(0[xX][a-fA-F0-9]+((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
-    Token::Terminator(R"(0[0-7]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
-    Token::Terminator(R"([1-9][0-9]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
-    Token::Terminator(R"(L?'(\\.|[^\\'\n])+')"), 
-    Token::Terminator(R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)"), 
-    Token::Terminator(R"([0-9]*(\.)[0-9]+([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
-    Token::Terminator(R"([0-9]+(\.)[0-9]*([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
-    Token::Terminator(R"(0[xX][a-fA-F0-9]+([Pp][+-]?[0-9]+)(f|F|l|L)?)"), 
-    Token::Terminator(R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
-    Token::Terminator(R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
-    Token::Terminator(R"(L?"(\\.|[^\\"\n])*")"), 
-    Token::Terminator(R"((\.\.\.))"), 
-    Token::Terminator(R"((>>=))"), 
-    Token::Terminator(R"((<<=))"), 
-    Token::Terminator(R"((\+=))"), 
-    Token::Terminator(R"((-=))"), 
-    Token::Terminator(R"((\*=))"), 
-    Token::Terminator(R"((/=))"), 
-    Token::Terminator(R"((%=))"), 
-    Token::Terminator(R"((&=))"), 
-    Token::Terminator(R"((\^=))"), 
-    Token::Terminator(R"((\|=))"), 
-    Token::Terminator(R"((>>))"), 
-    Token::Terminator(R"((<<))"), 
-    Token::Terminator(R"((\+\+))"), 
-    Token::Terminator(R"((--))"), 
-    Token::Terminator(R"((->))"), 
-    Token::Terminator(R"((&&))"), 
-    Token::Terminator(R"((\|\|))"), 
-    Token::Terminator(R"((<=))"), 
-    Token::Terminator(R"((>=))"), 
-    Token::Terminator(R"((==))"), 
-    Token::Terminator(R"((!=))"), 
-    Token::Terminator(R"((;))"), 
-    Token::Terminator(R"((({)|(<%)))"), 
-    Token::Terminator(R"(((})|(%>)))"), 
-    Token::Terminator(R"((,))"), 
-    Token::Terminator(R"((:))"), 
-    Token::Terminator(R"((=))"), 
-    Token::Terminator(R"((\())"), 
-    Token::Terminator(R"((\)))"), 
-    Token::Terminator(R"(((\[)|(<:)))"), 
-    Token::Terminator(R"(((\])|(:>)))"), 
-    Token::Terminator(R"((\.))"), 
-    Token::Terminator(R"((&))"), 
-    Token::Terminator(R"((!))"), 
-    Token::Terminator(R"((~))"), 
-    Token::Terminator(R"((-))"), 
-    Token::Terminator(R"((\+))"), 
-    Token::Terminator(R"((\*))"), 
-    Token::Terminator(R"((/))"), 
-    Token::Terminator(R"((%))"), 
-    Token::Terminator(R"((<))"), 
-    Token::Terminator(R"((>))"), 
-    Token::Terminator(R"((\^))"), 
-    Token::Terminator(R"((\|))"), 
-    Token::Terminator(R"((?))"), 
-    Token::Terminator(R"([ \t\v\n\f])"), 
     Token::Terminator(R"(.)"), 
+    Token::Terminator(R"([ \t\v\n\f])"), 
+    Token::Terminator(R"((?))"), 
+    Token::Terminator(R"((\|))"), 
+    Token::Terminator(R"((\^))"), 
+    Token::Terminator(R"((>))"), 
+    Token::Terminator(R"((<))"), 
+    Token::Terminator(R"((%))"), 
+    Token::Terminator(R"((/))"), 
+    Token::Terminator(R"((\*))"), 
+    Token::Terminator(R"((\+))"), 
+    Token::Terminator(R"((-))"), 
+    Token::Terminator(R"((~))"), 
+    Token::Terminator(R"((!))"), 
+    Token::Terminator(R"((&))"), 
+    Token::Terminator(R"((\.))"), 
+    Token::Terminator(R"(((\])|(:>)))"), 
+    Token::Terminator(R"(((\[)|(<:)))"), 
+    Token::Terminator(R"((\)))"), 
+    Token::Terminator(R"((\())"), 
+    Token::Terminator(R"((=))"), 
+    Token::Terminator(R"((:))"), 
+    Token::Terminator(R"((,))"), 
+    Token::Terminator(R"(((})|(%>)))"), 
+    Token::Terminator(R"((({)|(<%)))"), 
+    Token::Terminator(R"((;))"), 
+    Token::Terminator(R"((!=))"), 
+    Token::Terminator(R"((==))"), 
+    Token::Terminator(R"((>=))"), 
+    Token::Terminator(R"((<=))"), 
+    Token::Terminator(R"((\|\|))"), 
+    Token::Terminator(R"((&&))"), 
+    Token::Terminator(R"((->))"), 
+    Token::Terminator(R"((--))"), 
+    Token::Terminator(R"((\+\+))"), 
+    Token::Terminator(R"((<<))"), 
+    Token::Terminator(R"((>>))"), 
+    Token::Terminator(R"((\|=))"), 
+    Token::Terminator(R"((\^=))"), 
+    Token::Terminator(R"((&=))"), 
+    Token::Terminator(R"((%=))"), 
+    Token::Terminator(R"((/=))"), 
+    Token::Terminator(R"((\*=))"), 
+    Token::Terminator(R"((-=))"), 
+    Token::Terminator(R"((\+=))"), 
+    Token::Terminator(R"((<<=))"), 
+    Token::Terminator(R"((>>=))"), 
+    Token::Terminator(R"((\.\.\.))"), 
+    Token::Terminator(R"(L?"(\\.|[^\\"\n])*")"), 
+    Token::Terminator(R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
+    Token::Terminator(R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
+    Token::Terminator(R"(0[xX][a-fA-F0-9]+([Pp][+-]?[0-9]+)(f|F|l|L)?)"), 
+    Token::Terminator(R"([0-9]+(\.)[0-9]*([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
+    Token::Terminator(R"([0-9]*(\.)[0-9]+([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
+    Token::Terminator(R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)"), 
+    Token::Terminator(R"(L?'(\\.|[^\\'\n])+')"), 
+    Token::Terminator(R"([1-9][0-9]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
+    Token::Terminator(R"(0[0-7]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
+    Token::Terminator(R"(0[xX][a-fA-F0-9]+((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
+    Token::Terminator(R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)"), 
+    Token::Terminator(R"((while))"), 
+    Token::Terminator(R"((volatile))"), 
+    Token::Terminator(R"((void))"), 
+    Token::Terminator(R"((unsigned))"), 
+    Token::Terminator(R"((union))"), 
+    Token::Terminator(R"((typedef))"), 
+    Token::Terminator(R"((switch))"), 
+    Token::Terminator(R"((struct))"), 
+    Token::Terminator(R"((static))"), 
+    Token::Terminator(R"((sizeof))"), 
+    Token::Terminator(R"((signed))"), 
+    Token::Terminator(R"((short))"), 
+    Token::Terminator(R"((return))"), 
+    Token::Terminator(R"((restrict))"), 
+    Token::Terminator(R"((register))"), 
+    Token::Terminator(R"((long))"), 
+    Token::Terminator(R"((int))"), 
+    Token::Terminator(R"((inline))"), 
+    Token::Terminator(R"((_Imaginary))"), 
+    Token::Terminator(R"((if))"), 
+    Token::Terminator(R"((goto))"), 
+    Token::Terminator(R"((for))"), 
+    Token::Terminator(R"((float))"), 
+    Token::Terminator(R"((extern))"), 
+    Token::Terminator(R"((enum))"), 
+    Token::Terminator(R"((else))"), 
+    Token::Terminator(R"((double))"), 
+    Token::Terminator(R"((do))"), 
+    Token::Terminator(R"((default))"), 
+    Token::Terminator(R"((continue))"), 
+    Token::Terminator(R"((const))"), 
+    Token::Terminator(R"((_Complex))"), 
+    Token::Terminator(R"((char))"), 
+    Token::Terminator(R"((case))"), 
+    Token::Terminator(R"((break))"), 
+    Token::Terminator(R"((_Bool))"), 
+    Token::Terminator(R"((auto))"), 
+    Token::Terminator(R"((//)[^\n]*)"), 
+    Token::Terminator(R"((/\*))"), 
   };
   vector<RegEx> lexical_tokens_regex = {
-    RegEx(R"((/\*))"), 
-    RegEx(R"((//)[^\n]*)"), 
-    RegEx(R"((auto))"), 
-    RegEx(R"((_Bool))"), 
-    RegEx(R"((break))"), 
-    RegEx(R"((case))"), 
-    RegEx(R"((char))"), 
-    RegEx(R"((_Complex))"), 
-    RegEx(R"((const))"), 
-    RegEx(R"((continue))"), 
-    RegEx(R"((default))"), 
-    RegEx(R"((do))"), 
-    RegEx(R"((double))"), 
-    RegEx(R"((else))"), 
-    RegEx(R"((enum))"), 
-    RegEx(R"((extern))"), 
-    RegEx(R"((float))"), 
-    RegEx(R"((for))"), 
-    RegEx(R"((goto))"), 
-    RegEx(R"((if))"), 
-    RegEx(R"((_Imaginary))"), 
-    RegEx(R"((inline))"), 
-    RegEx(R"((int))"), 
-    RegEx(R"((long))"), 
-    RegEx(R"((register))"), 
-    RegEx(R"((restrict))"), 
-    RegEx(R"((return))"), 
-    RegEx(R"((short))"), 
-    RegEx(R"((signed))"), 
-    RegEx(R"((sizeof))"), 
-    RegEx(R"((static))"), 
-    RegEx(R"((struct))"), 
-    RegEx(R"((switch))"), 
-    RegEx(R"((typedef))"), 
-    RegEx(R"((union))"), 
-    RegEx(R"((unsigned))"), 
-    RegEx(R"((void))"), 
-    RegEx(R"((volatile))"), 
-    RegEx(R"((while))"), 
-    RegEx(R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)"), 
-    RegEx(R"(0[xX][a-fA-F0-9]+((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
-    RegEx(R"(0[0-7]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
-    RegEx(R"([1-9][0-9]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
-    RegEx(R"(L?'(\\.|[^\\'\n])+')"), 
-    RegEx(R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)"), 
-    RegEx(R"([0-9]*(\.)[0-9]+([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
-    RegEx(R"([0-9]+(\.)[0-9]*([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
-    RegEx(R"(0[xX][a-fA-F0-9]+([Pp][+-]?[0-9]+)(f|F|l|L)?)"), 
-    RegEx(R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
-    RegEx(R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
-    RegEx(R"(L?"(\\.|[^\\"\n])*")"), 
-    RegEx(R"((\.\.\.))"), 
-    RegEx(R"((>>=))"), 
-    RegEx(R"((<<=))"), 
-    RegEx(R"((\+=))"), 
-    RegEx(R"((-=))"), 
-    RegEx(R"((\*=))"), 
-    RegEx(R"((/=))"), 
-    RegEx(R"((%=))"), 
-    RegEx(R"((&=))"), 
-    RegEx(R"((\^=))"), 
-    RegEx(R"((\|=))"), 
-    RegEx(R"((>>))"), 
-    RegEx(R"((<<))"), 
-    RegEx(R"((\+\+))"), 
-    RegEx(R"((--))"), 
-    RegEx(R"((->))"), 
-    RegEx(R"((&&))"), 
-    RegEx(R"((\|\|))"), 
-    RegEx(R"((<=))"), 
-    RegEx(R"((>=))"), 
-    RegEx(R"((==))"), 
-    RegEx(R"((!=))"), 
-    RegEx(R"((;))"), 
-    RegEx(R"((({)|(<%)))"), 
-    RegEx(R"(((})|(%>)))"), 
-    RegEx(R"((,))"), 
-    RegEx(R"((:))"), 
-    RegEx(R"((=))"), 
-    RegEx(R"((\())"), 
-    RegEx(R"((\)))"), 
-    RegEx(R"(((\[)|(<:)))"), 
-    RegEx(R"(((\])|(:>)))"), 
-    RegEx(R"((\.))"), 
-    RegEx(R"((&))"), 
-    RegEx(R"((!))"), 
-    RegEx(R"((~))"), 
-    RegEx(R"((-))"), 
-    RegEx(R"((\+))"), 
-    RegEx(R"((\*))"), 
-    RegEx(R"((/))"), 
-    RegEx(R"((%))"), 
-    RegEx(R"((<))"), 
-    RegEx(R"((>))"), 
-    RegEx(R"((\^))"), 
-    RegEx(R"((\|))"), 
-    RegEx(R"((?))"), 
-    RegEx(R"([ \t\v\n\f])"), 
     RegEx(R"(.)"), 
+    RegEx(R"([ \t\v\n\f])"), 
+    RegEx(R"((?))"), 
+    RegEx(R"((\|))"), 
+    RegEx(R"((\^))"), 
+    RegEx(R"((>))"), 
+    RegEx(R"((<))"), 
+    RegEx(R"((%))"), 
+    RegEx(R"((/))"), 
+    RegEx(R"((\*))"), 
+    RegEx(R"((\+))"), 
+    RegEx(R"((-))"), 
+    RegEx(R"((~))"), 
+    RegEx(R"((!))"), 
+    RegEx(R"((&))"), 
+    RegEx(R"((\.))"), 
+    RegEx(R"(((\])|(:>)))"), 
+    RegEx(R"(((\[)|(<:)))"), 
+    RegEx(R"((\)))"), 
+    RegEx(R"((\())"), 
+    RegEx(R"((=))"), 
+    RegEx(R"((:))"), 
+    RegEx(R"((,))"), 
+    RegEx(R"(((})|(%>)))"), 
+    RegEx(R"((({)|(<%)))"), 
+    RegEx(R"((;))"), 
+    RegEx(R"((!=))"), 
+    RegEx(R"((==))"), 
+    RegEx(R"((>=))"), 
+    RegEx(R"((<=))"), 
+    RegEx(R"((\|\|))"), 
+    RegEx(R"((&&))"), 
+    RegEx(R"((->))"), 
+    RegEx(R"((--))"), 
+    RegEx(R"((\+\+))"), 
+    RegEx(R"((<<))"), 
+    RegEx(R"((>>))"), 
+    RegEx(R"((\|=))"), 
+    RegEx(R"((\^=))"), 
+    RegEx(R"((&=))"), 
+    RegEx(R"((%=))"), 
+    RegEx(R"((/=))"), 
+    RegEx(R"((\*=))"), 
+    RegEx(R"((-=))"), 
+    RegEx(R"((\+=))"), 
+    RegEx(R"((<<=))"), 
+    RegEx(R"((>>=))"), 
+    RegEx(R"((\.\.\.))"), 
+    RegEx(R"(L?"(\\.|[^\\"\n])*")"), 
+    RegEx(R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
+    RegEx(R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
+    RegEx(R"(0[xX][a-fA-F0-9]+([Pp][+-]?[0-9]+)(f|F|l|L)?)"), 
+    RegEx(R"([0-9]+(\.)[0-9]*([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
+    RegEx(R"([0-9]*(\.)[0-9]+([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
+    RegEx(R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)"), 
+    RegEx(R"(L?'(\\.|[^\\'\n])+')"), 
+    RegEx(R"([1-9][0-9]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
+    RegEx(R"(0[0-7]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
+    RegEx(R"(0[xX][a-fA-F0-9]+((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
+    RegEx(R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)"), 
+    RegEx(R"((while))"), 
+    RegEx(R"((volatile))"), 
+    RegEx(R"((void))"), 
+    RegEx(R"((unsigned))"), 
+    RegEx(R"((union))"), 
+    RegEx(R"((typedef))"), 
+    RegEx(R"((switch))"), 
+    RegEx(R"((struct))"), 
+    RegEx(R"((static))"), 
+    RegEx(R"((sizeof))"), 
+    RegEx(R"((signed))"), 
+    RegEx(R"((short))"), 
+    RegEx(R"((return))"), 
+    RegEx(R"((restrict))"), 
+    RegEx(R"((register))"), 
+    RegEx(R"((long))"), 
+    RegEx(R"((int))"), 
+    RegEx(R"((inline))"), 
+    RegEx(R"((_Imaginary))"), 
+    RegEx(R"((if))"), 
+    RegEx(R"((goto))"), 
+    RegEx(R"((for))"), 
+    RegEx(R"((float))"), 
+    RegEx(R"((extern))"), 
+    RegEx(R"((enum))"), 
+    RegEx(R"((else))"), 
+    RegEx(R"((double))"), 
+    RegEx(R"((do))"), 
+    RegEx(R"((default))"), 
+    RegEx(R"((continue))"), 
+    RegEx(R"((const))"), 
+    RegEx(R"((_Complex))"), 
+    RegEx(R"((char))"), 
+    RegEx(R"((case))"), 
+    RegEx(R"((break))"), 
+    RegEx(R"((_Bool))"), 
+    RegEx(R"((auto))"), 
+    RegEx(R"((//)[^\n]*)"), 
+    RegEx(R"((/\*))"), 
   };
 
   /* section 7.3 */
@@ -1954,9 +1952,9 @@ int main() {
   // syntax
   sly::core::grammar::ContextFreeGrammar cfg(productions, start_syntax_token, ending);
   sly::core::grammar::Lr1 lr1;
-  // cfg.Compile(lr1);
-  // auto table = cfg.GetLrTable();
-  // LrParser parser(table);
+  cfg.Compile(lr1);
+  auto table = cfg.GetLrTable();
+  LrParser parser(table);
 
   cout << start_syntax_token.GetTokName() << endl;
 
@@ -1979,11 +1977,9 @@ int main() {
     ad.Set("lval", s2ppl.buffer_); 
 
     IdType id = to_syntax_token_id(lexical_token, ad);
-    cerr << ad.Get<string>("lval") << " " << id << endl;
     if (id == 0) {
-      continue;
+      continue; // ignore
     }
-    
     Token syntax_token = syntax_tokens[id];
 
     tokens.emplace_back(syntax_token);
@@ -1995,10 +1991,10 @@ int main() {
     cerr << "  " << token.GetTokName() << endl;
   }
 
-  // parser.Parse(tokens, attributes);
-  // auto tree = parser.GetTree();
-  // cerr << "parse tree: " << endl;
-  // tree.Print(std::cerr);
+  parser.Parse(tokens, attributes);
+  auto tree = parser.GetTree();
+  cerr << "parse tree: " << endl;
+  tree.Print(std::cerr);
 
   return 0;
 }
