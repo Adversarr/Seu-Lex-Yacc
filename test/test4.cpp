@@ -617,7 +617,8 @@ using namespace std;)";
   }
   oss << "};" << endl;
   oss << endl;
-  oss << "auto &start_syntax_token = syntax_tokens[primary_expression];" << endl;
+  oss << "//@variable" << endl;
+  oss << "auto &start_syntax_token = syntax_tokens[" << parms.startToken << "];" << endl;
   oss << endl;
 
   /* section 4 */

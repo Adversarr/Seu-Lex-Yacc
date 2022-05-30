@@ -553,7 +553,7 @@ Token syntax_tokens[256 + num_syntax_tokens] = {
   Token::NonTerminator("unary_operator"), // 386
 };
 
-auto &start_syntax_token = syntax_tokens[primary_expression];
+auto &start_syntax_token = syntax_tokens[translation_unit];
 
 /* section 4 */
 //@variable
@@ -1956,7 +1956,7 @@ int main() {
   auto table = cfg.GetLrTable();
   LrParser parser(table);
 
-  // cout << start_syntax_token.GetTokName() << endl;
+  cout << start_syntax_token.GetTokName() << endl;
 
   /* section 7.4 */
   // runtime
