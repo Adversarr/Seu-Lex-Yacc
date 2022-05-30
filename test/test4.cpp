@@ -555,31 +555,28 @@ inline std::string regex2code(const std::string &str) {
 }
 
 void generateCodeFile(Parms parms, ostream &oss) {
-  
   /* section 1 */
-  oss << R"(
-/* section 1 */
-#include "sly/AttrDict.h"
-#include "sly/FaModel.h"
-#include "sly/LrParser.h"
-#include "sly/RegEx.h"
-#include "sly/Stream2TokenPipe.h"
-#include <sly/sly.h>
-
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-
-using sly::core::type::AttrDict;
-using sly::core::type::Production;
-using sly::core::type::Token;
-using sly::core::lexical::RegEx;
-using sly::core::lexical::DfaModel;
-using sly::runtime::Stream2TokenPipe;
-using sly::core::grammar::LrParser;
-using namespace std;)";
-  oss << endl;
+  oss << R"(/* section 1 */)" << endl;
+  oss << R"(#include "sly/AttrDict.h")" << endl;
+  oss << R"(#include "sly/FaModel.h")" << endl;
+  oss << R"(#include "sly/LrParser.h")" << endl;
+  oss << R"(#include "sly/RegEx.h")" << endl;
+  oss << R"(#include "sly/Stream2TokenPipe.h")" << endl;
+  oss << R"(#include <sly/sly.h>)" << endl;
+  oss << R"()" << endl;
+  oss << R"(#include <iostream>)" << endl;
+  oss << R"(#include <fstream>)" << endl;
+  oss << R"(#include <sstream>)" << endl;
+  oss << R"(#include <vector>)" << endl;
+  oss << R"()" << endl;
+  oss << R"(using sly::core::type::AttrDict;)" << endl;
+  oss << R"(using sly::core::type::Production;)" << endl;
+  oss << R"(using sly::core::type::Token;)" << endl;
+  oss << R"(using sly::core::lexical::RegEx;)" << endl;
+  oss << R"(using sly::core::lexical::DfaModel;)" << endl;
+  oss << R"(using sly::runtime::Stream2TokenPipe;)" << endl;
+  oss << R"(using sly::core::grammar::LrParser;)" << endl;
+  oss << R"(using namespace std;)" << endl;
   oss << endl;
 
   /* section 2 */
@@ -642,20 +639,19 @@ using namespace std;)";
   oss << "};" << endl;
 
   /* section 5 */
-  oss << R"(
-/* section 5 */
-void count() {
-  // pass
-}
-
-void comment() {
-  // pass
-}
-
-int check_type(void)
-{
-  return IDENTIFIER;
-})";
+  oss << R"(/* section 5 */)" << endl;
+  oss << R"(void count() {)" << endl;
+  oss << R"(  // pass)" << endl;
+  oss << R"(})" << endl;
+  oss << R"()" << endl;
+  oss << R"(void comment() {)" << endl;
+  oss << R"(  // pass)" << endl;
+  oss << R"(})" << endl;
+  oss << R"()" << endl;
+  oss << R"(int check_type(void))" << endl;
+  oss << R"({)" << endl;
+  oss << R"(  return IDENTIFIER;)" << endl;
+  oss << R"(})" << endl;
 
   oss << endl;
   oss << endl;
