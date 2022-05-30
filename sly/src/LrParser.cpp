@@ -75,8 +75,13 @@ void LrParser::ParseOnce(const vector<Token> &token_stream, const vector<YYSTATE
         current_offset_ += 1;
         return;
       }
-      if (action.action == ParsingTable::kError)
+      if (action.action == ParsingTable::kError){
         spdlog::error("Found invalid action. current token={}", current_token.ToString());
+        spdlog::error("current state_stack={}", utils::ToString{}(state_stack_));
+        spdlog::error("current state_id={}", utils::ToString{}(current_state_id_));
+        spdlog::error("current apt_stack={}", utils::ToString{}(apt_stack_));
+        spdlog::error("current ");
+      }
       assert(false);
     }
   } else {

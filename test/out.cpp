@@ -1994,11 +1994,12 @@ int main() {
   for (auto token : tokens) {
     cerr << "  " << token.GetTokName() << endl;
   }
-
-  // parser.Parse(tokens, attributes);
-  // auto tree = parser.GetTree();
-  // cerr << "parse tree: " << endl;
-  // tree.Print(std::cerr);
+  spdlog::info("Start parse.");
+  parser.Parse(tokens, attributes);
+  spdlog::info("Done.");
+  auto tree = parser.GetTree();
+  cerr << "parse tree: " << endl;
+  tree.Print(std::cerr);
 
   return 0;
 }
