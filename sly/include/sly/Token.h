@@ -59,6 +59,7 @@ class Token {
 
   string ToString() const;
  
+  size_t hash() const;
  private:
   IdType tid_;
   

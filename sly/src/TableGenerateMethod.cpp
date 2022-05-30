@@ -86,7 +86,6 @@ vector<IdType> ParsingTable::GetGoto(IdType lhs, const Token &tok) const {
 }
 
 void ParsingTable::Print(ostream &os) const {
-  os << "\n======================================================\n";
   os << "sly::core::grammar::ParsingTable(";
   // print out action table:
   os << "{";
@@ -133,7 +132,6 @@ void ParsingTable::Print(ostream &os) const {
   os << ",";
   epsilon_token_.PrintImpl(os);
   os << ")";
-  os << "\n======================================================\n";
 }
 
 const vector<unordered_map<Token, vector<ParsingTable::CellTp>, Token::Hash>> &

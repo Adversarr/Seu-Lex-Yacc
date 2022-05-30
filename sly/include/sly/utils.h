@@ -208,6 +208,7 @@ public:
     }
     return "[" + hv + "]";
   }
+
   type operator()(const vector<bool> &bs) const {
     string hv = "";
     for (int i = 0; i < bs.size(); ++i) {

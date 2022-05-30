@@ -32,6 +32,10 @@ bool Token::IsTerminator() const
   return type_ == Type::kTerminator;
 }
 
+size_t Token::hash() const {
+  return Token::Hash{}(*this);
+}
+
 Token::Token(string tok_name, Type tok_type, IdType tid, Attr attr) :
   name_(std::move(tok_name)), tid_(tid), type_(tok_type), attr_(attr)
 {

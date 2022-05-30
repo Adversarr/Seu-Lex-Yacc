@@ -1,3 +1,4 @@
+#include "sly/Token.h"
 #include "spdlog/spdlog.h"
 #include <sly/LrParser.h>
 #include <sly/utils.h>
@@ -75,8 +76,18 @@ void LrParser::ParseOnce(const vector<Token> &token_stream, const vector<YYSTATE
         current_offset_ += 1;
         return;
       }
-      if (action.action == ParsingTable::kError)
+      if (action.action == ParsingTable::kError){
         spdlog::error("Found invalid action. current token={}", current_token.ToString());
+        spdlog::error("current state_stack={}", utils::ToString{}(state_stack_));
+        spdlog::error("current state_id={}", utils::ToString{}(current_state_id_));
+        spdlog::error("current apt_stack={}", utils::ToString{}(apt_stack_));
+        auto b = token_stream.cbegin() + max(0, (int) current_state_id_ - 5);
+        auto e = token_stream.end();
+        if (distance(b, token_stream.end()) >= 10) {
+          e = b + 10;
+        }
+        spdlog::error("token stream = ... {} ...", utils::ToString{}(vector<Token>{b, e}));
+      }
       assert(false);
     }
   } else {
