@@ -28,7 +28,7 @@ core::type::Token Stream2TokenPipe::Defer(std::istream& is) {
     c = is.get();
     utils::Log::GetGlobalLogger().Info("Caught ", static_cast<int>(c) , " From stream.");
     // 1. 测试是否是可行的
-    if (!(c > static_cast<char>(0) && c <= static_cast<char>(127))) {
+    if (!(c > static_cast<int8_t>(0) && c <= static_cast<int8_t>(127))) {
       utils::Log::GetGlobalLogger().Info("Handling the eof flag.");
       if (buffer_.length() == 0) {
         // 如果 buffer 是空的，直接返回 eof 标志

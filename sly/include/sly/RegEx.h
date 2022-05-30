@@ -14,7 +14,7 @@ namespace sly::core::lexical {
 class RegEx {
  public:
 
-  explicit RegEx(std::string expr, bool compile=false);
+  explicit RegEx(std::string expr);
   
   bool CanMatch(std::string str);
   

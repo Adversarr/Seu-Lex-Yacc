@@ -320,7 +320,10 @@ pair<vector<vector<int>>, vector<int>> DfaModel::Merge(const std::vector<DfaMode
   // states[i] == id >=  0 表示第 i 个 dfa 状态为 id
   //              id == -1 表示第 i 个 dfa 已经退出
   vector<vector<int>> states;
-  states.emplace_back(dfa_list.size(), 0);
+  states.emplace_back();
+  for (const auto & dfa: dfa_list) {
+    states.front().push_back(dfa.entry_);
+  }
   
   auto determine_can_accept = [&dfa_list](const vector<int> &state) {
     for (int i = 0; i < dfa_list.size(); ++i) {
@@ -332,10 +335,12 @@ pair<vector<vector<int>>, vector<int>> DfaModel::Merge(const std::vector<DfaMode
     }
     return -1;
   };
+  // 扩展状态直到收敛
   for (int i = 0; i < states.size(); ++i) {
-    auto current = states[i];
+    // 获取当前状态
+    vector<int> current = states[i];
     utils::Log::GetGlobalLogger().Info("state", i);
-    // 在返回值中添加项
+    // 在返回值中添加状态是否可以作为结束的标记
     accept.push_back(determine_can_accept(current));
     vector<int> tran(128, -1);
     // 对所有转义字符执行转移
@@ -351,7 +356,7 @@ pair<vector<vector<int>>, vector<int>> DfaModel::Merge(const std::vector<DfaMode
       vector<int> transition_target_state;
       for (int i = 0; i < dfa_list.size(); ++i) {
         const auto& dfa = dfa_list[i];
-        const auto state = current[i];
+        const auto& state = current[i];
         if (state == -1) {
           transition_target_state.emplace_back(-1);
         } else {
