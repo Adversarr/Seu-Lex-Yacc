@@ -5,14 +5,13 @@
 #include <sly/sly.h>
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 
 using sly::core::type::AttrDict;
-using sly::core::type::Production;
 using sly::core::type::Token;
 using sly::core::lexical::RegEx;
 using sly::core::lexical::DfaModel;
 using sly::runtime::Stream2TokenPipe;
-using sly::core::grammar::LrParser;
 using namespace std;
 
 vector<string> regex_strings = {
@@ -47,24 +46,78 @@ int main() {
   sly::utils::Log::SetLogLevel(sly::utils::Log::kError);
 
   auto ending = Token::Terminator("EOF_FLAG");
-  vector<Token> lexical_tokens;
+  // TODO: 原来的代码：
+  // vector<Token> lexical_tokens = {
+  //   Token::Terminator("any"),
+  //   Token::Terminator("word"),
+  // };
+  // vector<RegEx> lexical_tokens_regex = {
+  //   RegEx("."),
+  //   RegEx("([a-zA-Z_]([a-zA-Z_]|[0-9])*)"), 
+  // };
+  vector<Token> lexical_tokens = {
+    Token::Terminator("integer"),
+    Token::Terminator("float"),
+    Token::Terminator("kw-auto"),
+    Token::Terminator("kw-const"),
+    Token::Terminator("kw-void"),
+    Token::Terminator("identifier"),
+    Token::Terminator("eq"),
+    Token::Terminator("minus-and-assign"),
+    Token::Terminator("semicolon"),
+    Token::Terminator("post-self-plus"),
+    Token::Terminator("lbrace"),
+    Token::Terminator("rbrace"),
+    Token::Terminator("line-comment"),
+    Token::Terminator("spaces"),
+    Token::Terminator("any"),
+  };
+  vector<RegEx> lexical_tokens_regex = {
+    RegEx("(([0-9])+)"),
+    RegEx("([0-9]+)\\.([0-9]*)(e[+-]?[0-9]+)?"),
+    RegEx("auto"),
+    RegEx("const"),
+    RegEx("void"),
+    RegEx("([a-zA-Z_]([a-zA-Z_]|[0-9])*)"), 
+    RegEx("="),
+    RegEx("-="),
+    RegEx(";"),
+    RegEx("\\+\\+"),
+    RegEx("\\)"),
+    RegEx("\\("),
+    RegEx("//[^\n]*"),
+    RegEx("(\r|\n|\t| )+"),
+    RegEx("."),
+  };
   vector<DfaModel> lexical_tokens_dfa;
-  for (string str : regex_strings) {
-    lexical_tokens.push_back(Token::Terminator(str));
-    cerr << "make " << str;
-    lexical_tokens_dfa.push_back(RegEx(str).GetDfaModel());
-    cerr << " successfully" << endl;
+  for (auto& regex : lexical_tokens_regex) {
+    lexical_tokens_dfa.push_back(regex.GetDfaModel());
   }
   auto [transition, state] = DfaModel::Merge(lexical_tokens_dfa);
   auto s2ppl = Stream2TokenPipe(transition, state, lexical_tokens, ending);
 
-  cerr << "start testing" << endl;
+
+  string input_string = "abc";
+  // 测试样例
+  // string s = R"(
+  //   auto a = 1.0e2; // this is a comment.
+  //   const int b = 2;
+  //   b++;
+  //   const int bca_123 = 4.0e-10;
+  //   void abc();
+  // )";
+  cin >> input_string;
+  stringstream input_stream(input_string);
+
+  vector<AttrDict> attributes;
+  vector<Token> tokens;
   while (true) {
     string input_string;
     getline(cin, input_string);
     stringstream input_stream(input_string);
 
-    cerr << input_string << endl;
+    cerr << setw(12) << "\"" + ad.Get<string>("lval") + "\""
+         << "\t" << token.GetTokName() << endl;
 
     while (true) {
       auto token = s2ppl.Defer(input_stream);

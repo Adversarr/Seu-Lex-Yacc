@@ -5,6 +5,7 @@
 #include <sly/Token.h>
 #include <sly/utils.h>
 #include <cassert>
+#include <sstream>
 
 namespace sly::core::type {
 
@@ -29,6 +30,10 @@ bool Token::operator!=(const Token &another) const
 bool Token::IsTerminator() const
 {
   return type_ == Type::kTerminator;
+}
+
+size_t Token::hash() const {
+  return Token::Hash{}(*this);
 }
 
 Token::Token(string tok_name, Type tok_type, IdType tid, Attr attr) :
@@ -88,6 +93,17 @@ void Token::SetAttr(Token::Attr attribute)
   Token::attr_ = attribute;
 }
 
+string translate_to_raw_form(const string & origin) {
+  string s;
+  for (auto c: origin) {
+    s.push_back(c);
+    if (c == '\\') {
+      s.push_back(c);
+    }
+  }
+  return s;
+}
+
 
 ostream &operator<<(ostream &os, const Token &tok)
 {
@@ -114,7 +130,7 @@ ostream &operator<<(ostream &os, const Token::Attr& attr) {
   } else if (attr == Token::Attr::kNone) {
     os << "sly::core::type::Token::Attr::kNone";
   } else {
-    utils::Log::GetGlobalLogger().Err((int) attr);
+    spdlog::error("{}",(int) attr);
     assert(false);
   }
   return os;
@@ -135,7 +151,7 @@ ostream &operator<<(ostream &os, const Token::Type& type) {
 
 
 void Token::PrintImpl(std::ostream& os) const {
-  os << "sly::core::type::Token(\"" << GetTokName() << "\",";
+  os << "sly::core::type::Token(\"" << translate_to_raw_form(GetTokName()) << "\",";
   auto type = GetTokenType();
   auto attr= GetAttr();
   if (type == Token::Type::kTerminator) {
@@ -155,10 +171,16 @@ void Token::PrintImpl(std::ostream& os) const {
   } else if (attr == Token::Attr::kNone) {
     os << "sly::core::type::Token::Attr::kNone";
   } else {
-    utils::Log::GetGlobalLogger().Err((int) attr);
+    spdlog::error("{}",(int) attr);
     assert(false);
   }
   os << ")";
+}
+
+string Token::ToString() const{
+  stringstream ss;
+  ss << *this;
+  return ss.str();
 }
 
 }

@@ -5,6 +5,7 @@
 #include <sly/AnnotatedParseTree.h>
 
 #include <iomanip>
+#include <sstream>
 #include <utility>
 
 namespace sly::core::type {
@@ -65,7 +66,11 @@ void AnnotatedParseTree::EmplaceFront(AnnotatedParseTree &&tree) {
   sub_nodes_.emplace_front(make_shared<AnnotatedParseTree>(tree));
 }
 
-
+string AnnotatedParseTree::ToString() const {
+  stringstream ss;
+  Print(ss);
+  return "AnnontatedParseTree{" + ss.str() + "}";
+}
 
 void AnnotatedParseTree::Print(ostream &oss, int depth) const{
   if (depth > 0) {

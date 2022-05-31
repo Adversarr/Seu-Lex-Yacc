@@ -47,6 +47,7 @@ class Production {
   const vector<Token> &GetTokens() const;
  
   const vector<Action> &GetActions() const;
+  string ToString() const;
  private:
   TokenVec tokens_;
   

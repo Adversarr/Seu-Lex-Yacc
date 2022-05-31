@@ -3,6 +3,7 @@
 //
 
 #include "sly/Production.h"
+#include "spdlog/spdlog.h"
 #include <sly/TableGenerateMethod.h>
 #include <sly/def.h>
 #include <sly/utils.h>
@@ -42,9 +43,8 @@ bool ParsingTable::PutAction(IdType lhs, const Token &tok,
     acts = "Acc";
   else
     acts = "Err";
-  sly::utils::Log::GetGlobalLogger().Info("Putting ACTION: StateID: ", lhs,
-                                          " Token: ", tok, "\tAction: ", acts,
-                                          action.id);
+  spdlog::debug("Putting ACTION: StateID: {} Token: {}\t Action: {} {}", lhs,
+                tok.ToString(), acts, action.id);
 
   return true;
 }
@@ -58,8 +58,8 @@ bool ParsingTable::PutGoto(IdType lhs, const Token &tok, IdType rhs) {
   if (f != goto_table_[lhs].end())
     f->second.push_back(rhs);
   goto_table_[lhs].insert({tok, {rhs}});
-  sly::utils::Log::GetGlobalLogger().Info("Putting  GOTO : From: ", lhs,
-                                          " To:", rhs, "\tToken", tok);
+  spdlog::debug("Putting  GOTO : From: {} To: {} \t Token{}", lhs, rhs,
+                utils::ToString{}(tok));
 
   return true;
 }
@@ -86,8 +86,8 @@ vector<IdType> ParsingTable::GetGoto(IdType lhs, const Token &tok) const {
 }
 
 void ParsingTable::Print(ostream &os) const {
-  os << "\n======================================================\n";
   os << "sly::core::grammar::ParsingTable(";
+  os << std::endl << "  ";
   // print out action table:
   os << "{";
   for (const auto &line : action_table_) {
@@ -109,6 +109,7 @@ void ParsingTable::Print(ostream &os) const {
     os << "}, ";
   }
   os << "}, ";
+  os << std::endl << "  ";
   // print out goto
   os << "{";
   for (const auto &line : goto_table_) {
@@ -124,16 +125,23 @@ void ParsingTable::Print(ostream &os) const {
     }
     os << "},";
   }
-  os << "}, productions,";
+  os << "}, ";
+  os << std::endl << "  ";
+
+  os << "productions";
+  os << ",";
+  os << std::endl << "  ";
 
   // several tokens
   entry_token_.PrintImpl(os);
   os << ",";
+  os << std::endl << "  ";
   augmented_token_.PrintImpl(os);
   os << ",";
+  os << std::endl << "  ";
   epsilon_token_.PrintImpl(os);
+  os << std::endl << "  ";
   os << ")";
-  os << "\n======================================================\n";
 }
 
 const vector<unordered_map<Token, vector<ParsingTable::CellTp>, Token::Hash>> &
@@ -223,9 +231,9 @@ ParsingTable::ParsingTable(
     : productions_(productions), action_table_(action_table),
       goto_table_(goto_table), entry_token_(entry_token),
       augmented_token_(augmented_token), epsilon_token_(epsilon_token) {
-        productions_.insert(productions_.begin(), 
-          type::Production(augmented_token_)(entry_token));
-      }
+  productions_.insert(productions_.begin(),
+                      type::Production(augmented_token_)(entry_token));
+}
 
 ostream &operator<<(ostream &os, const ParsingTable::CellTp &cell) {
   os << "sly::core::grammar::ParsingTable::CellTp{";
@@ -243,8 +251,41 @@ ostream &operator<<(ostream &os, const ParsingTable::CellTp &cell) {
   } else {
     os << ".action = sly::core::grammar::ParsingTable::AutomataAction::kError,";
   }
-  os << ".id=" << cell.id << "}";
+  os << ".id=" << cell.id << ", .cause={";
+  if (!cell.cause.empty()) {
+    for (int i = 0; i < cell.cause.size() - 1; ++i) {
+      os << cell.cause[i] << ", ";
+    }
+    os << cell.cause.back();
+  }
+  os << "}}";
   return os;
+}
+
+bool ParsingTable::CellTp::operator==(const CellTp &rhs) const {
+  return this->action == rhs.action && this->id == rhs.id &&
+         this->cause == rhs.cause;
+}
+
+bool ParsingTable::operator==(const ParsingTable &rhs) const {
+  bool flag;
+  flag = productions_ == rhs.productions_;
+  spdlog::debug("comparing productions={}", flag);
+  flag = action_table_ == rhs.action_table_;
+  spdlog::debug("comparing action={}", flag);
+  flag = goto_table_ == rhs.goto_table_;
+  spdlog::debug("comparing goto={}", flag);
+  flag = entry_token_ == rhs.entry_token_;
+  spdlog::debug("comparing entry={}", flag);
+  flag = augmented_token_ == rhs.augmented_token_;
+  spdlog::debug("comparing augmented={}", flag);
+  flag = epsilon_token_ == rhs.epsilon_token_;
+  spdlog::debug("comparing epsilon={}", flag);
+  return productions_ == rhs.productions_ &&
+         action_table_ == rhs.action_table_ && goto_table_ == rhs.goto_table_ &&
+         entry_token_ == rhs.entry_token_ &&
+         augmented_token_ == rhs.augmented_token_ &&
+         epsilon_token_ == rhs.epsilon_token_;
 }
 
 } // namespace sly::core::grammar

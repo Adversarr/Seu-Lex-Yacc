@@ -256,10 +256,10 @@ LexParms ParseLexParameters(stringstream &file_stream) {
     auto rbrace = Token::Terminator("rbrace");
     auto line   = Token::Terminator("line");
     // auto ending = Token::Terminator("EOF_FLAG");
-    RegEx re_delim("%%[\r\n]+");
-    RegEx re_lbrace("%{[\r\n]+");
-    RegEx re_rbrace("%}[\r\n]+");
-    RegEx re_line(".*[\r\n]+");
+    RegEx re_delim  {R"(%%[\r\n]+)"};
+    RegEx re_lbrace {R"(%{[\r\n]+)"};
+    RegEx re_rbrace {R"(%}[\r\n]+)"};
+    RegEx re_line   {R"([^\r\n]*[\r\n]+)"};
     auto LexFile   = Token::NonTerminator("LexFile");
     auto Defs      = Token::NonTerminator("Defs");
     auto DefsLine  = Token::NonTerminator("DefsLine");
@@ -362,6 +362,7 @@ LexParms ParseLexParameters(stringstream &file_stream) {
     auto token = s2ppl.value().Defer(file_stream);
     AttrDict ad;
     ad.Set("lval", s2ppl.value().buffer_); 
+
     tokens.emplace_back(token);
     attributes.emplace_back(ad);
     if (token == ending)
@@ -393,8 +394,8 @@ YaccParms ParseYaccParameters(stringstream &file_stream) {
     auto delim  = Token::Terminator("delim");
     auto line   = Token::Terminator("line");
     // auto ending = Token::Terminator("EOF_FLAG");
-    RegEx re_delim("%%[\r\n]+");
-    RegEx re_line(".*[\r\n]+");
+    RegEx re_delim {R"(%%[\r\n]+)"};
+    RegEx re_line  {R"([^\r\n]*[\r\n]+)"};
     auto YaccFile  = Token::NonTerminator("YaccFile");
     auto Defs      = Token::NonTerminator("Defs");
     auto DefsLine  = Token::NonTerminator("DefsLine");
@@ -553,183 +554,188 @@ inline std::string regex2code(const std::string &str) {
   return res;
 }
 
-void generateCodeFile(Parms parms, ostream &oss) {
-  
+void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
+  auto &oss1 = oss_code;
+  auto &oss2 = oss_precompile;
+
+  // code file
   /* section 1 */
-  oss << R"(
-/* section 1 */
-#include "sly/AttrDict.h"
-#include "sly/FaModel.h"
-#include "sly/LrParser.h"
-#include "sly/RegEx.h"
-#include "sly/Stream2TokenPipe.h"
-#include <sly/sly.h>
-
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-
-using sly::core::type::AttrDict;
-using sly::core::type::Production;
-using sly::core::type::Token;
-using sly::core::lexical::RegEx;
-using sly::core::lexical::DfaModel;
-using sly::runtime::Stream2TokenPipe;
-using sly::core::grammar::LrParser;
-using namespace std;)";
-  oss << endl;
-  oss << endl;
+  oss1 << R"(/* section 1 */)" << endl;
+  oss1 << R"(#include "sly/AttrDict.h")" << endl;
+  oss1 << R"(#include "sly/FaModel.h")" << endl;
+  oss1 << R"(#include "sly/LrParser.h")" << endl;
+  oss1 << R"(#include "sly/RegEx.h")" << endl;
+  oss1 << R"(#include "sly/Stream2TokenPipe.h")" << endl;
+  oss1 << R"(#include <sly/sly.h>)" << endl;
+  oss1 << R"()" << endl;
+  oss1 << R"(#include <iostream>)" << endl;
+  oss1 << R"(#include <fstream>)" << endl;
+  oss1 << R"(#include <sstream>)" << endl;
+  oss1 << R"(#include <vector>)" << endl;
+  oss1 << R"()" << endl;
+  oss1 << R"(using sly::core::type::AttrDict;)" << endl;
+  oss1 << R"(using sly::core::type::Production;)" << endl;
+  oss1 << R"(using sly::core::type::Token;)" << endl;
+  oss1 << R"(using sly::core::lexical::RegEx;)" << endl;
+  oss1 << R"(using sly::core::lexical::DfaModel;)" << endl;
+  oss1 << R"(using sly::runtime::Stream2TokenPipe;)" << endl;
+  oss1 << R"(using sly::core::grammar::LrParser;)" << endl;
+  oss1 << R"(using namespace std;)" << endl;
+  oss1 << endl;
 
   /* section 2 */
   int num_lexical_tokens = parms.lexTokens.size();
   int num_syntax_tokens = parms.terminalTokens.size() + parms.nonTerminalTokens.size();
-  oss << "/* section 2 */" << endl;
-  oss << "//@variable" << endl;
-  oss << "const int num_lexical_tokens = " << num_lexical_tokens << ";" << endl;
-  oss << "const int num_syntax_tokens = " << num_syntax_tokens << ";" << endl;
-  oss << endl;
-  oss << "auto ending = Token::Terminator(\"EOF_FLAG\");" << endl;
-  oss << endl;
-  oss << "//@variable" << endl;
+  oss1 << "/* section 2 */" << endl;
+  oss1 << "//@variable" << endl;
+  oss1 << "const int num_lexical_tokens = " << num_lexical_tokens << ";" << endl;
+  oss1 << "const int num_syntax_tokens = " << num_syntax_tokens << ";" << endl;
+  oss1 << endl;
+  oss1 << "auto ending = Token::Terminator(\"EOF_FLAG\");" << endl;
+  oss1 << endl;
+  oss1 << "//@variable" << endl;
   int tokenIdx = 256;
   for (const string &tokenName : parms.terminalTokens) {
-    oss << "#define " << tokenName << " " << tokenIdx++ << endl;
+    oss1 << "#define " << tokenName << " " << tokenIdx++ << endl;
   }
   for (const string &tokenName : parms.nonTerminalTokens) {
-    oss << "#define " << tokenName << " " << tokenIdx++ << endl;
+    oss1 << "#define " << tokenName << " " << tokenIdx++ << endl;
   }
-  oss << endl;
+  oss1 << endl;
 
   /* section 3 */
-  oss << "/* section 3 */" << endl;
-  oss << "// syntax tokens " << endl;
-  oss << "Token syntax_tokens[256 + num_syntax_tokens] = {" << endl;
+  oss1 << "/* section 3 */" << endl;
+  oss1 << "// syntax tokens " << endl;
+  oss1 << "Token syntax_tokens[256 + num_syntax_tokens] = {" << endl;
   for (tokenIdx = 0; tokenIdx <= 255; tokenIdx++) {
-    oss << "  Token::Terminator(string(1, " << tokenIdx << ")), " << endl;
+    oss1 << "  Token::Terminator(string(1, " << tokenIdx << ")), " << endl;
   }
+  oss1 << "  //@variable" << endl;
   for (const string &tokenName : parms.terminalTokens) {
-    oss << "  Token::Terminator(\"" << tokenName << "\"), // " << tokenIdx++ << endl;
+    oss1 << "  Token::Terminator(\"" << tokenName << "\"), // " << tokenIdx++ << endl;
   }
   for (const string &tokenName : parms.nonTerminalTokens) {
-    oss << "  Token::NonTerminator(\"" << tokenName << "\"), // " << tokenIdx++ << endl;
+    oss1 << "  Token::NonTerminator(\"" << tokenName << "\"), // " << tokenIdx++ << endl;
   }
-  oss << "};" << endl;
-  oss << endl;
-  oss << "auto &start_syntax_token = syntax_tokens[primary_expression];" << endl;
-  oss << endl;
+  oss1 << "};" << endl;
+  oss1 << endl;
+  oss1 << "//@variable" << endl;
+  oss1 << "auto &start_syntax_token = syntax_tokens[" << parms.startToken << "];" << endl;
+  oss1 << endl;
 
   /* section 4 */
-  oss << "/* section 4 */" << endl;
-  oss << "//@variable" << endl;
-  oss << "vector<Production> productions = {" << endl;
+  oss1 << "/* section 4 */" << endl;
+  oss1 << "// syntax" << endl;
+  oss1 << "//@variable" << endl;
+  oss1 << "vector<Production> productions = {" << endl;
   for (const auto &prod : parms.prods) {
-    oss << "  // " << prod.startToken << " : ";
+    oss1 << "  // " << prod.startToken << " : ";
     for (const string &nextToken : prod.nextTokens) {
-      oss << nextToken << " ";
+      oss1 << nextToken << " ";
     }
-    oss << ";" << endl;
-    oss << "  Production(syntax_tokens[" << prod.startToken << "], {[](vector<YYSTATE> &v) {" << endl;
-    oss << "      // action ..." << endl;
-    oss << "  }})";
+    oss1 << ";" << endl;
+    oss1 << "  Production(syntax_tokens[" << prod.startToken << "], {[](vector<YYSTATE> &v) {" << endl;
+    oss1 << "      // action ..." << endl;
+    oss1 << "    }})";
     for (const string &nextToken : prod.nextTokens) {
-      oss << "(syntax_tokens[" << nextToken << "])";
+      oss1 << "(syntax_tokens[" << nextToken << "])";
     }
-    oss << ", " << endl;
+    oss1 << ", " << endl;
   }
-  oss << "};" << endl;
+  oss1 << "};" << endl;
+  oss1 << "// lexical" << endl;
+  oss1 << "//@variable" << endl;
+  oss1 << "vector<Token> lexical_tokens = {" << endl;
+  for (const auto &[regex, action] : parms.lexTokens) {
+    oss1 << "  Token::Terminator(R\"(" << regex << ")\"), "<< endl;
+  }
+  oss1 << "};" << endl;
+  oss1 << "vector<DfaModel> lexical_tokens_dfa = {" << endl;
+  for (const auto &[regex, action] : parms.lexTokens) {
+    oss1 << "  RegEx(R\"(" << regex << ")\").GetDfaModel(), "<< endl;
+  }
+  oss1 << "};" << endl;
 
   /* section 5 */
-  oss << R"(
-/* section 5 */
-void count() {
-  // pass
-}
+  oss1 << R"(/* section 5 */)" << endl;
+  oss1 << R"(void count() {)" << endl;
+  oss1 << R"(  // pass)" << endl;
+  oss1 << R"(})" << endl;
+  oss1 << R"()" << endl;
+  oss1 << R"(void comment() {)" << endl;
+  oss1 << R"(  // pass)" << endl;
+  oss1 << R"(})" << endl;
+  oss1 << R"()" << endl;
+  oss1 << R"(int check_type(void))" << endl;
+  oss1 << R"({)" << endl;
+  oss1 << R"(  return IDENTIFIER;)" << endl;
+  oss1 << R"(})" << endl;
 
-void comment() {
-  // pass
-}
+  oss1 << endl;
+  oss1 << endl;
 
-int check_type(void)
-{
-  return IDENTIFIER;
-})";
-
-  oss << endl;
-  oss << endl;
+  /* section 5.1 */
+  oss1 << R"(stringstream input_stream;)" << endl;
+  oss1 << R"(Stream2TokenPipe s2ppl;)" << endl;
+  oss1 << R"()" << endl;
+  oss1 << R"(char input() {)" << endl;
+  oss1 << R"(  if (!(input_stream.good() && !input_stream.eof() && !input_stream.fail())) {)" << endl;
+  oss1 << R"(    return 0;)" << endl;
+  oss1 << R"(  })" << endl;
+  oss1 << R"(  char c = input_stream.get();)" << endl;
+  oss1 << R"(  return c;)" << endl;
+  oss1 << R"(})" << endl;
 
   /* section 6 */
-  oss << "/* section 6 */" << endl;
-  oss << "//@variable" << endl;
-  oss << "IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {" << endl;
-  oss << "  string token_name = lexical_token.GetTokName();" << endl;
-  oss << "  ";
+  oss1 << "/* section 6 */" << endl;
+  oss1 << "//@variable" << endl;
+  oss1 << "IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {" << endl;
+  oss1 << "  string token_name = lexical_token.GetTokName();" << endl;
+  oss1 << "  ";
   for (const auto &[regex, action] : parms.lexTokens) {
-    oss << "if (token_name == R\"(" << regex << ")\") { " << endl;
-    oss << "    { " << action << "}" << endl;
-    oss << "} else ";
+    oss1 << "if (token_name == R\"(" << regex << ")\") { " << endl;
+    oss1 << "    { " << action << "}" << endl;
+    oss1 << "  } else ";
   }
-  oss << " {" << endl;
-  oss << "    return 0;" << endl;
-  oss << "  }" << endl;
-  oss << "}" << endl;
-  oss << endl;
+  oss1 << " {" << endl;
+  oss1 << "    return 0;" << endl;
+  oss1 << "  }" << endl;
+  oss1 << "  return 0;" << endl;
+  oss1 << "}" << endl;
+  oss1 << endl;
 
   /* section 7 */
-  oss << "/* section 7 */" << endl;
-  oss << "int main() {" << endl;
+  oss1 << "/* section 7 */" << endl;
+  oss1 << "int main() {" << endl;
 
   /* section 7.1 */
-  oss << "  /* section 7.1 */" << endl;
-  oss << "  sly::utils::Log::SetLogLevel(sly::utils::Log::kError);" << endl;
-  oss << "  " << endl;
-  
-  /* section 7.2 */
-  oss << "  /* section 7.2 */" << endl;
-  oss << "  // lexical token" << endl;
-  oss << "  //@variable" << endl;
-  oss << "  vector<Token> lexical_tokens = {" << endl;
-  for (const auto &[regex, action] : parms.lexTokens) {
-    oss << "    Token::Terminator(R\"(" << regex << ")\"), "<< endl;
-  }
-  oss << "  };" << endl;
-  oss << "  vector<RegEx> lexical_tokens_regex = {" << endl;
-  for (const auto &[regex, action] : parms.lexTokens) {
-    oss << "    RegEx(R\"(" << regex << ")\"), "<< endl;
-  }
-  oss << "  };" << endl;
+  oss1 << "  /* section 7.1 */" << endl;
+  oss1 << "  spdlog::set_level(spdlog::level::off);" << endl;
+  oss1 << "  " << endl;
 
   /* section 7.3 */
-  oss << R"(
+  oss1 << R"(
   /* section 7.3 */
-  vector<DfaModel> lexical_tokens_dfa;
-  for (auto regex : lexical_tokens_regex) {
-    lexical_tokens_dfa.push_back(regex.GetDfaModel());
-  }
+  // lexical
   auto [transition, state] = sly::core::lexical::DfaModel::Merge(lexical_tokens_dfa);
-  auto s2ppl = Stream2TokenPipe(transition, state, lexical_tokens, ending);
-
+  s2ppl = Stream2TokenPipe(transition, state, lexical_tokens, ending);
   // syntax
-  sly::core::grammar::ContextFreeGrammar cfg(productions, start_syntax_token, ending);
-  sly::core::grammar::Lr1 lr1;
-  cfg.Compile(lr1);
-  auto table = cfg.GetLrTable();
-  LrParser parser(table);
-
-  cout << start_syntax_token.GetTokName() << endl;)";
-  oss << endl;
+  sly::core::grammar::ParsingTable table;
+  #include "out_precompile.cpp" // generate parsing table
+  )";
+  oss1 << endl;
 
   /* section 7.4 */
-  oss << R"(
+  oss1 << R"(
   /* section 7.4 */
   // runtime
-  stringstream input_stream;
   {
     ifstream inputFile("../demo/1.in");
     input_stream << inputFile.rdbuf();
     inputFile.close();
   }
 
+  // lexical
   vector<AttrDict> attributes;
   vector<Token> tokens;
   while (true) {
@@ -740,6 +746,8 @@ int check_type(void)
     ad.Set("lval", s2ppl.buffer_); 
 
     IdType id = to_syntax_token_id(lexical_token, ad);
+    if (id == 0) 
+      continue;
     Token syntax_token = syntax_tokens[id];
 
     tokens.emplace_back(syntax_token);
@@ -747,24 +755,47 @@ int check_type(void)
   }
 
   cerr << "tokens: " << endl;
-  for (auto token : tokens) {
-    cerr << "  " << token.GetTokName() << endl;
+  for (int i = 0; i < tokens.size(); i++) {
+    auto token = tokens[i];
+    auto ad = attributes[i];
+    cerr << "  " << ad.Get<string>("lval") << " : " << token.GetTokName() << endl;
   }
 
+  // syntax
   parser.Parse(tokens, attributes);
   auto tree = parser.GetTree();
   cerr << "parse tree: " << endl;
   tree.Print(std::cerr);
 
   return 0;)";
-  oss << endl;
+  oss1 << endl;
+  oss1 << "}" << endl;
 
-  oss << "}" << endl;
+  // pre-compiled file
+  oss2 << R"(
+  // syntax
+  sly::core::grammar::ContextFreeGrammar cfg(productions, start_syntax_token, ending);
+  sly::core::grammar::Lr1 lr1;
+  cfg.Compile(lr1);
+  table = cfg.GetLrTable();
+  LrParser parser(table);
+
+  // rewrite
+  ofstream outputFile("../test/out_precompile.cpp");
+  outputFile << "// syntax" << endl;
+  outputFile << "table = ";
+  table.Print(outputFile);
+  outputFile << ";" << endl;
+  outputFile << "LrParser parser(table);" << endl;
+  outputFile.close();
+
+  // return 0;
+  )";
 }
 
 int main() {
   // ignore warnings
-  sly::utils::Log::SetLogLevel(sly::utils::Log::kError);
+  spdlog::set_level(spdlog::level::err);
 
   stringstream lex_file_stream;
   stringstream yacc_file_stream;
@@ -779,12 +810,15 @@ int main() {
   }
 
   auto lexParms = ParseLexParameters(lex_file_stream);
+  // lexParms.Print(std::cout);
   auto yaccParms = ParseYaccParameters(yacc_file_stream);
+  // yaccParms.Print(std::cout);
   auto parms = ParseParameters(lexParms, yaccParms);
   parms.Print(std::cout);
 
-  ofstream output_file_stream("../test/out.cpp");
-  generateCodeFile(parms, output_file_stream);
+  ofstream output_code_file_stream("../test/out.cpp");
+  ofstream output_precompile_file_stream("../test/out_precompile.cpp");
+  generateCodeFile(parms, output_code_file_stream, output_precompile_file_stream);
 
   return 0;
 }

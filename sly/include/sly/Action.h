@@ -30,6 +30,8 @@ class Action {
   bool operator==(const Action &rhs) const;
   
   inline std::string GetImpl() const;
+
+  std::string ToString() const;
  
  private:
   std::optional<ActionFType> opt_f_;

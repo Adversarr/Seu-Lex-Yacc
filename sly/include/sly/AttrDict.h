@@ -13,6 +13,7 @@
 #include <functional>
 #include <memory>
 #include <typeindex>
+#include <spdlog/spdlog.h>
 
 #include "def.h"
 #include "utils.h"
@@ -44,6 +45,8 @@ class AttrDict
   inline void Clear();
 
   map<string, string> ToStrDict() const;
+
+  string ToString() const;
  
  private:
   map<string, any> attr_dict_;
@@ -73,7 +76,7 @@ T AttrDict::Get(const std::string& attr_name) const
   // check attr_name available:
   auto i = attr_dict_.find(attr_name);
   if (i == attr_dict_.end()){
-    utils::Log::GetGlobalLogger().Err("cannot find attribute[[" + attr_name + "]].");
+    spdlog::error("cannot find attribute[[{}]].", attr_name);
     assert(false);
   }
   auto& v = i->second;

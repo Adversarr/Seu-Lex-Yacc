@@ -2,15 +2,17 @@
 // Created by Yang Jerry on 2022/3/30.
 //
 
+#include <string>
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "bugprone-macro-parentheses"
 
 #ifndef SEULEXYACC_UTILS_H
 #define SEULEXYACC_UTILS_H
-
+#include <vector>
 #include <iostream>
 #include <set>
 #include <map>
+#include <spdlog/spdlog.h>
 #include <unordered_map>
 #include <sstream>
 #include <functional>
@@ -91,6 +93,7 @@ class Log {
   void Put(ostream &os, T arg) const;
 };
 
+
 template<typename T>
 void Log::Put(ostream &os, T arg) const {
   os << arg;
@@ -155,9 +158,152 @@ size_t hash(const T &v, const Args &... args) {
   return hash_combine(v1, v2);
 }
 
-#define FUNC_END_INFO sly::utils::Log::GetGlobalLogger().Info(__FILE__, __LINE__, __FUNCTION__, "Done.")
 
-#define FUNC_START_INFO sly::utils::Log::GetGlobalLogger().Info(__FILE__, __LINE__, __FUNCTION__, "Start.")
+struct ToString{
+  stringstream ss;
+  using type = std::string;
+  template<typename T>
+  typename enable_if<!is_class<T>::value, type>::type
+  operator()(const T &v) {
+    ss << v;
+    return ss.str();
+  }
+
+private:
+  type __reduce(const type& h) const { return h; }
+  type __combine(const type& l, const type& r) const { 
+    return l + "," + r;
+  }
+  template<typename ... SZ>
+  type __reduce(const type& h, const SZ&...args) const {
+    return __combine(h, __reduce(args...));
+  }
+
+  template <typename T>
+  type comb(const T &t) const { 
+    return  ToString{}(t);
+  }
+
+  template <typename T, typename... Args>
+  type comb(const T &t, const Args &...args) const {
+    return __reduce(ToString{}(t), comb(args...));
+  }
+
+public:
+  template <typename T1, typename T2, typename... Args>
+  type operator()(const T1 &t1, const T2 &t2, const Args &...args) {
+    return "<"+comb(t1, t2, args...)+">";
+  }
+
+  template <typename L, typename R>
+  type operator()(const pair<L, R> p) const {
+    return "<"+comb(p.first, p.second)+">";
+  }
+
+  template <typename I, typename C = typename I::const_iterator>
+  type operator()(const I &it) const {
+    string hv = "";
+    for (const auto& i: it) {
+      hv = hv + ToString{}(i) + ",";
+    }
+    return "[" + hv + "]";
+  }
+
+  type operator()(const vector<bool> &bs) const {
+    string hv = "";
+    for (int i = 0; i < bs.size(); ++i) {
+      hv = ToString{}((int)bs[i]) + ",";
+    }
+    return "[" + hv + "]";
+  }
+
+  template <typename... Args> size_t operator()(const tuple<Args...> &tup) {
+    return apply([](Args... v) -> size_t { return ToString{}.comb<Args...>(v...); },
+                 tup);
+  }
+  template <
+      typename ToStringable,
+      typename = is_same<decltype(std::declval<ToStringable>().ToString()), string>>
+  string operator()(const ToStringable &v) {
+    return v.ToString();
+  }
+};
+
+
+////////////////////// MY HASH //////////////////////
+struct Hash {
+  template <typename T>
+  typename enable_if<!is_class<T>::value, size_t>::type
+  operator()(const T &v) const {
+    return std::hash<T>{}(v);
+  }
+
+private:
+  size_t __hash_reduce(size_t h) const { return h; }
+  size_t __hash_combine(size_t l, size_t r) const { return (l << 1) ^ r; }
+  template<typename ... SZ>
+  size_t __hash_reduce(size_t h, SZ ... t) const {
+    return Hash::__hash_combine(h, __hash_reduce(t...));
+  }
+
+  template <typename T> size_t comb(const T &t) const { return Hash{}(t); }
+
+  template <typename T, typename... Args>
+  size_t comb(const T &t, const Args &...args) const {
+    return __hash_reduce(Hash{}(t), comb(args...));
+  }
+
+public:
+  template <typename T1, typename T2, typename... Args>
+  size_t operator()(const T1 &t1, const T2 &t2, const Args &...args) {
+    return comb(t1, t2, args...);
+  }
+
+  template <typename L, typename R>
+  size_t operator()(const pair<L, R> p) const {
+    return Hash{}(p.first, p.second);
+  }
+
+  template <typename I, typename C = typename I::const_iterator>
+  size_t operator()(const I &it) const {
+    size_t hv = 0;
+    for (const auto &v : it) {
+      hv = __hash_combine(hv, Hash{}(v));
+    }
+    return hv;
+  }
+  size_t operator()(const vector<bool> &bs) const {
+    size_t hv = 0;
+    for (int i = 0; i < bs.size(); ++i) {
+      hv = __hash_combine(hv, Hash{}((int)bs[i]));
+    }
+    return hv;
+  }
+
+  template <typename... Args> size_t operator()(const tuple<Args...> &tup) {
+    return apply([](Args... v) -> size_t { return Hash{}.comb<Args...>(v...); },
+                 tup);
+  }
+  template <
+      typename Hashable,
+      typename = is_same<decltype(std::declval<Hashable>().hash()), size_t>>
+  size_t operator()(const Hashable &v) {
+    return v.hash();
+  }
+};
+////////////////////// MY HASH //////////////////////
+
+
+
+// #define FUNC_END_INFO sly::utils::Log::GetGlobalLogger().Info(__FILE__, __LINE__, __FUNCTION__, "Done.")
+
+// #define FUNC_START_INFO sly::utils::Log::GetGlobalLogger().Info(__FILE__, __LINE__, __FUNCTION__, "Start.")
+
+
+#define FUNC_END_INFO spdlog::debug("{} {} {} {}",__FILE__, __LINE__, __FUNCTION__, "Done.")
+
+#define FUNC_START_INFO spdlog::debug("{} {} {} {}",__FILE__, __LINE__, __FUNCTION__, "Start.")
+
 
 template<typename T>
 std::string to_string(const T& v) {
@@ -190,6 +336,7 @@ inline void replace_all(std::string &str, const std::string &from, const std::st
 inline std::string escape(const std::string &str) {
   std::string res = str;
   replace_all(res, "\t", "\\t");
+  
   replace_all(res, "\r", "\\r");
   replace_all(res, "\n", "\\n");
   return res;

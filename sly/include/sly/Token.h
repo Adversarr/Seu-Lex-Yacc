@@ -57,7 +57,9 @@ class Token {
 
   void PrintImpl(std::ostream& os) const;
 
+  string ToString() const;
  
+  size_t hash() const;
  private:
   IdType tid_;
   

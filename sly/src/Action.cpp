@@ -4,6 +4,7 @@
 
 #include <sly/Action.h>
 #include <string>
+#include <sly/utils.h>
 namespace sly::core::type {
 
 Action::Action() = default;
@@ -37,6 +38,10 @@ std::ostream& operator <<(std::ostream& os, const Action& act) {
   os << "sly::core::type::Action([](std::vector<YYSTATE>& v) {"
     << act.GetImpl() << "}, \"" << act.GetImpl() << "\"}";
   return os;
+}
+
+std::string Action::ToString() const {
+  return "Action{" + impl_ + "}";
 }
 
 }
