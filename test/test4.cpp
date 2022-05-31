@@ -783,10 +783,7 @@ void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
 
   // rewrite
   ofstream outputFile("../test/out_precompile.cpp");
-  outputFile << "// syntax" << endl;
-  outputFile << "table = ";
-  table.Print(outputFile);
-  outputFile << ";" << endl;
+  table.PrintGeneratorCode(outputFile);
   outputFile.close();
 
   // return 0;

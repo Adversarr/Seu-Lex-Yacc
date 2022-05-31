@@ -144,6 +144,81 @@ void ParsingTable::Print(ostream &os) const {
   os << ")";
 }
 
+void ParsingTable::PrintGeneratorCode(ostream &os) const {
+  // table = ...
+  os << "{" << endl;
+  os << "std::vector<std::unordered_map<Token, std::vector<CellTp>, Token::Hash>> action_table_" << std::endl;
+  os << "std::vector<std::unordered_map<Token, std::vector<IdType>, Token::Hash>> goto_table_" << std::endl;
+  os << "//vector<type::Production> productions_" << std::endl;
+  os << "Token entry_token_" << std::endl;
+  os << "Token augmented_token_" << std::endl;
+  os << "Token epsilon_token_" << std::endl;
+  
+  os << "// action_table_" << std::endl;
+  os << "{" << std::endl;
+  for (const auto &line : action_table_) {
+    os << "  action_table_.push_back({" << std::endl;
+    for (auto [token, cell] : line) {
+      os << "    {";
+      // print token:
+      // Token(token.GetTokName(), token.GetTokenType(), token.GetTid(),
+      // token.GetAttr());
+      token.PrintImpl(os);
+      // Print comma.
+      os << ", {";
+      // print cell:
+      for (const auto &c : cell) {
+        os << c << ",";
+      }
+      os << "}}," << std::endl;
+    }
+    os << "  }); " << std::endl;
+  }
+  os << "}" << std::endl;
+  os << std::endl;
+
+  os << "// goto_table_" << std::endl;
+  os << "{" << std::endl;
+  for (const auto &line : goto_table_) {
+    os << "  goto_table_.push_back({" << std::endl;
+    for (const auto &[token, go] : line) {
+      os << "    {";
+      token.PrintImpl(os);
+      os << ",{";
+      for (auto v : go) {
+        os << v << ",";
+      }
+      os << "  }}," << std::endl;
+    }
+    os << "});" << std::endl;
+  }
+  os << "}" << std::endl;
+  os << std::endl;
+
+  os << "productions_ = productions;" << std::endl;
+
+  os << "entry_token_ = ";
+  entry_token_.PrintImpl(os);
+  os << std::endl;
+  os << std::endl;
+
+  os << "augmented_token_ = ";
+  augmented_token_.PrintImpl(os);
+  os << std::endl;
+  os << std::endl;
+
+  os << "epsilon_token_ = ";
+  epsilon_token_.PrintImpl(os);
+  os << std::endl;
+  os << std::endl;
+
+  os << "table = sly::core::grammar::ParsingTable(" << std::endl;
+  os << "  action_table_, goto_table_, productions_, " << std::endl;
+  os << "  entry_token_, augmented_token_, epsilon_token_" << std::endl;
+  os << ");" << std::endl;
+  os << "}" << endl;
+}
+
 const vector<unordered_map<Token, vector<ParsingTable::CellTp>, Token::Hash>> &
 ParsingTable::GetActionTable() const {
   return action_table_;
@@ -191,7 +266,7 @@ const Token &ParsingTable::GetEpsilonToken() const { return epsilon_token_; }
 void ParsingTable::SetEpsilonToken(const Token &epsilon_token) {
   epsilon_token_ = epsilon_token;
 }
-
+  
 const vector<type::Production> &ParsingTable::GetProductions() const {
   return productions_;
 }

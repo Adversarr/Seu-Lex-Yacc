@@ -48,6 +48,8 @@ class ParsingTable
   void Reset();
   
   void Print(ostream& os) const;
+
+  void PrintGeneratorCode(ostream &os) const;
   
   const vector<unordered_map<Token, vector<CellTp>, Token::Hash>> &GetActionTable() const;
   
