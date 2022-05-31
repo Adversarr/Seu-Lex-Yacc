@@ -147,12 +147,13 @@ void ParsingTable::Print(ostream &os) const {
 void ParsingTable::PrintGeneratorCode(ostream &os) const {
   // table = ...
   os << "{" << endl;
-  os << "std::vector<std::unordered_map<Token, std::vector<CellTp>, Token::Hash>> action_table_" << std::endl;
-  os << "std::vector<std::unordered_map<Token, std::vector<IdType>, Token::Hash>> goto_table_" << std::endl;
-  os << "//vector<type::Production> productions_" << std::endl;
-  os << "Token entry_token_" << std::endl;
-  os << "Token augmented_token_" << std::endl;
-  os << "Token epsilon_token_" << std::endl;
+  os << "std::vector<std::unordered_map<sly::core::type::Token, std::vector<sly::core::grammar::ParsingTable::CellTp>, sly::core::type::Token::Hash>> action_table_;" << std::endl;
+  os << "std::vector<std::unordered_map<sly::core::type::Token, std::vector<IdType>, sly::core::type::Token::Hash>> goto_table_;" << std::endl;
+  os << "std::vector<sly::core::type::Production> productions_;" << std::endl;
+  os << "sly::core::type::Token entry_token_;" << std::endl;
+  os << "sly::core::type::Token augmented_token_;" << std::endl;
+  os << "sly::core::type::Token epsilon_token_;" << std::endl;
+  os << std::endl;
   
   os << "// action_table_" << std::endl;
   os << "{" << std::endl;
@@ -188,9 +189,9 @@ void ParsingTable::PrintGeneratorCode(ostream &os) const {
       for (auto v : go) {
         os << v << ",";
       }
-      os << "  }}," << std::endl;
+      os << "}}," << std::endl;
     }
-    os << "});" << std::endl;
+    os << "  });" << std::endl;
   }
   os << "}" << std::endl;
   os << std::endl;
@@ -199,17 +200,15 @@ void ParsingTable::PrintGeneratorCode(ostream &os) const {
 
   os << "entry_token_ = ";
   entry_token_.PrintImpl(os);
-  os << std::endl;
-  os << std::endl;
+  os << ";" << std::endl;
 
   os << "augmented_token_ = ";
   augmented_token_.PrintImpl(os);
-  os << std::endl;
-  os << std::endl;
+  os << ";" << std::endl;
 
   os << "epsilon_token_ = ";
   epsilon_token_.PrintImpl(os);
-  os << std::endl;
+  os << ";" << std::endl;
   os << std::endl;
 
   os << "table = sly::core::grammar::ParsingTable(" << std::endl;
