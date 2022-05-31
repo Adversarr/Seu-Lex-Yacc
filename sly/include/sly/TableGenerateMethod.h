@@ -28,6 +28,7 @@ class ParsingTable
     AutomataAction action = kError;
     IdType id = 0;
     vector<IdType> cause;
+    bool operator ==(const CellTp& rhs) const;
   };
   
   explicit ParsingTable(int n_states=0);
@@ -92,6 +93,8 @@ class ParsingTable
     Token augmented_token,
     Token epsilon_token
   );
+
+  bool operator==(const ParsingTable& rhs) const;
  
  private:
   vector<type::Production> productions_;

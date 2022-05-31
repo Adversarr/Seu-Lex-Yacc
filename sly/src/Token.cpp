@@ -93,6 +93,17 @@ void Token::SetAttr(Token::Attr attribute)
   Token::attr_ = attribute;
 }
 
+string translate_to_raw_form(const string & origin) {
+  string s;
+  for (auto c: origin) {
+    s.push_back(c);
+    if (c == '\\') {
+      s.push_back(c);
+    }
+  }
+  return s;
+}
+
 
 ostream &operator<<(ostream &os, const Token &tok)
 {
@@ -140,7 +151,7 @@ ostream &operator<<(ostream &os, const Token::Type& type) {
 
 
 void Token::PrintImpl(std::ostream& os) const {
-  os << "sly::core::type::Token(" << "R\"(" << GetTokName() << ")\"" << ",";
+  os << "sly::core::type::Token(\"" << translate_to_raw_form(GetTokName()) << "\",";
   auto type = GetTokenType();
   auto attr= GetAttr();
   if (type == Token::Type::kTerminator) {
