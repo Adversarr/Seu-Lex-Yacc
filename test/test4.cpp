@@ -710,7 +710,7 @@ void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
 
   /* section 7.1 */
   oss1 << "  /* section 7.1 */" << endl;
-  oss1 << "  spdlog::set_level(spdlog::level::off);" << endl;
+  oss1 << "  spdlog::set_level(spdlog::level::err);" << endl;
   oss1 << "  " << endl;
 
   /* section 7.3 */
@@ -722,6 +722,8 @@ void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
   // syntax
   sly::core::grammar::ParsingTable table;
   #include "out_precompile.cpp" // generate parsing table
+  table.SetEndingToken(ending); // sb YZR
+  LrParser parser(table);
   )";
   oss1 << endl;
 
@@ -778,7 +780,6 @@ void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
   sly::core::grammar::Lr1 lr1;
   cfg.Compile(lr1);
   table = cfg.GetLrTable();
-  LrParser parser(table);
 
   // rewrite
   ofstream outputFile("../test/out_precompile.cpp");
@@ -786,7 +787,6 @@ void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
   outputFile << "table = ";
   table.Print(outputFile);
   outputFile << ";" << endl;
-  outputFile << "LrParser parser(table);" << endl;
   outputFile.close();
 
   // return 0;

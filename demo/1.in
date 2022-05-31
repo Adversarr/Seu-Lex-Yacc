@@ -1,3 +1,4 @@
 int main() { 
-	int a = 10 ;
+	int a = 0;
+	float b = 1.5;
 }
