@@ -5,6 +5,7 @@
 #include "sly/Production.h"
 #include "sly/Token.h"
 #include "spdlog/spdlog.h"
+#include <ostream>
 #include <sly/TableGenerateMethod.h>
 #include <sly/def.h>
 #include <sly/utils.h>
@@ -16,6 +17,23 @@ ParsingTable::ParsingTable(int n_states) {
   for (int i = 0; i < n_states; ++i) {
     action_table_.emplace_back();
     goto_table_.emplace_back();
+  }
+}
+
+void ParsingTable::SetAllToError(const vector<Token> &token_list) {
+  for (auto &action_line : action_table_) {
+    for (const auto &token : token_list) {
+      if (action_line.find(token) == action_line.end()) {
+
+        action_line.insert(
+            {token,
+            std::vector<CellTp>{CellTp{
+                .action =
+                    sly::core::grammar::ParsingTable::AutomataAction::kError,
+                .id=0,
+                .cause={}}}});
+      }
+    }
   }
 }
 
@@ -186,7 +204,7 @@ void ParsingTable::PrintGeneratorCode(ostream &os) const {
 
   for (const auto &line : action_table_) {
     os << "  action_table_.push_back(std::unordered_map<Token, std::vector<sly::core::grammar::ParsingTable::CellTp>, Token::Hash>{" << std::endl;
-    for (auto [token, cell] : line) {
+    for (const auto& [token, cell] : line) {
       os << "    {";
       // print token:
       // Token(token.GetTokName(), token.GetTokenType(), token.GetTid(),
@@ -194,7 +212,7 @@ void ParsingTable::PrintGeneratorCode(ostream &os) const {
       // token.PrintImpl(os);
       os << "__tokens_in_use[" << tok2id[token] << "]";
       // Print comma.
-      os << ", {";
+      os << ", std::vector<sly::core::grammar::ParsingTable::CellTp>{";
       // print cell:
       for (const auto &c : cell) {
         os << c << ",";
@@ -214,7 +232,7 @@ void ParsingTable::PrintGeneratorCode(ostream &os) const {
       os << "    {";
       // token.PrintImpl(os);
       os << "__tokens_in_use[" << tok2id[token] << "]";
-      os << ",{";
+      os << ", vector<unsigned long>{";
       for (auto v : go) {
         os << v << ",";
       }
@@ -389,6 +407,108 @@ bool ParsingTable::operator==(const ParsingTable &rhs) const {
          entry_token_ == rhs.entry_token_ &&
          augmented_token_ == rhs.augmented_token_ &&
          epsilon_token_ == rhs.epsilon_token_;
+}
+void ParsingTable::PrintGeneratorCodeOpti(ostream &os) const {
+  unordered_set<Token, Token::Hash> token_set;
+  for (const auto& line: action_table_) {
+    for (const auto&[token, cell]: line) {
+      token_set.insert(token);
+    }
+  }
+  for (const auto& line: productions_) {
+    for (const auto& token: line.GetTokens()) {
+      token_set.insert(token);
+    }
+  }
+  vector<Token> tokens{token_set.begin(), token_set.end()};
+  stringstream ss;
+  ss << "{";
+  unordered_map<Token, int, Token::Hash> tok2id;
+  for (int i = 0; i < tokens.size(); ++i) {
+    tok2id.insert({tokens[i], i});
+    tokens[i].PrintImpl(ss);
+    if (i != tokens.size())
+      ss << ",\n";
+  }
+  ss << "}";
+  os << "{" << endl;
+  os << "std::vector<std::unordered_map<sly::core::type::Token, std::vector<sly::core::grammar::ParsingTable::CellTp>, sly::core::type::Token::Hash>> action_table_;" << std::endl;
+  os << "std::vector<std::unordered_map<sly::core::type::Token, std::vector<IdType>, sly::core::type::Token::Hash>> goto_table_;" << std::endl;
+  os << "std::vector<sly::core::type::Production> productions_;" << std::endl;
+  os << "sly::core::type::Token entry_token_;" << std::endl;
+  os << "sly::core::type::Token augmented_token_;" << std::endl;
+  os << "sly::core::type::Token epsilon_token_;" << std::endl;
+  os << "std::vector<sly::core::type::Token> __tokens_in_use" << ss.str() << ";" << std::endl;
+  os << std::endl;
+  os << "// action_table_" << std::endl;
+  os << "{" << std::endl;
+  os << "table=sly::core::grammar::ParsingTable(" << action_table_.size() << ");" << endl;
+  
+  for (const auto &line : action_table_) {
+    os << "  action_table_.push_back(std::unordered_map<Token, std::vector<sly::core::grammar::ParsingTable::CellTp>, Token::Hash>{" << std::endl;
+    for (const auto& [token, cell] : line) {
+      if (cell.front().action==kError) {
+        continue;
+      }
+      os << "    {";
+      // print token:
+      // Token(token.GetTokName(), token.GetTokenType(), token.GetTid(),
+      // token.GetAttr());
+      // token.PrintImpl(os);
+      os << "__tokens_in_use[" << tok2id[token] << "]";
+      // Print comma.
+      os << ", std::vector<sly::core::grammar::ParsingTable::CellTp>{";
+      // print cell:
+      for (const auto &c : cell) {
+        os << c << ",";
+      }
+      os << "}}," << std::endl;
+    }
+    os << "  }); " << std::endl;
+  }
+  os << "}" << std::endl;
+  os << std::endl;
+  
+  os << "// goto_table_" << std::endl;
+  os << "{" << std::endl;
+  for (const auto &line : goto_table_) {
+    os << "  goto_table_.push_back(std::unordered_map<sly::core::type::Token, vector<unsigned long>, sly::core::type::Token::Hash>{" << std::endl;
+    for (const auto &[token, go] : line) {
+      os << "    {";
+      // token.PrintImpl(os);
+      os << "__tokens_in_use[" << tok2id[token] << "]";
+      os << ", vector<unsigned long>{";
+      for (auto v : go) {
+        os << v << ",";
+      }
+      os << "}}," << std::endl;
+    }
+    os << "  });" << std::endl;
+  }
+  os << "}" << std::endl;
+  os << std::endl;
+
+  os << "productions_ = productions;" << std::endl;
+
+  os << "entry_token_ = ";
+  entry_token_.PrintImpl(os);
+  os << ";" << std::endl;
+
+  os << "augmented_token_ = ";
+  augmented_token_.PrintImpl(os);
+  os << ";" << std::endl;
+
+  os << "epsilon_token_ = ";
+  epsilon_token_.PrintImpl(os);
+  os << ";" << std::endl;
+  os << std::endl;
+
+  os << "table = sly::core::grammar::ParsingTable(" << std::endl;
+  os << "  action_table_, goto_table_, productions_, " << std::endl;
+  os << "  entry_token_, augmented_token_, epsilon_token_" << std::endl;
+  os << ");" << std::endl;
+  os << "table.SetAllToError(__tokens_in_use)";
+  os << "}" << endl;
 }
 
 } // namespace sly::core::grammar

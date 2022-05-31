@@ -783,7 +783,7 @@ void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
 
   // rewrite
   ofstream outputFile("../test/out_precompile.cpp");
-  table.PrintGeneratorCode(outputFile);
+  table.PrintGeneratorCodeOpti(outputFile);
   outputFile.close();
 
   // return 0;
