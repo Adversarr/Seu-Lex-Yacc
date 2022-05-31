@@ -22,7 +22,7 @@ using namespace std;
 
 /* section 2 */
 //@variable
-const int num_lexical_tokens = 18;
+const int num_lexical_tokens = 14;
 const int num_syntax_tokens = 17;
 
 auto ending = Token::Terminator("EOF_FLAG");
@@ -426,12 +426,8 @@ int check_type(void)
 //@variable
 IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {
   string token_name = lexical_token.GetTokName();
-  if (token_name == R"((if))") { 
-    { { count(); return(IF); }}
-  } else if (token_name == R"((int))") { 
+  if (token_name == R"((int))") { 
     { { count(); return(INT); }}
-  } else if (token_name == R"((return))") { 
-    { { count(); return(RETURN); }}
   } else if (token_name == R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)") { 
     { { count(); return(IDENTIFIER); }}
   } else if (token_name == R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)") { 
@@ -454,10 +450,6 @@ IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {
     { { count(); return('-'); }}
   } else if (token_name == R"((\+))") { 
     { { count(); return('+'); }}
-  } else if (token_name == R"((\*))") { 
-    { { count(); return('*'); }}
-  } else if (token_name == R"((/))") { 
-    { { count(); return('/'); }}
   } else if (token_name == R"([ \t\v\r\n\f])") { 
     { { count(); }}
   } else if (token_name == R"(.)") { 
@@ -477,9 +469,7 @@ int main() {
   // lexical token
   //@variable
   vector<Token> lexical_tokens = {
-    Token::Terminator(R"((if))"), 
     Token::Terminator(R"((int))"), 
-    Token::Terminator(R"((return))"), 
     Token::Terminator(R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)"), 
     Token::Terminator(R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)"), 
     Token::Terminator(R"(L?"(\\.|[^\\"\r\n])*")"), 
@@ -491,15 +481,11 @@ int main() {
     Token::Terminator(R"((\)))"), 
     Token::Terminator(R"((-))"), 
     Token::Terminator(R"((\+))"), 
-    Token::Terminator(R"((\*))"), 
-    Token::Terminator(R"((/))"), 
     Token::Terminator(R"([ \t\v\r\n\f])"), 
     Token::Terminator(R"(.)"), 
   };
   vector<RegEx> lexical_tokens_regex = {
-    RegEx(R"((if))"), 
     RegEx(R"((int))"), 
-    RegEx(R"((return))"), 
     RegEx(R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)"), 
     RegEx(R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)"), 
     RegEx(R"(L?"(\\.|[^\\"\r\n])*")"), 
@@ -511,8 +497,6 @@ int main() {
     RegEx(R"((\)))"), 
     RegEx(R"((-))"), 
     RegEx(R"((\+))"), 
-    RegEx(R"((\*))"), 
-    RegEx(R"((/))"), 
     RegEx(R"([ \t\v\r\n\f])"), 
     RegEx(R"(.)"), 
   };
