@@ -328,14 +328,14 @@ void Lr1::GenTable() {
           auto pid = prod_id.value();
           if (reduce.action != ParsingTable::AutomataAction::kEmpty) {
             // 已经赋值
-            spdlog::warn("Found Reduce <> Reduce conflict:\n\t{}: \n- with\n{}: {}",
+            spdlog::info("Found Reduce <> Reduce conflict:\n\t{}: \n- with\n{}: {}",
                                         pid, p_grammar->GetProductions()[pid].ToString(),
                                         reduce.id, p_grammar->GetProductions()[reduce.id].ToString());
             if (pid < reduce.id) {
               reduce.id = pid;
-              spdlog::warn("Replace!");
+              spdlog::info("Replace!");
             } else {
-              spdlog::warn("Do nothing!");
+              spdlog::info("Do nothing!");
             }
           }
           
@@ -362,7 +362,7 @@ void Lr1::GenTable() {
         for_each(shift_in.cause.begin(), shift_in.cause.end(),
                  [&ss, this](const auto &v) { ss << "\t" << v << ": " << p_grammar->GetProductions()[v] << endl; });
         ss << "Reduce:" << endl << "\t" << reduce.id << ": " << p_grammar->GetProductions()[reduce.id] << endl;
-        spdlog::warn("Found Shift-In <> Reduce Conflict!\n{}", ss.str());
+        spdlog::info("Found Shift-In <> Reduce Conflict!\n{}", ss.str());
         
         // 处理冲突：
         // 1. 用结合律分析
@@ -378,10 +378,10 @@ void Lr1::GenTable() {
                    })) {
           // 可以通过结合律解决
           if (tok.GetAttr() == Token::Attr::kLeftAssociative) {
-            spdlog::warn("Reduce. because {} Has LeftAssociative.", tok.ToString());
+            spdlog::info("Reduce. because {} Has LeftAssociative.", tok.ToString());
             lr_table_.PutAction(i, tok, reduce);
           } else {
-            spdlog::warn("Shift In. because {} Has RightAssociative.", tok.ToString());
+            spdlog::info("Shift In. because {} Has RightAssociative.", tok.ToString());
             lr_table_.PutAction(i, tok, shift_in);
           }
         }
@@ -390,12 +390,12 @@ void Lr1::GenTable() {
         else if (all_of(shift_in.cause.cbegin(), shift_in.cause.cend(),
                         [&reduce](const auto &v) { return reduce.id < v; })) {
           // 执行reduce
-          spdlog::warn("Reduce. because of prio");
+          spdlog::info("Reduce. because of prio");
           lr_table_.PutAction(i, tok, reduce);
         } else if (all_of(shift_in.cause.cbegin(), shift_in.cause.cend(),
                           [&reduce](const auto &v) { return reduce.id > v; })) {
           // 执行 shift in
-          spdlog::warn("ShiftIn. because of prio");
+          spdlog::info("ShiftIn. because of prio");
           lr_table_.PutAction(i, tok, shift_in);
         } else {
           stringstream ss;

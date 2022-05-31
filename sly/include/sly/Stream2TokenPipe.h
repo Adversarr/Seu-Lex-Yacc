@@ -16,6 +16,7 @@ namespace sly::runtime {
 
 class Stream2TokenPipe {
  public:
+  explicit Stream2TokenPipe() {};
   explicit Stream2TokenPipe(std::vector<std::vector<int>> working_table, 
     std::vector<int> accept_states, std::vector<core::type::Token> corr_token, core::type::Token end_token);
 

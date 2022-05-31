@@ -9,8 +9,8 @@ IS          ((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))
 %%
 
 "int"           { count(); return(INT); }
+{D}+        { count(); return(CONSTANT); }
 {L}({L}|{D})*       { count(); return(IDENTIFIER); }
-{D}+{E}{FS}?        { count(); return(CONSTANT); }
 
 L?\"(\\.|[^\\\"\r\n])*\"    { count(); return(STRING_LITERAL); }
 

@@ -71,7 +71,7 @@ int main() {
     Token::Terminator("any"),
   };
   vector<RegEx> lexical_tokens_regex = {
-    RegEx("([0-9]+)"),
+    RegEx("(([0-9])+)"),
     RegEx("([0-9]+)\\.([0-9]*)(e[+-]?[0-9]+)?"),
     RegEx("auto"),
     RegEx("const"),
@@ -97,15 +97,15 @@ int main() {
 
   string input_string = "abc";
   // 测试样例
-  string s = R"(
-    auto a = 1.0e2; // this is a comment.
-    const int b = 2;
-    b++;
-    const int bca_123 = 4.0e-10;
-    void abc();
-  )";
-  // cin >> input_string;
-  stringstream input_stream(s);
+  // string s = R"(
+  //   auto a = 1.0e2; // this is a comment.
+  //   const int b = 2;
+  //   b++;
+  //   const int bca_123 = 4.0e-10;
+  //   void abc();
+  // )";
+  cin >> input_string;
+  stringstream input_stream(input_string);
 
   vector<AttrDict> attributes;
   vector<Token> tokens;

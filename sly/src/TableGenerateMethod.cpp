@@ -87,6 +87,7 @@ vector<IdType> ParsingTable::GetGoto(IdType lhs, const Token &tok) const {
 
 void ParsingTable::Print(ostream &os) const {
   os << "sly::core::grammar::ParsingTable(";
+  os << std::endl << "  ";
   // print out action table:
   os << "{";
   for (const auto &line : action_table_) {
@@ -108,6 +109,7 @@ void ParsingTable::Print(ostream &os) const {
     os << "}, ";
   }
   os << "}, ";
+  os << std::endl << "  ";
   // print out goto
   os << "{";
   for (const auto &line : goto_table_) {
@@ -123,14 +125,22 @@ void ParsingTable::Print(ostream &os) const {
     }
     os << "},";
   }
-  os << "}, productions,";
+  os << "}, ";
+  os << std::endl << "  ";
+
+  os << "productions";
+  os << ",";
+  os << std::endl << "  ";
 
   // several tokens
   entry_token_.PrintImpl(os);
   os << ",";
+  os << std::endl << "  ";
   augmented_token_.PrintImpl(os);
   os << ",";
+  os << std::endl << "  ";
   epsilon_token_.PrintImpl(os);
+  os << std::endl << "  ";
   os << ")";
 }
 

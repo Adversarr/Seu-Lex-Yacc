@@ -22,7 +22,7 @@ using namespace std;
 
 /* section 2 */
 //@variable
-const int num_lexical_tokens = 18;
+const int num_lexical_tokens = 14;
 const int num_syntax_tokens = 17;
 
 auto ending = Token::Terminator("EOF_FLAG");
@@ -305,6 +305,7 @@ Token syntax_tokens[256 + num_syntax_tokens] = {
   Token::Terminator(string(1, 253)), 
   Token::Terminator(string(1, 254)), 
   Token::Terminator(string(1, 255)), 
+  //@variable
   Token::Terminator("CONSTANT"), // 256
   Token::Terminator("IDENTIFIER"), // 257
   Token::Terminator("IF"), // 258
@@ -328,6 +329,7 @@ Token syntax_tokens[256 + num_syntax_tokens] = {
 auto &start_syntax_token = syntax_tokens[translation_unit];
 
 /* section 4 */
+// syntax
 //@variable
 vector<Production> productions = {
   // translation_unit : external_declaration ;
@@ -407,6 +409,40 @@ vector<Production> productions = {
       // action ...
     }})(syntax_tokens[STRING_LITERAL]), 
 };
+// lexical
+//@variable
+vector<Token> lexical_tokens = {
+  Token::Terminator(R"((int))"), 
+  Token::Terminator(R"([0-9]+)"), 
+  Token::Terminator(R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)"), 
+  Token::Terminator(R"(L?"(\\.|[^\\"\r\n])*")"), 
+  Token::Terminator(R"((;))"), 
+  Token::Terminator(R"((({)|(<%)))"), 
+  Token::Terminator(R"(((})|(%>)))"), 
+  Token::Terminator(R"((=))"), 
+  Token::Terminator(R"((\())"), 
+  Token::Terminator(R"((\)))"), 
+  Token::Terminator(R"((-))"), 
+  Token::Terminator(R"((\+))"), 
+  Token::Terminator(R"([ \t\v\r\n\f])"), 
+  Token::Terminator(R"(.)"), 
+};
+vector<DfaModel> lexical_tokens_dfa = {
+  RegEx(R"((int))").GetDfaModel(), 
+  RegEx(R"([0-9]+)").GetDfaModel(), 
+  RegEx(R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)").GetDfaModel(), 
+  RegEx(R"(L?"(\\.|[^\\"\r\n])*")").GetDfaModel(), 
+  RegEx(R"((;))").GetDfaModel(), 
+  RegEx(R"((({)|(<%)))").GetDfaModel(), 
+  RegEx(R"(((})|(%>)))").GetDfaModel(), 
+  RegEx(R"((=))").GetDfaModel(), 
+  RegEx(R"((\())").GetDfaModel(), 
+  RegEx(R"((\)))").GetDfaModel(), 
+  RegEx(R"((-))").GetDfaModel(), 
+  RegEx(R"((\+))").GetDfaModel(), 
+  RegEx(R"([ \t\v\r\n\f])").GetDfaModel(), 
+  RegEx(R"(.)").GetDfaModel(), 
+};
 /* section 5 */
 void count() {
   // pass
@@ -422,20 +458,26 @@ int check_type(void)
 }
 
 
+stringstream input_stream;
+Stream2TokenPipe s2ppl;
+
+char input() {
+  if (!(input_stream.good() && !input_stream.eof() && !input_stream.fail())) {
+    return 0;
+  }
+  char c = input_stream.get();
+  return c;
+}
 /* section 6 */
 //@variable
 IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {
   string token_name = lexical_token.GetTokName();
-  if (token_name == R"((if))") { 
-    { { count(); return(IF); }}
-  } else if (token_name == R"((int))") { 
+  if (token_name == R"((int))") { 
     { { count(); return(INT); }}
-  } else if (token_name == R"((return))") { 
-    { { count(); return(RETURN); }}
+  } else if (token_name == R"([0-9]+)") { 
+    { { count(); return(CONSTANT); }}
   } else if (token_name == R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)") { 
     { { count(); return(IDENTIFIER); }}
-  } else if (token_name == R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)") { 
-    { { count(); return(CONSTANT); }}
   } else if (token_name == R"(L?"(\\.|[^\\"\r\n])*")") { 
     { { count(); return(STRING_LITERAL); }}
   } else if (token_name == R"((;))") { 
@@ -454,10 +496,6 @@ IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {
     { { count(); return('-'); }}
   } else if (token_name == R"((\+))") { 
     { { count(); return('+'); }}
-  } else if (token_name == R"((\*))") { 
-    { { count(); return('*'); }}
-  } else if (token_name == R"((/))") { 
-    { { count(); return('/'); }}
   } else if (token_name == R"([ \t\v\r\n\f])") { 
     { { count(); }}
   } else if (token_name == R"(.)") { 
@@ -471,78 +509,27 @@ IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {
 /* section 7 */
 int main() {
   /* section 7.1 */
-  spdlog::set_level(spdlog::level::info);
+  spdlog::set_level(spdlog::level::off);
   
-  /* section 7.2 */
-  // lexical token
-  //@variable
-  vector<Token> lexical_tokens = {
-    Token::Terminator(R"((if))"), 
-    Token::Terminator(R"((int))"), 
-    Token::Terminator(R"((return))"), 
-    Token::Terminator(R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)"), 
-    Token::Terminator(R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)"), 
-    Token::Terminator(R"(L?"(\\.|[^\\"\r\n])*")"), 
-    Token::Terminator(R"((;))"), 
-    Token::Terminator(R"((({)|(<%)))"), 
-    Token::Terminator(R"(((})|(%>)))"), 
-    Token::Terminator(R"((=))"), 
-    Token::Terminator(R"((\())"), 
-    Token::Terminator(R"((\)))"), 
-    Token::Terminator(R"((-))"), 
-    Token::Terminator(R"((\+))"), 
-    Token::Terminator(R"((\*))"), 
-    Token::Terminator(R"((/))"), 
-    Token::Terminator(R"([ \t\v\r\n\f])"), 
-    Token::Terminator(R"(.)"), 
-  };
-  vector<RegEx> lexical_tokens_regex = {
-    RegEx(R"((if))"), 
-    RegEx(R"((int))"), 
-    RegEx(R"((return))"), 
-    RegEx(R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)"), 
-    RegEx(R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)"), 
-    RegEx(R"(L?"(\\.|[^\\"\r\n])*")"), 
-    RegEx(R"((;))"), 
-    RegEx(R"((({)|(<%)))"), 
-    RegEx(R"(((})|(%>)))"), 
-    RegEx(R"((=))"), 
-    RegEx(R"((\())"), 
-    RegEx(R"((\)))"), 
-    RegEx(R"((-))"), 
-    RegEx(R"((\+))"), 
-    RegEx(R"((\*))"), 
-    RegEx(R"((/))"), 
-    RegEx(R"([ \t\v\r\n\f])"), 
-    RegEx(R"(.)"), 
-  };
 
   /* section 7.3 */
-  vector<DfaModel> lexical_tokens_dfa;
-  for (auto regex : lexical_tokens_regex) {
-    lexical_tokens_dfa.push_back(regex.GetDfaModel());
-  }
+  // lexical
   auto [transition, state] = sly::core::lexical::DfaModel::Merge(lexical_tokens_dfa);
-  auto s2ppl = Stream2TokenPipe(transition, state, lexical_tokens, ending);
-
+  s2ppl = Stream2TokenPipe(transition, state, lexical_tokens, ending);
   // syntax
-  sly::core::grammar::ContextFreeGrammar cfg(productions, start_syntax_token, ending);
-  sly::core::grammar::Lr1 lr1;
-  cfg.Compile(lr1);
-  auto table = cfg.GetLrTable();
-  LrParser parser(table);
-
-  cout << start_syntax_token.GetTokName() << endl;
+  sly::core::grammar::ParsingTable table;
+  #include "out_precompile.cpp" // generate parsing table
+  
 
   /* section 7.4 */
   // runtime
-  stringstream input_stream;
   {
     ifstream inputFile("../demo/1.in");
     input_stream << inputFile.rdbuf();
     inputFile.close();
   }
 
+  // lexical
   vector<AttrDict> attributes;
   vector<Token> tokens;
   while (true) {
@@ -568,6 +555,7 @@ int main() {
     cerr << "  " << ad.Get<string>("lval") << " : " << token.GetTokName() << endl;
   }
 
+  // syntax
   parser.Parse(tokens, attributes);
   auto tree = parser.GetTree();
   cerr << "parse tree: " << endl;

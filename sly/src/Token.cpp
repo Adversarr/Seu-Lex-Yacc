@@ -140,7 +140,7 @@ ostream &operator<<(ostream &os, const Token::Type& type) {
 
 
 void Token::PrintImpl(std::ostream& os) const {
-  os << "sly::core::type::Token(\"" << GetTokName() << "\",";
+  os << "sly::core::type::Token(" << "R\"(" << GetTokName() << ")\"" << ",";
   auto type = GetTokenType();
   auto attr= GetAttr();
   if (type == Token::Type::kTerminator) {
