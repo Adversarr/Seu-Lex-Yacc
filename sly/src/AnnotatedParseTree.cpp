@@ -69,30 +69,100 @@ void AnnotatedParseTree::EmplaceFront(AnnotatedParseTree &&tree) {
 string AnnotatedParseTree::ToString() const {
   stringstream ss;
   Print(ss);
-  return "AnnontatedParseTree{" + ss.str() + "}";
+  return "AnnontatedParseTree{\n" + ss.str() + "}";
 }
 
-void AnnotatedParseTree::Print(ostream &oss, int depth) const{
-  if (depth > 0) {
-    oss << std::setw(depth * 2) << "* ";
+void AnnotatedParseTree::PrintForShort(ostream& oss, bool printAttr) const {
+  Print_(oss, true, printAttr);
+}
+
+void AnnotatedParseTree::Print(ostream& oss, bool printAttr) const {
+  Print_(oss, false, printAttr);
+}
+
+void AnnotatedParseTree::Print_(ostream &oss, bool forShort, bool printAttr, int depth, vector<bool> isLast) const {
+  if (depth == 0) {
+    oss << " ";
   }
-  oss << token_ << "<";
-  if (!attrs_.empty()) {
-    auto dict = attrs_[0].ToStrDict();
-    for (const auto&[k, v]: dict) {
-      if (typeid(v) == typeid(std::string)) {
-        oss << k << ":" << sly::utils::escape(v) << "/";
-      } else {
-        oss << k << ":" << v << "/";
+  for (int i = 0; i < isLast.size(); i++) {
+    if (i + 1 == isLast.size()) {
+      oss << (isLast[i] ? " └ " : " ├ ");
+    } else {
+      oss << (isLast[i] ? "  " : " │");
+    }
+  }
+  // print token name
+  if (type_ == Type::kNonTerminator) {
+    oss << "\033[35m" << token_.GetTokName() << "\033[0m";
+  } else {
+    oss << "\033[34m" << token_.GetTokName() << "\033[0m";
+  }
+  oss << " ";
+  // print attributes
+  if (type_ == Type::kNonTerminator) {
+    if (printAttr) {
+      oss << "[";
+      if (!attrs_.empty()) {
+        auto dict = attrs_[0].ToStrDict();
+        for (const auto&[k, v]: dict) {
+          if (typeid(v) == typeid(std::string)) {
+            oss << k << ":" << sly::utils::escape(v) << " /";
+          } else {
+            oss << k << ":" << v << " /";
+          }
+        }
+      }
+      oss << "]";
+    }
+  } else {
+    oss << "<line:" << attrs_[0].Get<int>("row") << ":" << attrs_[0].Get<int>("col") << ">";
+    oss << " ";
+    oss << "\"\033[33m" << sly::utils::escape(attrs_[0].Get<string>("lval")) << "\033[0m\"";
+    if (printAttr) {
+      oss << " [";
+      if (!attrs_.empty()) {
+        auto dict = attrs_[0].ToStrDict();
+        for (const auto&[k, v]: dict) {
+          if (k == "lval" || k == "row" || k == "col") {
+            continue;
+          }
+          if (typeid(v) == typeid(std::string)) {
+            oss << k << ":" << sly::utils::escape(v) << " /";
+          } else {
+            oss << k << ":" << v << " /";
+          }
+        }
+      }
+      oss << "]";
+    }
+  }
+  // // print other attributes
+  // if (type_ == Type::kNonTerminator) {
+  //   oss << "\033[32m" << token_.GetTokName() << "\033[0m";
+  // } else {
+  //   oss << "\033[34m" << token_.GetTokName() << "\033[0m";
+  // } 
+  // oss << ">";
+  oss << std::endl;
+  isLast.emplace_back(false);
+  if (type_ == Type::kNonTerminator) {
+    // for (const auto &sub_node: sub_nodes_) {
+    if (forShort && sub_nodes_.size() == 1) {
+      SubNode sub_node = sub_nodes_[0];
+      while (sub_node->type_ ==  Type::kNonTerminator && sub_node->sub_nodes_.size() == 1) {
+        sub_node = sub_node->sub_nodes_[0];
+      }
+      isLast.back() = true;
+      sub_node->Print_(oss, forShort, printAttr, depth + 1, isLast);
+    } else {
+      for (auto it = sub_nodes_.begin(); it != sub_nodes_.end(); it++) {
+        if (it + 1 == sub_nodes_.end()) {
+          isLast.back() = true;
+        }
+        (*it)->Print_(oss, forShort, printAttr, depth + 1, isLast);
       }
     }
   }
-  oss << ">";
-  oss << std::endl;
-  if (type_ == Type::kNonTerminator) {
-    for (const auto &sub_node: sub_nodes_) {
-      sub_node->Print(oss, depth + 1);
-    }
-  }
 }
-}
+
+} // namespace sly::core::type

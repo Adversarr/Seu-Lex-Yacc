@@ -20,9 +20,38 @@ using sly::runtime::Stream2TokenPipe;
 using sly::core::grammar::LrParser;
 using namespace std;
 
+#define ECHO (cerr << yytext)
+#define error(...) {\
+  fprintf(stderr, "%s:line %d: ", __FILE__, __LINE__);  \
+  fprintf(stderr, __VA_ARGS__);                         \
+  fprintf(stderr, "\n");                                \
+  assert(false);                                              \
+}
+
+/* user code from yacc file start */
+#include <stdio.h>
+
+extern int column;
+
+void yyerror(char const *s)
+{
+	fflush(stdout);
+	printf("\n%*s\n%*s\n", column, "^", column, s);
+}
+
+
+/* user code from yacc file end */
+
+/* user code from lex file start */
+#include <stdio.h>
+
+void count(void);
+
+/* user code from lex file end */
+
 /* section 2 */
 //@variable
-const int num_lexical_tokens = 14;
+const int num_lexical_tokens = 99;
 const int num_syntax_tokens = 131;
 
 auto ending = Token::Terminator("EOF_FLAG");
@@ -163,262 +192,262 @@ auto ending = Token::Terminator("EOF_FLAG");
 /* section 3 */
 // syntax tokens 
 Token syntax_tokens[256 + num_syntax_tokens] = {
-  Token::Terminator(string(1, 0)), 
-  Token::Terminator(string(1, 1)), 
-  Token::Terminator(string(1, 2)), 
-  Token::Terminator(string(1, 3)), 
-  Token::Terminator(string(1, 4)), 
-  Token::Terminator(string(1, 5)), 
-  Token::Terminator(string(1, 6)), 
-  Token::Terminator(string(1, 7)), 
-  Token::Terminator(string(1, 8)), 
-  Token::Terminator(string(1, 9)), 
-  Token::Terminator(string(1, 10)), 
-  Token::Terminator(string(1, 11)), 
-  Token::Terminator(string(1, 12)), 
-  Token::Terminator(string(1, 13)), 
-  Token::Terminator(string(1, 14)), 
-  Token::Terminator(string(1, 15)), 
-  Token::Terminator(string(1, 16)), 
-  Token::Terminator(string(1, 17)), 
-  Token::Terminator(string(1, 18)), 
-  Token::Terminator(string(1, 19)), 
-  Token::Terminator(string(1, 20)), 
-  Token::Terminator(string(1, 21)), 
-  Token::Terminator(string(1, 22)), 
-  Token::Terminator(string(1, 23)), 
-  Token::Terminator(string(1, 24)), 
-  Token::Terminator(string(1, 25)), 
-  Token::Terminator(string(1, 26)), 
-  Token::Terminator(string(1, 27)), 
-  Token::Terminator(string(1, 28)), 
-  Token::Terminator(string(1, 29)), 
-  Token::Terminator(string(1, 30)), 
-  Token::Terminator(string(1, 31)), 
-  Token::Terminator(string(1, 32)), 
-  Token::Terminator(string(1, 33)), 
-  Token::Terminator(string(1, 34)), 
-  Token::Terminator(string(1, 35)), 
-  Token::Terminator(string(1, 36)), 
-  Token::Terminator(string(1, 37)), 
-  Token::Terminator(string(1, 38)), 
-  Token::Terminator(string(1, 39)), 
-  Token::Terminator(string(1, 40)), 
-  Token::Terminator(string(1, 41)), 
-  Token::Terminator(string(1, 42)), 
-  Token::Terminator(string(1, 43)), 
-  Token::Terminator(string(1, 44)), 
-  Token::Terminator(string(1, 45)), 
-  Token::Terminator(string(1, 46)), 
-  Token::Terminator(string(1, 47)), 
-  Token::Terminator(string(1, 48)), 
-  Token::Terminator(string(1, 49)), 
-  Token::Terminator(string(1, 50)), 
-  Token::Terminator(string(1, 51)), 
-  Token::Terminator(string(1, 52)), 
-  Token::Terminator(string(1, 53)), 
-  Token::Terminator(string(1, 54)), 
-  Token::Terminator(string(1, 55)), 
-  Token::Terminator(string(1, 56)), 
-  Token::Terminator(string(1, 57)), 
-  Token::Terminator(string(1, 58)), 
-  Token::Terminator(string(1, 59)), 
-  Token::Terminator(string(1, 60)), 
-  Token::Terminator(string(1, 61)), 
-  Token::Terminator(string(1, 62)), 
-  Token::Terminator(string(1, 63)), 
-  Token::Terminator(string(1, 64)), 
-  Token::Terminator(string(1, 65)), 
-  Token::Terminator(string(1, 66)), 
-  Token::Terminator(string(1, 67)), 
-  Token::Terminator(string(1, 68)), 
-  Token::Terminator(string(1, 69)), 
-  Token::Terminator(string(1, 70)), 
-  Token::Terminator(string(1, 71)), 
-  Token::Terminator(string(1, 72)), 
-  Token::Terminator(string(1, 73)), 
-  Token::Terminator(string(1, 74)), 
-  Token::Terminator(string(1, 75)), 
-  Token::Terminator(string(1, 76)), 
-  Token::Terminator(string(1, 77)), 
-  Token::Terminator(string(1, 78)), 
-  Token::Terminator(string(1, 79)), 
-  Token::Terminator(string(1, 80)), 
-  Token::Terminator(string(1, 81)), 
-  Token::Terminator(string(1, 82)), 
-  Token::Terminator(string(1, 83)), 
-  Token::Terminator(string(1, 84)), 
-  Token::Terminator(string(1, 85)), 
-  Token::Terminator(string(1, 86)), 
-  Token::Terminator(string(1, 87)), 
-  Token::Terminator(string(1, 88)), 
-  Token::Terminator(string(1, 89)), 
-  Token::Terminator(string(1, 90)), 
-  Token::Terminator(string(1, 91)), 
-  Token::Terminator(string(1, 92)), 
-  Token::Terminator(string(1, 93)), 
-  Token::Terminator(string(1, 94)), 
-  Token::Terminator(string(1, 95)), 
-  Token::Terminator(string(1, 96)), 
-  Token::Terminator(string(1, 97)), 
-  Token::Terminator(string(1, 98)), 
-  Token::Terminator(string(1, 99)), 
-  Token::Terminator(string(1, 100)), 
-  Token::Terminator(string(1, 101)), 
-  Token::Terminator(string(1, 102)), 
-  Token::Terminator(string(1, 103)), 
-  Token::Terminator(string(1, 104)), 
-  Token::Terminator(string(1, 105)), 
-  Token::Terminator(string(1, 106)), 
-  Token::Terminator(string(1, 107)), 
-  Token::Terminator(string(1, 108)), 
-  Token::Terminator(string(1, 109)), 
-  Token::Terminator(string(1, 110)), 
-  Token::Terminator(string(1, 111)), 
-  Token::Terminator(string(1, 112)), 
-  Token::Terminator(string(1, 113)), 
-  Token::Terminator(string(1, 114)), 
-  Token::Terminator(string(1, 115)), 
-  Token::Terminator(string(1, 116)), 
-  Token::Terminator(string(1, 117)), 
-  Token::Terminator(string(1, 118)), 
-  Token::Terminator(string(1, 119)), 
-  Token::Terminator(string(1, 120)), 
-  Token::Terminator(string(1, 121)), 
-  Token::Terminator(string(1, 122)), 
-  Token::Terminator(string(1, 123)), 
-  Token::Terminator(string(1, 124)), 
-  Token::Terminator(string(1, 125)), 
-  Token::Terminator(string(1, 126)), 
-  Token::Terminator(string(1, 127)), 
-  Token::Terminator(string(1, 128)), 
-  Token::Terminator(string(1, 129)), 
-  Token::Terminator(string(1, 130)), 
-  Token::Terminator(string(1, 131)), 
-  Token::Terminator(string(1, 132)), 
-  Token::Terminator(string(1, 133)), 
-  Token::Terminator(string(1, 134)), 
-  Token::Terminator(string(1, 135)), 
-  Token::Terminator(string(1, 136)), 
-  Token::Terminator(string(1, 137)), 
-  Token::Terminator(string(1, 138)), 
-  Token::Terminator(string(1, 139)), 
-  Token::Terminator(string(1, 140)), 
-  Token::Terminator(string(1, 141)), 
-  Token::Terminator(string(1, 142)), 
-  Token::Terminator(string(1, 143)), 
-  Token::Terminator(string(1, 144)), 
-  Token::Terminator(string(1, 145)), 
-  Token::Terminator(string(1, 146)), 
-  Token::Terminator(string(1, 147)), 
-  Token::Terminator(string(1, 148)), 
-  Token::Terminator(string(1, 149)), 
-  Token::Terminator(string(1, 150)), 
-  Token::Terminator(string(1, 151)), 
-  Token::Terminator(string(1, 152)), 
-  Token::Terminator(string(1, 153)), 
-  Token::Terminator(string(1, 154)), 
-  Token::Terminator(string(1, 155)), 
-  Token::Terminator(string(1, 156)), 
-  Token::Terminator(string(1, 157)), 
-  Token::Terminator(string(1, 158)), 
-  Token::Terminator(string(1, 159)), 
-  Token::Terminator(string(1, 160)), 
-  Token::Terminator(string(1, 161)), 
-  Token::Terminator(string(1, 162)), 
-  Token::Terminator(string(1, 163)), 
-  Token::Terminator(string(1, 164)), 
-  Token::Terminator(string(1, 165)), 
-  Token::Terminator(string(1, 166)), 
-  Token::Terminator(string(1, 167)), 
-  Token::Terminator(string(1, 168)), 
-  Token::Terminator(string(1, 169)), 
-  Token::Terminator(string(1, 170)), 
-  Token::Terminator(string(1, 171)), 
-  Token::Terminator(string(1, 172)), 
-  Token::Terminator(string(1, 173)), 
-  Token::Terminator(string(1, 174)), 
-  Token::Terminator(string(1, 175)), 
-  Token::Terminator(string(1, 176)), 
-  Token::Terminator(string(1, 177)), 
-  Token::Terminator(string(1, 178)), 
-  Token::Terminator(string(1, 179)), 
-  Token::Terminator(string(1, 180)), 
-  Token::Terminator(string(1, 181)), 
-  Token::Terminator(string(1, 182)), 
-  Token::Terminator(string(1, 183)), 
-  Token::Terminator(string(1, 184)), 
-  Token::Terminator(string(1, 185)), 
-  Token::Terminator(string(1, 186)), 
-  Token::Terminator(string(1, 187)), 
-  Token::Terminator(string(1, 188)), 
-  Token::Terminator(string(1, 189)), 
-  Token::Terminator(string(1, 190)), 
-  Token::Terminator(string(1, 191)), 
-  Token::Terminator(string(1, 192)), 
-  Token::Terminator(string(1, 193)), 
-  Token::Terminator(string(1, 194)), 
-  Token::Terminator(string(1, 195)), 
-  Token::Terminator(string(1, 196)), 
-  Token::Terminator(string(1, 197)), 
-  Token::Terminator(string(1, 198)), 
-  Token::Terminator(string(1, 199)), 
-  Token::Terminator(string(1, 200)), 
-  Token::Terminator(string(1, 201)), 
-  Token::Terminator(string(1, 202)), 
-  Token::Terminator(string(1, 203)), 
-  Token::Terminator(string(1, 204)), 
-  Token::Terminator(string(1, 205)), 
-  Token::Terminator(string(1, 206)), 
-  Token::Terminator(string(1, 207)), 
-  Token::Terminator(string(1, 208)), 
-  Token::Terminator(string(1, 209)), 
-  Token::Terminator(string(1, 210)), 
-  Token::Terminator(string(1, 211)), 
-  Token::Terminator(string(1, 212)), 
-  Token::Terminator(string(1, 213)), 
-  Token::Terminator(string(1, 214)), 
-  Token::Terminator(string(1, 215)), 
-  Token::Terminator(string(1, 216)), 
-  Token::Terminator(string(1, 217)), 
-  Token::Terminator(string(1, 218)), 
-  Token::Terminator(string(1, 219)), 
-  Token::Terminator(string(1, 220)), 
-  Token::Terminator(string(1, 221)), 
-  Token::Terminator(string(1, 222)), 
-  Token::Terminator(string(1, 223)), 
-  Token::Terminator(string(1, 224)), 
-  Token::Terminator(string(1, 225)), 
-  Token::Terminator(string(1, 226)), 
-  Token::Terminator(string(1, 227)), 
-  Token::Terminator(string(1, 228)), 
-  Token::Terminator(string(1, 229)), 
-  Token::Terminator(string(1, 230)), 
-  Token::Terminator(string(1, 231)), 
-  Token::Terminator(string(1, 232)), 
-  Token::Terminator(string(1, 233)), 
-  Token::Terminator(string(1, 234)), 
-  Token::Terminator(string(1, 235)), 
-  Token::Terminator(string(1, 236)), 
-  Token::Terminator(string(1, 237)), 
-  Token::Terminator(string(1, 238)), 
-  Token::Terminator(string(1, 239)), 
-  Token::Terminator(string(1, 240)), 
-  Token::Terminator(string(1, 241)), 
-  Token::Terminator(string(1, 242)), 
-  Token::Terminator(string(1, 243)), 
-  Token::Terminator(string(1, 244)), 
-  Token::Terminator(string(1, 245)), 
-  Token::Terminator(string(1, 246)), 
-  Token::Terminator(string(1, 247)), 
-  Token::Terminator(string(1, 248)), 
-  Token::Terminator(string(1, 249)), 
-  Token::Terminator(string(1, 250)), 
-  Token::Terminator(string(1, 251)), 
-  Token::Terminator(string(1, 252)), 
-  Token::Terminator(string(1, 253)), 
-  Token::Terminator(string(1, 254)), 
-  Token::Terminator(string(1, 255)), 
+  Token::Terminator(string(1, static_cast<char>(0))), 
+  Token::Terminator(string(1, static_cast<char>(1))), 
+  Token::Terminator(string(1, static_cast<char>(2))), 
+  Token::Terminator(string(1, static_cast<char>(3))), 
+  Token::Terminator(string(1, static_cast<char>(4))), 
+  Token::Terminator(string(1, static_cast<char>(5))), 
+  Token::Terminator(string(1, static_cast<char>(6))), 
+  Token::Terminator(string(1, static_cast<char>(7))), 
+  Token::Terminator(string(1, static_cast<char>(8))), 
+  Token::Terminator(string(1, static_cast<char>(9))), 
+  Token::Terminator(string(1, static_cast<char>(10))), 
+  Token::Terminator(string(1, static_cast<char>(11))), 
+  Token::Terminator(string(1, static_cast<char>(12))), 
+  Token::Terminator(string(1, static_cast<char>(13))), 
+  Token::Terminator(string(1, static_cast<char>(14))), 
+  Token::Terminator(string(1, static_cast<char>(15))), 
+  Token::Terminator(string(1, static_cast<char>(16))), 
+  Token::Terminator(string(1, static_cast<char>(17))), 
+  Token::Terminator(string(1, static_cast<char>(18))), 
+  Token::Terminator(string(1, static_cast<char>(19))), 
+  Token::Terminator(string(1, static_cast<char>(20))), 
+  Token::Terminator(string(1, static_cast<char>(21))), 
+  Token::Terminator(string(1, static_cast<char>(22))), 
+  Token::Terminator(string(1, static_cast<char>(23))), 
+  Token::Terminator(string(1, static_cast<char>(24))), 
+  Token::Terminator(string(1, static_cast<char>(25))), 
+  Token::Terminator(string(1, static_cast<char>(26))), 
+  Token::Terminator(string(1, static_cast<char>(27))), 
+  Token::Terminator(string(1, static_cast<char>(28))), 
+  Token::Terminator(string(1, static_cast<char>(29))), 
+  Token::Terminator(string(1, static_cast<char>(30))), 
+  Token::Terminator(string(1, static_cast<char>(31))), 
+  Token::Terminator(string(1, static_cast<char>(32))), 
+  Token::Terminator(string(1, static_cast<char>(33))), 
+  Token::Terminator(string(1, static_cast<char>(34))), 
+  Token::Terminator(string(1, static_cast<char>(35))), 
+  Token::Terminator(string(1, static_cast<char>(36))), 
+  Token::Terminator(string(1, static_cast<char>(37))), 
+  Token::Terminator(string(1, static_cast<char>(38))), 
+  Token::Terminator(string(1, static_cast<char>(39))), 
+  Token::Terminator(string(1, static_cast<char>(40))), 
+  Token::Terminator(string(1, static_cast<char>(41))), 
+  Token::Terminator(string(1, static_cast<char>(42))), 
+  Token::Terminator(string(1, static_cast<char>(43))), 
+  Token::Terminator(string(1, static_cast<char>(44))), 
+  Token::Terminator(string(1, static_cast<char>(45))), 
+  Token::Terminator(string(1, static_cast<char>(46))), 
+  Token::Terminator(string(1, static_cast<char>(47))), 
+  Token::Terminator(string(1, static_cast<char>(48))), 
+  Token::Terminator(string(1, static_cast<char>(49))), 
+  Token::Terminator(string(1, static_cast<char>(50))), 
+  Token::Terminator(string(1, static_cast<char>(51))), 
+  Token::Terminator(string(1, static_cast<char>(52))), 
+  Token::Terminator(string(1, static_cast<char>(53))), 
+  Token::Terminator(string(1, static_cast<char>(54))), 
+  Token::Terminator(string(1, static_cast<char>(55))), 
+  Token::Terminator(string(1, static_cast<char>(56))), 
+  Token::Terminator(string(1, static_cast<char>(57))), 
+  Token::Terminator(string(1, static_cast<char>(58))), 
+  Token::Terminator(string(1, static_cast<char>(59))), 
+  Token::Terminator(string(1, static_cast<char>(60))), 
+  Token::Terminator(string(1, static_cast<char>(61))), 
+  Token::Terminator(string(1, static_cast<char>(62))), 
+  Token::Terminator(string(1, static_cast<char>(63))), 
+  Token::Terminator(string(1, static_cast<char>(64))), 
+  Token::Terminator(string(1, static_cast<char>(65))), 
+  Token::Terminator(string(1, static_cast<char>(66))), 
+  Token::Terminator(string(1, static_cast<char>(67))), 
+  Token::Terminator(string(1, static_cast<char>(68))), 
+  Token::Terminator(string(1, static_cast<char>(69))), 
+  Token::Terminator(string(1, static_cast<char>(70))), 
+  Token::Terminator(string(1, static_cast<char>(71))), 
+  Token::Terminator(string(1, static_cast<char>(72))), 
+  Token::Terminator(string(1, static_cast<char>(73))), 
+  Token::Terminator(string(1, static_cast<char>(74))), 
+  Token::Terminator(string(1, static_cast<char>(75))), 
+  Token::Terminator(string(1, static_cast<char>(76))), 
+  Token::Terminator(string(1, static_cast<char>(77))), 
+  Token::Terminator(string(1, static_cast<char>(78))), 
+  Token::Terminator(string(1, static_cast<char>(79))), 
+  Token::Terminator(string(1, static_cast<char>(80))), 
+  Token::Terminator(string(1, static_cast<char>(81))), 
+  Token::Terminator(string(1, static_cast<char>(82))), 
+  Token::Terminator(string(1, static_cast<char>(83))), 
+  Token::Terminator(string(1, static_cast<char>(84))), 
+  Token::Terminator(string(1, static_cast<char>(85))), 
+  Token::Terminator(string(1, static_cast<char>(86))), 
+  Token::Terminator(string(1, static_cast<char>(87))), 
+  Token::Terminator(string(1, static_cast<char>(88))), 
+  Token::Terminator(string(1, static_cast<char>(89))), 
+  Token::Terminator(string(1, static_cast<char>(90))), 
+  Token::Terminator(string(1, static_cast<char>(91))), 
+  Token::Terminator(string(1, static_cast<char>(92))), 
+  Token::Terminator(string(1, static_cast<char>(93))), 
+  Token::Terminator(string(1, static_cast<char>(94))), 
+  Token::Terminator(string(1, static_cast<char>(95))), 
+  Token::Terminator(string(1, static_cast<char>(96))), 
+  Token::Terminator(string(1, static_cast<char>(97))), 
+  Token::Terminator(string(1, static_cast<char>(98))), 
+  Token::Terminator(string(1, static_cast<char>(99))), 
+  Token::Terminator(string(1, static_cast<char>(100))), 
+  Token::Terminator(string(1, static_cast<char>(101))), 
+  Token::Terminator(string(1, static_cast<char>(102))), 
+  Token::Terminator(string(1, static_cast<char>(103))), 
+  Token::Terminator(string(1, static_cast<char>(104))), 
+  Token::Terminator(string(1, static_cast<char>(105))), 
+  Token::Terminator(string(1, static_cast<char>(106))), 
+  Token::Terminator(string(1, static_cast<char>(107))), 
+  Token::Terminator(string(1, static_cast<char>(108))), 
+  Token::Terminator(string(1, static_cast<char>(109))), 
+  Token::Terminator(string(1, static_cast<char>(110))), 
+  Token::Terminator(string(1, static_cast<char>(111))), 
+  Token::Terminator(string(1, static_cast<char>(112))), 
+  Token::Terminator(string(1, static_cast<char>(113))), 
+  Token::Terminator(string(1, static_cast<char>(114))), 
+  Token::Terminator(string(1, static_cast<char>(115))), 
+  Token::Terminator(string(1, static_cast<char>(116))), 
+  Token::Terminator(string(1, static_cast<char>(117))), 
+  Token::Terminator(string(1, static_cast<char>(118))), 
+  Token::Terminator(string(1, static_cast<char>(119))), 
+  Token::Terminator(string(1, static_cast<char>(120))), 
+  Token::Terminator(string(1, static_cast<char>(121))), 
+  Token::Terminator(string(1, static_cast<char>(122))), 
+  Token::Terminator(string(1, static_cast<char>(123))), 
+  Token::Terminator(string(1, static_cast<char>(124))), 
+  Token::Terminator(string(1, static_cast<char>(125))), 
+  Token::Terminator(string(1, static_cast<char>(126))), 
+  Token::Terminator(string(1, static_cast<char>(127))), 
+  Token::Terminator(string(1, static_cast<char>(128))), 
+  Token::Terminator(string(1, static_cast<char>(129))), 
+  Token::Terminator(string(1, static_cast<char>(130))), 
+  Token::Terminator(string(1, static_cast<char>(131))), 
+  Token::Terminator(string(1, static_cast<char>(132))), 
+  Token::Terminator(string(1, static_cast<char>(133))), 
+  Token::Terminator(string(1, static_cast<char>(134))), 
+  Token::Terminator(string(1, static_cast<char>(135))), 
+  Token::Terminator(string(1, static_cast<char>(136))), 
+  Token::Terminator(string(1, static_cast<char>(137))), 
+  Token::Terminator(string(1, static_cast<char>(138))), 
+  Token::Terminator(string(1, static_cast<char>(139))), 
+  Token::Terminator(string(1, static_cast<char>(140))), 
+  Token::Terminator(string(1, static_cast<char>(141))), 
+  Token::Terminator(string(1, static_cast<char>(142))), 
+  Token::Terminator(string(1, static_cast<char>(143))), 
+  Token::Terminator(string(1, static_cast<char>(144))), 
+  Token::Terminator(string(1, static_cast<char>(145))), 
+  Token::Terminator(string(1, static_cast<char>(146))), 
+  Token::Terminator(string(1, static_cast<char>(147))), 
+  Token::Terminator(string(1, static_cast<char>(148))), 
+  Token::Terminator(string(1, static_cast<char>(149))), 
+  Token::Terminator(string(1, static_cast<char>(150))), 
+  Token::Terminator(string(1, static_cast<char>(151))), 
+  Token::Terminator(string(1, static_cast<char>(152))), 
+  Token::Terminator(string(1, static_cast<char>(153))), 
+  Token::Terminator(string(1, static_cast<char>(154))), 
+  Token::Terminator(string(1, static_cast<char>(155))), 
+  Token::Terminator(string(1, static_cast<char>(156))), 
+  Token::Terminator(string(1, static_cast<char>(157))), 
+  Token::Terminator(string(1, static_cast<char>(158))), 
+  Token::Terminator(string(1, static_cast<char>(159))), 
+  Token::Terminator(string(1, static_cast<char>(160))), 
+  Token::Terminator(string(1, static_cast<char>(161))), 
+  Token::Terminator(string(1, static_cast<char>(162))), 
+  Token::Terminator(string(1, static_cast<char>(163))), 
+  Token::Terminator(string(1, static_cast<char>(164))), 
+  Token::Terminator(string(1, static_cast<char>(165))), 
+  Token::Terminator(string(1, static_cast<char>(166))), 
+  Token::Terminator(string(1, static_cast<char>(167))), 
+  Token::Terminator(string(1, static_cast<char>(168))), 
+  Token::Terminator(string(1, static_cast<char>(169))), 
+  Token::Terminator(string(1, static_cast<char>(170))), 
+  Token::Terminator(string(1, static_cast<char>(171))), 
+  Token::Terminator(string(1, static_cast<char>(172))), 
+  Token::Terminator(string(1, static_cast<char>(173))), 
+  Token::Terminator(string(1, static_cast<char>(174))), 
+  Token::Terminator(string(1, static_cast<char>(175))), 
+  Token::Terminator(string(1, static_cast<char>(176))), 
+  Token::Terminator(string(1, static_cast<char>(177))), 
+  Token::Terminator(string(1, static_cast<char>(178))), 
+  Token::Terminator(string(1, static_cast<char>(179))), 
+  Token::Terminator(string(1, static_cast<char>(180))), 
+  Token::Terminator(string(1, static_cast<char>(181))), 
+  Token::Terminator(string(1, static_cast<char>(182))), 
+  Token::Terminator(string(1, static_cast<char>(183))), 
+  Token::Terminator(string(1, static_cast<char>(184))), 
+  Token::Terminator(string(1, static_cast<char>(185))), 
+  Token::Terminator(string(1, static_cast<char>(186))), 
+  Token::Terminator(string(1, static_cast<char>(187))), 
+  Token::Terminator(string(1, static_cast<char>(188))), 
+  Token::Terminator(string(1, static_cast<char>(189))), 
+  Token::Terminator(string(1, static_cast<char>(190))), 
+  Token::Terminator(string(1, static_cast<char>(191))), 
+  Token::Terminator(string(1, static_cast<char>(192))), 
+  Token::Terminator(string(1, static_cast<char>(193))), 
+  Token::Terminator(string(1, static_cast<char>(194))), 
+  Token::Terminator(string(1, static_cast<char>(195))), 
+  Token::Terminator(string(1, static_cast<char>(196))), 
+  Token::Terminator(string(1, static_cast<char>(197))), 
+  Token::Terminator(string(1, static_cast<char>(198))), 
+  Token::Terminator(string(1, static_cast<char>(199))), 
+  Token::Terminator(string(1, static_cast<char>(200))), 
+  Token::Terminator(string(1, static_cast<char>(201))), 
+  Token::Terminator(string(1, static_cast<char>(202))), 
+  Token::Terminator(string(1, static_cast<char>(203))), 
+  Token::Terminator(string(1, static_cast<char>(204))), 
+  Token::Terminator(string(1, static_cast<char>(205))), 
+  Token::Terminator(string(1, static_cast<char>(206))), 
+  Token::Terminator(string(1, static_cast<char>(207))), 
+  Token::Terminator(string(1, static_cast<char>(208))), 
+  Token::Terminator(string(1, static_cast<char>(209))), 
+  Token::Terminator(string(1, static_cast<char>(210))), 
+  Token::Terminator(string(1, static_cast<char>(211))), 
+  Token::Terminator(string(1, static_cast<char>(212))), 
+  Token::Terminator(string(1, static_cast<char>(213))), 
+  Token::Terminator(string(1, static_cast<char>(214))), 
+  Token::Terminator(string(1, static_cast<char>(215))), 
+  Token::Terminator(string(1, static_cast<char>(216))), 
+  Token::Terminator(string(1, static_cast<char>(217))), 
+  Token::Terminator(string(1, static_cast<char>(218))), 
+  Token::Terminator(string(1, static_cast<char>(219))), 
+  Token::Terminator(string(1, static_cast<char>(220))), 
+  Token::Terminator(string(1, static_cast<char>(221))), 
+  Token::Terminator(string(1, static_cast<char>(222))), 
+  Token::Terminator(string(1, static_cast<char>(223))), 
+  Token::Terminator(string(1, static_cast<char>(224))), 
+  Token::Terminator(string(1, static_cast<char>(225))), 
+  Token::Terminator(string(1, static_cast<char>(226))), 
+  Token::Terminator(string(1, static_cast<char>(227))), 
+  Token::Terminator(string(1, static_cast<char>(228))), 
+  Token::Terminator(string(1, static_cast<char>(229))), 
+  Token::Terminator(string(1, static_cast<char>(230))), 
+  Token::Terminator(string(1, static_cast<char>(231))), 
+  Token::Terminator(string(1, static_cast<char>(232))), 
+  Token::Terminator(string(1, static_cast<char>(233))), 
+  Token::Terminator(string(1, static_cast<char>(234))), 
+  Token::Terminator(string(1, static_cast<char>(235))), 
+  Token::Terminator(string(1, static_cast<char>(236))), 
+  Token::Terminator(string(1, static_cast<char>(237))), 
+  Token::Terminator(string(1, static_cast<char>(238))), 
+  Token::Terminator(string(1, static_cast<char>(239))), 
+  Token::Terminator(string(1, static_cast<char>(240))), 
+  Token::Terminator(string(1, static_cast<char>(241))), 
+  Token::Terminator(string(1, static_cast<char>(242))), 
+  Token::Terminator(string(1, static_cast<char>(243))), 
+  Token::Terminator(string(1, static_cast<char>(244))), 
+  Token::Terminator(string(1, static_cast<char>(245))), 
+  Token::Terminator(string(1, static_cast<char>(246))), 
+  Token::Terminator(string(1, static_cast<char>(247))), 
+  Token::Terminator(string(1, static_cast<char>(248))), 
+  Token::Terminator(string(1, static_cast<char>(249))), 
+  Token::Terminator(string(1, static_cast<char>(250))), 
+  Token::Terminator(string(1, static_cast<char>(251))), 
+  Token::Terminator(string(1, static_cast<char>(252))), 
+  Token::Terminator(string(1, static_cast<char>(253))), 
+  Token::Terminator(string(1, static_cast<char>(254))), 
+  Token::Terminator(string(1, static_cast<char>(255))), 
   //@variable
   Token::Terminator("ADD_ASSIGN"), // 256
   Token::Terminator("AND_ASSIGN"), // 257
@@ -1512,91 +1541,480 @@ vector<Production> productions = {
 // lexical
 //@variable
 vector<Token> lexical_tokens = {
+  Token::Terminator(R"((/\*))"), 
+  Token::Terminator(R"((//)[^\n\r]*)"), 
+  Token::Terminator(R"((auto))"), 
+  Token::Terminator(R"((_Bool))"), 
+  Token::Terminator(R"((break))"), 
+  Token::Terminator(R"((case))"), 
+  Token::Terminator(R"((char))"), 
+  Token::Terminator(R"((_Complex))"), 
+  Token::Terminator(R"((const))"), 
+  Token::Terminator(R"((continue))"), 
+  Token::Terminator(R"((default))"), 
+  Token::Terminator(R"((do))"), 
+  Token::Terminator(R"((double))"), 
+  Token::Terminator(R"((else))"), 
+  Token::Terminator(R"((enum))"), 
+  Token::Terminator(R"((extern))"), 
+  Token::Terminator(R"((float))"), 
+  Token::Terminator(R"((for))"), 
+  Token::Terminator(R"((goto))"), 
+  Token::Terminator(R"((if))"), 
+  Token::Terminator(R"((_Imaginary))"), 
+  Token::Terminator(R"((inline))"), 
   Token::Terminator(R"((int))"), 
-  Token::Terminator(R"([0-9]+)"), 
+  Token::Terminator(R"((long))"), 
+  Token::Terminator(R"((register))"), 
+  Token::Terminator(R"((restrict))"), 
+  Token::Terminator(R"((return))"), 
+  Token::Terminator(R"((short))"), 
+  Token::Terminator(R"((signed))"), 
+  Token::Terminator(R"((sizeof))"), 
+  Token::Terminator(R"((static))"), 
+  Token::Terminator(R"((struct))"), 
+  Token::Terminator(R"((switch))"), 
+  Token::Terminator(R"((typedef))"), 
+  Token::Terminator(R"((union))"), 
+  Token::Terminator(R"((unsigned))"), 
+  Token::Terminator(R"((void))"), 
+  Token::Terminator(R"((volatile))"), 
+  Token::Terminator(R"((while))"), 
   Token::Terminator(R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)"), 
-  Token::Terminator(R"(L?"(\\.|[^\\"\r\n])*")"), 
+  Token::Terminator(R"(0[xX][a-fA-F0-9]+((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
+  Token::Terminator(R"(0[0-7]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
+  Token::Terminator(R"([1-9][0-9]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)"), 
+  Token::Terminator(R"(L?'(\\.|[^\\'\n\r])+')"), 
+  Token::Terminator(R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)"), 
+  Token::Terminator(R"([0-9]*(\.)[0-9]+([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
+  Token::Terminator(R"([0-9]+(\.)[0-9]*([Ee][+-]?[0-9]+)?(f|F|l|L)?)"), 
+  Token::Terminator(R"(0[xX][a-fA-F0-9]+([Pp][+-]?[0-9]+)(f|F|l|L)?)"), 
+  Token::Terminator(R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
+  Token::Terminator(R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][+-]?[0-9]+)?(f|F|l|L)?)"), 
+  Token::Terminator(R"(L?"(\\.|[^\\"\n\r])*")"), 
+  Token::Terminator(R"((\.\.\.))"), 
+  Token::Terminator(R"((>>=))"), 
+  Token::Terminator(R"((<<=))"), 
+  Token::Terminator(R"((\+=))"), 
+  Token::Terminator(R"((-=))"), 
+  Token::Terminator(R"((\*=))"), 
+  Token::Terminator(R"((/=))"), 
+  Token::Terminator(R"((%=))"), 
+  Token::Terminator(R"((&=))"), 
+  Token::Terminator(R"((\^=))"), 
+  Token::Terminator(R"((\|=))"), 
+  Token::Terminator(R"((>>))"), 
+  Token::Terminator(R"((<<))"), 
+  Token::Terminator(R"((\+\+))"), 
+  Token::Terminator(R"((--))"), 
+  Token::Terminator(R"((->))"), 
+  Token::Terminator(R"((&&))"), 
+  Token::Terminator(R"((\|\|))"), 
+  Token::Terminator(R"((<=))"), 
+  Token::Terminator(R"((>=))"), 
+  Token::Terminator(R"((==))"), 
+  Token::Terminator(R"((!=))"), 
   Token::Terminator(R"((;))"), 
   Token::Terminator(R"((({)|(<%)))"), 
   Token::Terminator(R"(((})|(%>)))"), 
+  Token::Terminator(R"((,))"), 
+  Token::Terminator(R"((:))"), 
   Token::Terminator(R"((=))"), 
   Token::Terminator(R"((\())"), 
   Token::Terminator(R"((\)))"), 
+  Token::Terminator(R"(((\[)|(<:)))"), 
+  Token::Terminator(R"(((\])|(:>)))"), 
+  Token::Terminator(R"((\.))"), 
+  Token::Terminator(R"((&))"), 
+  Token::Terminator(R"((!))"), 
+  Token::Terminator(R"((~))"), 
   Token::Terminator(R"((-))"), 
   Token::Terminator(R"((\+))"), 
-  Token::Terminator(R"([ \t\v\r\n\f])"), 
+  Token::Terminator(R"((\*))"), 
+  Token::Terminator(R"((/))"), 
+  Token::Terminator(R"((%))"), 
+  Token::Terminator(R"((<))"), 
+  Token::Terminator(R"((>))"), 
+  Token::Terminator(R"((\^))"), 
+  Token::Terminator(R"((\|))"), 
+  Token::Terminator(R"((?))"), 
+  Token::Terminator(R"([ \t\v\n\r\f])"), 
   Token::Terminator(R"(.)"), 
 };
 vector<DfaModel> lexical_tokens_dfa = {
+  RegEx(R"((/\*))").GetDfaModel(), 
+  RegEx(R"((//)[^\n\r]*)").GetDfaModel(), 
+  RegEx(R"((auto))").GetDfaModel(), 
+  RegEx(R"((_Bool))").GetDfaModel(), 
+  RegEx(R"((break))").GetDfaModel(), 
+  RegEx(R"((case))").GetDfaModel(), 
+  RegEx(R"((char))").GetDfaModel(), 
+  RegEx(R"((_Complex))").GetDfaModel(), 
+  RegEx(R"((const))").GetDfaModel(), 
+  RegEx(R"((continue))").GetDfaModel(), 
+  RegEx(R"((default))").GetDfaModel(), 
+  RegEx(R"((do))").GetDfaModel(), 
+  RegEx(R"((double))").GetDfaModel(), 
+  RegEx(R"((else))").GetDfaModel(), 
+  RegEx(R"((enum))").GetDfaModel(), 
+  RegEx(R"((extern))").GetDfaModel(), 
+  RegEx(R"((float))").GetDfaModel(), 
+  RegEx(R"((for))").GetDfaModel(), 
+  RegEx(R"((goto))").GetDfaModel(), 
+  RegEx(R"((if))").GetDfaModel(), 
+  RegEx(R"((_Imaginary))").GetDfaModel(), 
+  RegEx(R"((inline))").GetDfaModel(), 
   RegEx(R"((int))").GetDfaModel(), 
-  RegEx(R"([0-9]+)").GetDfaModel(), 
+  RegEx(R"((long))").GetDfaModel(), 
+  RegEx(R"((register))").GetDfaModel(), 
+  RegEx(R"((restrict))").GetDfaModel(), 
+  RegEx(R"((return))").GetDfaModel(), 
+  RegEx(R"((short))").GetDfaModel(), 
+  RegEx(R"((signed))").GetDfaModel(), 
+  RegEx(R"((sizeof))").GetDfaModel(), 
+  RegEx(R"((static))").GetDfaModel(), 
+  RegEx(R"((struct))").GetDfaModel(), 
+  RegEx(R"((switch))").GetDfaModel(), 
+  RegEx(R"((typedef))").GetDfaModel(), 
+  RegEx(R"((union))").GetDfaModel(), 
+  RegEx(R"((unsigned))").GetDfaModel(), 
+  RegEx(R"((void))").GetDfaModel(), 
+  RegEx(R"((volatile))").GetDfaModel(), 
+  RegEx(R"((while))").GetDfaModel(), 
   RegEx(R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)").GetDfaModel(), 
-  RegEx(R"(L?"(\\.|[^\\"\r\n])*")").GetDfaModel(), 
+  RegEx(R"(0[xX][a-fA-F0-9]+((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)").GetDfaModel(), 
+  RegEx(R"(0[0-7]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)").GetDfaModel(), 
+  RegEx(R"([1-9][0-9]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)").GetDfaModel(), 
+  RegEx(R"(L?'(\\.|[^\\'\n\r])+')").GetDfaModel(), 
+  RegEx(R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)").GetDfaModel(), 
+  RegEx(R"([0-9]*(\.)[0-9]+([Ee][+-]?[0-9]+)?(f|F|l|L)?)").GetDfaModel(), 
+  RegEx(R"([0-9]+(\.)[0-9]*([Ee][+-]?[0-9]+)?(f|F|l|L)?)").GetDfaModel(), 
+  RegEx(R"(0[xX][a-fA-F0-9]+([Pp][+-]?[0-9]+)(f|F|l|L)?)").GetDfaModel(), 
+  RegEx(R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][+-]?[0-9]+)?(f|F|l|L)?)").GetDfaModel(), 
+  RegEx(R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][+-]?[0-9]+)?(f|F|l|L)?)").GetDfaModel(), 
+  RegEx(R"(L?"(\\.|[^\\"\n\r])*")").GetDfaModel(), 
+  RegEx(R"((\.\.\.))").GetDfaModel(), 
+  RegEx(R"((>>=))").GetDfaModel(), 
+  RegEx(R"((<<=))").GetDfaModel(), 
+  RegEx(R"((\+=))").GetDfaModel(), 
+  RegEx(R"((-=))").GetDfaModel(), 
+  RegEx(R"((\*=))").GetDfaModel(), 
+  RegEx(R"((/=))").GetDfaModel(), 
+  RegEx(R"((%=))").GetDfaModel(), 
+  RegEx(R"((&=))").GetDfaModel(), 
+  RegEx(R"((\^=))").GetDfaModel(), 
+  RegEx(R"((\|=))").GetDfaModel(), 
+  RegEx(R"((>>))").GetDfaModel(), 
+  RegEx(R"((<<))").GetDfaModel(), 
+  RegEx(R"((\+\+))").GetDfaModel(), 
+  RegEx(R"((--))").GetDfaModel(), 
+  RegEx(R"((->))").GetDfaModel(), 
+  RegEx(R"((&&))").GetDfaModel(), 
+  RegEx(R"((\|\|))").GetDfaModel(), 
+  RegEx(R"((<=))").GetDfaModel(), 
+  RegEx(R"((>=))").GetDfaModel(), 
+  RegEx(R"((==))").GetDfaModel(), 
+  RegEx(R"((!=))").GetDfaModel(), 
   RegEx(R"((;))").GetDfaModel(), 
   RegEx(R"((({)|(<%)))").GetDfaModel(), 
   RegEx(R"(((})|(%>)))").GetDfaModel(), 
+  RegEx(R"((,))").GetDfaModel(), 
+  RegEx(R"((:))").GetDfaModel(), 
   RegEx(R"((=))").GetDfaModel(), 
   RegEx(R"((\())").GetDfaModel(), 
   RegEx(R"((\)))").GetDfaModel(), 
+  RegEx(R"(((\[)|(<:)))").GetDfaModel(), 
+  RegEx(R"(((\])|(:>)))").GetDfaModel(), 
+  RegEx(R"((\.))").GetDfaModel(), 
+  RegEx(R"((&))").GetDfaModel(), 
+  RegEx(R"((!))").GetDfaModel(), 
+  RegEx(R"((~))").GetDfaModel(), 
   RegEx(R"((-))").GetDfaModel(), 
   RegEx(R"((\+))").GetDfaModel(), 
-  RegEx(R"([ \t\v\r\n\f])").GetDfaModel(), 
+  RegEx(R"((\*))").GetDfaModel(), 
+  RegEx(R"((/))").GetDfaModel(), 
+  RegEx(R"((%))").GetDfaModel(), 
+  RegEx(R"((<))").GetDfaModel(), 
+  RegEx(R"((>))").GetDfaModel(), 
+  RegEx(R"((\^))").GetDfaModel(), 
+  RegEx(R"((\|))").GetDfaModel(), 
+  RegEx(R"((?))").GetDfaModel(), 
+  RegEx(R"([ \t\v\n\r\f])").GetDfaModel(), 
   RegEx(R"(.)").GetDfaModel(), 
 };
+
 /* section 5 */
-void count() {
-  // pass
+stringstream input_stream;
+Stream2TokenPipe s2ppl;
+string yytext;
+
+char input() {
+  return s2ppl.input(input_stream);
 }
 
-void comment() {
-  // pass
+void unput(char c) {
+  s2ppl.unput(input_stream, c);
 }
+
+/* user code from lex file start */
+int yywrap(void)
+{
+	return 1;
+}
+
+
+void comment(void)
+{
+	char c, prev = 0;
+  
+	while ((c = input()) != 0)      /* (EOF maps to 0) */
+	{
+		if (c == '/' && prev == '*')
+			return;
+		prev = c;
+	}
+	error("unterminated comment");
+}
+
+
+int column = 0;
+
+void count(void)
+{
+	int i;
+
+	for (i = 0; yytext[i] != '\0'; i++)
+		if (yytext[i] == '\n' || yytext[i] == '\r')
+			column = 0;
+		else if (yytext[i] == '\t')
+			column += 8 - (column % 8);
+		else
+			column++;
+
+	ECHO;
+}
+
 
 int check_type(void)
 {
-  return IDENTIFIER;
+/*
+* pseudo code --- this is what it should check
+*
+*	if (yytext == type_name)
+*		return TYPE_NAME;
+*
+*	return IDENTIFIER;
+*/
+
+/*
+*	it actually will only return IDENTIFIER
+*/
+
+	return IDENTIFIER;
 }
 
 
-stringstream input_stream;
-Stream2TokenPipe s2ppl;
+/* user code from lex file end */
 
-char input() {
-  if (!(input_stream.good() && !input_stream.eof() && !input_stream.fail())) {
-    return 0;
-  }
-  char c = input_stream.get();
-  return c;
-}
 /* section 6 */
 //@variable
 IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {
   string token_name = lexical_token.GetTokName();
-  if (token_name == R"((int))") { 
+  if (token_name == R"((/\*))") { 
+    { { comment(); }}
+  } else if (token_name == R"((//)[^\n\r]*)") { 
+    { { /* consume //-comment */ }}
+  } else if (token_name == R"((auto))") { 
+    { { count(); return(AUTO); }}
+  } else if (token_name == R"((_Bool))") { 
+    { { count(); return(BOOL); }}
+  } else if (token_name == R"((break))") { 
+    { { count(); return(BREAK); }}
+  } else if (token_name == R"((case))") { 
+    { { count(); return(CASE); }}
+  } else if (token_name == R"((char))") { 
+    { { count(); return(CHAR); }}
+  } else if (token_name == R"((_Complex))") { 
+    { { count(); return(COMPLEX); }}
+  } else if (token_name == R"((const))") { 
+    { { count(); return(CONST); }}
+  } else if (token_name == R"((continue))") { 
+    { { count(); return(CONTINUE); }}
+  } else if (token_name == R"((default))") { 
+    { { count(); return(DEFAULT); }}
+  } else if (token_name == R"((do))") { 
+    { { count(); return(DO); }}
+  } else if (token_name == R"((double))") { 
+    { { count(); return(DOUBLE); }}
+  } else if (token_name == R"((else))") { 
+    { { count(); return(ELSE); }}
+  } else if (token_name == R"((enum))") { 
+    { { count(); return(ENUM); }}
+  } else if (token_name == R"((extern))") { 
+    { { count(); return(EXTERN); }}
+  } else if (token_name == R"((float))") { 
+    { { count(); return(FLOAT); }}
+  } else if (token_name == R"((for))") { 
+    { { count(); return(FOR); }}
+  } else if (token_name == R"((goto))") { 
+    { { count(); return(GOTO); }}
+  } else if (token_name == R"((if))") { 
+    { { count(); return(IF); }}
+  } else if (token_name == R"((_Imaginary))") { 
+    { { count(); return(IMAGINARY); }}
+  } else if (token_name == R"((inline))") { 
+    { { count(); return(INLINE); }}
+  } else if (token_name == R"((int))") { 
     { { count(); return(INT); }}
-  } else if (token_name == R"([0-9]+)") { 
-    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"((long))") { 
+    { { count(); return(LONG); }}
+  } else if (token_name == R"((register))") { 
+    { { count(); return(REGISTER); }}
+  } else if (token_name == R"((restrict))") { 
+    { { count(); return(RESTRICT); }}
+  } else if (token_name == R"((return))") { 
+    { { count(); return(RETURN); }}
+  } else if (token_name == R"((short))") { 
+    { { count(); return(SHORT); }}
+  } else if (token_name == R"((signed))") { 
+    { { count(); return(SIGNED); }}
+  } else if (token_name == R"((sizeof))") { 
+    { { count(); return(SIZEOF); }}
+  } else if (token_name == R"((static))") { 
+    { { count(); return(STATIC); }}
+  } else if (token_name == R"((struct))") { 
+    { { count(); return(STRUCT); }}
+  } else if (token_name == R"((switch))") { 
+    { { count(); return(SWITCH); }}
+  } else if (token_name == R"((typedef))") { 
+    { { count(); return(TYPEDEF); }}
+  } else if (token_name == R"((union))") { 
+    { { count(); return(UNION); }}
+  } else if (token_name == R"((unsigned))") { 
+    { { count(); return(UNSIGNED); }}
+  } else if (token_name == R"((void))") { 
+    { { count(); return(VOID); }}
+  } else if (token_name == R"((volatile))") { 
+    { { count(); return(VOLATILE); }}
+  } else if (token_name == R"((while))") { 
+    { { count(); return(WHILE); }}
   } else if (token_name == R"([a-zA-Z_]([a-zA-Z_]|[0-9])*)") { 
-    { { count(); return(IDENTIFIER); }}
-  } else if (token_name == R"(L?"(\\.|[^\\"\r\n])*")") { 
+    { { count(); return(check_type()); }}
+  } else if (token_name == R"(0[xX][a-fA-F0-9]+((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"(0[0-7]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"([1-9][0-9]*((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"(L?'(\\.|[^\\'\n\r])+')") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"([0-9]+([Ee][+-]?[0-9]+)(f|F|l|L)?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"([0-9]*(\.)[0-9]+([Ee][+-]?[0-9]+)?(f|F|l|L)?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"([0-9]+(\.)[0-9]*([Ee][+-]?[0-9]+)?(f|F|l|L)?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"(0[xX][a-fA-F0-9]+([Pp][+-]?[0-9]+)(f|F|l|L)?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"(0[xX][a-fA-F0-9]*(\.)[a-fA-F0-9]+([Pp][+-]?[0-9]+)?(f|F|l|L)?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"(0[xX][a-fA-F0-9]+(\.)[a-fA-F0-9]*([Pp][+-]?[0-9]+)?(f|F|l|L)?)") { 
+    { { count(); return(CONSTANT); }}
+  } else if (token_name == R"(L?"(\\.|[^\\"\n\r])*")") { 
     { { count(); return(STRING_LITERAL); }}
+  } else if (token_name == R"((\.\.\.))") { 
+    { { count(); return(ELLIPSIS); }}
+  } else if (token_name == R"((>>=))") { 
+    { { count(); return(RIGHT_ASSIGN); }}
+  } else if (token_name == R"((<<=))") { 
+    { { count(); return(LEFT_ASSIGN); }}
+  } else if (token_name == R"((\+=))") { 
+    { { count(); return(ADD_ASSIGN); }}
+  } else if (token_name == R"((-=))") { 
+    { { count(); return(SUB_ASSIGN); }}
+  } else if (token_name == R"((\*=))") { 
+    { { count(); return(MUL_ASSIGN); }}
+  } else if (token_name == R"((/=))") { 
+    { { count(); return(DIV_ASSIGN); }}
+  } else if (token_name == R"((%=))") { 
+    { { count(); return(MOD_ASSIGN); }}
+  } else if (token_name == R"((&=))") { 
+    { { count(); return(AND_ASSIGN); }}
+  } else if (token_name == R"((\^=))") { 
+    { { count(); return(XOR_ASSIGN); }}
+  } else if (token_name == R"((\|=))") { 
+    { { count(); return(OR_ASSIGN); }}
+  } else if (token_name == R"((>>))") { 
+    { { count(); return(RIGHT_OP); }}
+  } else if (token_name == R"((<<))") { 
+    { { count(); return(LEFT_OP); }}
+  } else if (token_name == R"((\+\+))") { 
+    { { count(); return(INC_OP); }}
+  } else if (token_name == R"((--))") { 
+    { { count(); return(DEC_OP); }}
+  } else if (token_name == R"((->))") { 
+    { { count(); return(PTR_OP); }}
+  } else if (token_name == R"((&&))") { 
+    { { count(); return(AND_OP); }}
+  } else if (token_name == R"((\|\|))") { 
+    { { count(); return(OR_OP); }}
+  } else if (token_name == R"((<=))") { 
+    { { count(); return(LE_OP); }}
+  } else if (token_name == R"((>=))") { 
+    { { count(); return(GE_OP); }}
+  } else if (token_name == R"((==))") { 
+    { { count(); return(EQ_OP); }}
+  } else if (token_name == R"((!=))") { 
+    { { count(); return(NE_OP); }}
   } else if (token_name == R"((;))") { 
     { { count(); return(';'); }}
   } else if (token_name == R"((({)|(<%)))") { 
     { { count(); return('{'); }}
   } else if (token_name == R"(((})|(%>)))") { 
     { { count(); return('}'); }}
+  } else if (token_name == R"((,))") { 
+    { { count(); return(','); }}
+  } else if (token_name == R"((:))") { 
+    { { count(); return(':'); }}
   } else if (token_name == R"((=))") { 
     { { count(); return('='); }}
   } else if (token_name == R"((\())") { 
     { { count(); return('('); }}
   } else if (token_name == R"((\)))") { 
     { { count(); return(')'); }}
+  } else if (token_name == R"(((\[)|(<:)))") { 
+    { { count(); return('['); }}
+  } else if (token_name == R"(((\])|(:>)))") { 
+    { { count(); return(']'); }}
+  } else if (token_name == R"((\.))") { 
+    { { count(); return('.'); }}
+  } else if (token_name == R"((&))") { 
+    { { count(); return('&'); }}
+  } else if (token_name == R"((!))") { 
+    { { count(); return('!'); }}
+  } else if (token_name == R"((~))") { 
+    { { count(); return('~'); }}
   } else if (token_name == R"((-))") { 
     { { count(); return('-'); }}
   } else if (token_name == R"((\+))") { 
     { { count(); return('+'); }}
-  } else if (token_name == R"([ \t\v\r\n\f])") { 
+  } else if (token_name == R"((\*))") { 
+    { { count(); return('*'); }}
+  } else if (token_name == R"((/))") { 
+    { { count(); return('/'); }}
+  } else if (token_name == R"((%))") { 
+    { { count(); return('%'); }}
+  } else if (token_name == R"((<))") { 
+    { { count(); return('<'); }}
+  } else if (token_name == R"((>))") { 
+    { { count(); return('>'); }}
+  } else if (token_name == R"((\^))") { 
+    { { count(); return('^'); }}
+  } else if (token_name == R"((\|))") { 
+    { { count(); return('|'); }}
+  } else if (token_name == R"((?))") { 
+    { { count(); return('?'); }}
+  } else if (token_name == R"([ \t\v\n\r\f])") { 
     { { count(); }}
   } else if (token_name == R"(.)") { 
     { { /* Add code to complain about unmatched characters */ }}
@@ -1634,36 +2052,44 @@ int main() {
   }
 
   // lexical
-  vector<AttrDict> attributes;
-  vector<Token> tokens;
-  while (true) {
-    auto lexical_token = s2ppl.Defer(input_stream);
-    if (lexical_token == ending)
-      break;
-    AttrDict ad;
-    ad.Set("lval", s2ppl.buffer_); 
+   vector<AttrDict> attributes;
+   vector<Token> tokens;
+   while (true) {
+     auto lexical_token = s2ppl.Defer(input_stream);
 
-    IdType id = to_syntax_token_id(lexical_token, ad);
-    if (id == 0) 
-      continue;
-    Token syntax_token = syntax_tokens[id];
+     AttrDict ad;
+     ad.Set("lval", s2ppl.buffer_); 
+     ad.Set("row", s2ppl.token_begin_row_);
+     ad.Set("col", s2ppl.token_begin_col_);
+     yytext = s2ppl.buffer_;
 
-    tokens.emplace_back(syntax_token);
-    attributes.emplace_back(ad);
-  }
+     Token syntax_token;
+     if (lexical_token == ending) {
+       syntax_token = ending;
+     } else {
+       IdType id = to_syntax_token_id(lexical_token, ad);
+       if (id == 0) 
+         continue;
+       syntax_token = syntax_tokens[id];
+     }
 
-  cerr << "tokens: " << endl;
-  for (int i = 0; i < tokens.size(); i++) {
-    auto token = tokens[i];
-    auto ad = attributes[i];
-    cerr << "  " << ad.Get<string>("lval") << " : " << token.GetTokName() << endl;
-  }
+     tokens.emplace_back(syntax_token);
+     attributes.emplace_back(ad);
+
+     // cerr << syntax_token.ToString() << " ";
+
+     parser.ParseStep(tokens, attributes);
+     if (lexical_token == ending) {
+       break;
+     }
+   }
+   cerr << endl;
 
   // syntax
-  parser.Parse(tokens, attributes);
   auto tree = parser.GetTree();
   cerr << "parse tree: " << endl;
-  tree.Print(std::cerr);
+  tree.PrintForShort(std::cerr, false);
 
   return 0;
 }
+
