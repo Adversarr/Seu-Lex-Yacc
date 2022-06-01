@@ -705,6 +705,7 @@ void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
   oss1 << endl;
 
   /* section 7 */
+  oss1 << "#include \"out_precompile.cpp\" // generate parsing table" << endl;
   oss1 << "/* section 7 */" << endl;
   oss1 << "int main() {" << endl;
 
@@ -721,7 +722,8 @@ void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
   s2ppl = Stream2TokenPipe(transition, state, lexical_tokens, ending);
   // syntax
   sly::core::grammar::ParsingTable table;
-  #include "out_precompile.cpp" // generate parsing table
+
+  _defer_table(productions, start_syntax_token, ending, table);
   table.SetEndingToken(ending); // sb YZR
   LrParser parser(table);
   )";
@@ -775,18 +777,21 @@ void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
 
   // pre-compiled file
   oss2 << R"(
-  // syntax
-  sly::core::grammar::ContextFreeGrammar cfg(productions, start_syntax_token, ending);
-  sly::core::grammar::Lr1 lr1;
-  cfg.Compile(lr1);
-  table = cfg.GetLrTable();
-
-  // rewrite
-  ofstream outputFile("../test/out_precompile.cpp");
-  table.PrintGeneratorCodeOpti(outputFile);
-  outputFile.close();
-
-  // return 0;
+  void _defer_table(const vector<Production> &productions,
+                    const sly::core::type::Token &start_syntax_token,
+                    const sly::core::type::Token &ending,
+                    sly::core::grammar::ParsingTable& table) {
+    // syntax
+    sly::core::grammar::ContextFreeGrammar cfg(productions, start_syntax_token, ending);
+    sly::core::grammar::Lr1 lr1;
+    cfg.Compile(lr1);
+    table = cfg.GetLrTable();
+    // rewrite
+    ofstream outputFile("../test/out_precompile.cpp");
+    table.PrintGeneratorCodeOpti(outputFile);
+    outputFile.close();
+    // return 0;
+  }
   )";
 }
 

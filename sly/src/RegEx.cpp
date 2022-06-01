@@ -1,6 +1,7 @@
 
 #include "sly/FaModel.h"
 #include "sly/LrParser.h"
+#include "spdlog/common.h"
 #include "spdlog/spdlog.h"
 #include <array>
 #include <cstddef>
@@ -405,10 +406,13 @@ DfaModel re2dfa(string expr_) {
   auto &eof_token = opt_re->eof_token;
   std::istringstream is(expr_);
   if (!opt.has_value()) {
+    auto l = spdlog::get_level();
+    spdlog::set_level(spdlog::level::err);
     sly::core::grammar::ContextFreeGrammar grammar{productions, seq, eof_token};
     sly::core::grammar::Lr1 lr1;
     grammar.Compile(lr1);
     opt = make_optional(move(lr1.GetParsingTable()));
+    spdlog::set_level(l);
   }
   LrParser parser(opt.value());
   vector<Token> token_input;
