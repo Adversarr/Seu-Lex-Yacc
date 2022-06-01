@@ -1606,6 +1606,7 @@ IdType to_syntax_token_id(Token lexical_token, AttrDict &ad) {
   return 0;
 }
 
+#include "out_precompile.cpp" // generate parsing table
 /* section 7 */
 int main() {
   /* section 7.1 */
@@ -1618,7 +1619,8 @@ int main() {
   s2ppl = Stream2TokenPipe(transition, state, lexical_tokens, ending);
   // syntax
   sly::core::grammar::ParsingTable table;
-  #include "out_precompile.cpp" // generate parsing table
+
+  _defer_table(productions, start_syntax_token, ending, table);
   table.SetEndingToken(ending); // sb YZR
   LrParser parser(table);
   
