@@ -33,6 +33,8 @@ class ParsingTable
   
   explicit ParsingTable(int n_states=0);
   
+  void SetAllToError(const vector<Token>& token_list);
+
   bool PutAction(IdType lhs, const Token& tok, CellTp action);
   
   void PutActionForce(IdType lhs, const Token& tok, CellTp action);
@@ -48,6 +50,11 @@ class ParsingTable
   void Reset();
   
   void Print(ostream& os) const;
+
+  void PrintGeneratorCode(ostream &os) const;
+
+  void PrintGeneratorCodeOpti(ostream &os) const;
+
   
   const vector<unordered_map<Token, vector<CellTp>, Token::Hash>> &GetActionTable() const;
   
@@ -98,6 +105,8 @@ class ParsingTable
  
  private:
   vector<type::Production> productions_;
+
+  vector<type::Token> tokens_;
   
   std::vector<std::unordered_map<Token, std::vector<CellTp>, Token::Hash>> action_table_;
   
