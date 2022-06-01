@@ -3,6 +3,7 @@
 #include <cassert>
 #include <sly/Stream2TokenPipe.h>
 #include <sly/utils.h>
+#include <stdexcept>
 
 namespace sly::runtime {
 
@@ -65,7 +66,9 @@ core::type::Token Stream2TokenPipe::Defer(std::istream &is) {
     spdlog::error("Caught invalid lexical element({} ascii={})"
                   " current_buffer={}, history={}, position={}", 
               c, static_cast<int>(c), buffer_, history_, history_count_);
-    assert(false);
+    throw runtime_error(fmt::format("Caught invalid lexical element({} ascii={})"
+                  " current_buffer={}, history={}, position={}", 
+              c, static_cast<int>(c), buffer_, history_, history_count_));
   } else {
     spdlog::info("return: buffer={} corr={}", buffer_, token_list_[return_token_id].ToString());
     return token_list_[return_token_id];
