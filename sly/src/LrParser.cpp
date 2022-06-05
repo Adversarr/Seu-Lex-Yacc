@@ -11,21 +11,30 @@ const ParsingTable &LrParser::GetPt() const { return pt_; }
 
 void LrParser::SetPt(const ParsingTable &pt) { pt_ = pt; }
 
-LrParser::LrParser(ParsingTable &parsing_table)
-    : pt_(parsing_table), current_state_id_(-1), current_offset_(0) {}
+LrParser::LrParser(ParsingTable &parsing_table) :
+  pt_(parsing_table), current_state_id_(-1), current_offset_(0), state_stack_(1, 0) {
+  
+}
 
 void LrParser::Parse(vector<Token> token_stream,
                      vector<YYSTATE> yylval_stream) {
   if (token_stream.back() != pt_.GetEndingToken()) {
-    spdlog::debug("Input token stream does not end with {} so add to it.",
-                  pt_.GetEndingToken().ToString());
-    token_stream.push_back(pt_.GetEndingToken());
-    yylval_stream.emplace_back();
+    if (token_stream.back() != pt_.GetEndingToken()) {
+      spdlog::debug("Input token stream does not end with {} so add to it.", pt_.GetEndingToken().ToString());
+      token_stream.push_back(pt_.GetEndingToken());
+      yylval_stream.emplace_back();
+    }
   }
   apt_stack_.clear();
   state_stack_.clear();
   current_offset_ = 0;
-  state_stack_.emplace_back(0);
+  state_stack_ = std::deque<IdType >(1, 0);
+  while (current_offset_ < token_stream.size()) {
+    ParseOnce(token_stream, yylval_stream);
+  }
+}
+
+void LrParser::ParseStep(const vector<Token>& token_stream, const vector<YYSTATE>& yylval_stream) {
   while (current_offset_ < token_stream.size()) {
     ParseOnce(token_stream, yylval_stream);
   }
@@ -34,6 +43,7 @@ void LrParser::Parse(vector<Token> token_stream,
 void LrParser::ParseOnce(const vector<Token> &token_stream,
                          const vector<YYSTATE> &yylval_stream) {
   auto &current_token = token_stream[current_offset_];
+  auto &current_attr = yylval_stream[current_offset_];
   if (current_token.GetTokenType() == Token::Type::kEpsilon) {
     current_offset_ += 1;
     return;
@@ -81,30 +91,51 @@ void LrParser::ParseOnce(const vector<Token> &token_stream,
         current_offset_ += 1;
         return;
       }
-      if (action.action == ParsingTable::kError) {
-        spdlog::error("Found invalid action. current token={}",
-                      current_token.ToString());
-        spdlog::error("current state_stack={}",
-                      utils::ToString{}(state_stack_));
-        spdlog::error("current state_id={}",
-                      utils::ToString{}(current_state_id_));
-        spdlog::error("current apt_stack={}", utils::ToString{}(apt_stack_));
-        auto b = token_stream.cbegin() + max(0, (int)current_state_id_ - 5);
+      if (action.action == ParsingTable::kError){
+        if (current_token != pt_.GetEndingToken()) {
+          spdlog::error("{}:{}: \033[31msyntax error:\033[0m "
+                        "caught unexpected token {} at line {} column {}, ",
+                        __FILE__, __LINE__, 
+                        current_token.ToString(), current_attr.Get<int>("row"), current_attr.Get<int>("col"));
+        } else {
+          spdlog::error("{}:{}: \033[31msyntax error:\033[0m "
+                        "caught unexpected token {} at the end of file, ",
+                        __FILE__, __LINE__, 
+                        current_token.ToString());
+        }
+        spdlog::error("current token={}", current_token.ToString());
+        // spdlog::error("current state_stack={}", utils::ToString{}(state_stack_));
+        // spdlog::error("current state_id={}", utils::ToString{}(current_state_id_));
+        // spdlog::error("current apt_stack is:\n{}", utils::ToString{}(apt_stack_));
+        auto b = token_stream.cbegin() + max(0, (int) current_state_id_ - 5);
         auto e = token_stream.end();
         if (distance(b, token_stream.end()) >= 10) {
           e = b + 10;
         }
-        spdlog::error("token stream = ... {} ...",
-                      utils::ToString{}(vector<Token>{b, e}));
+        spdlog::error("token stream = [... {} {}]", 
+                      utils::ToString{}(vector<Token>{b, e}), current_token.ToString());
+        assert(false);
       }
-      throw runtime_error(
-          fmt::format("Cannot current token... {}", current_token.ToString()));
     }
   } else {
-    spdlog::error("found non terminator in token_stream.");
-    throw runtime_error("found non terminator in token_stream.");
+    spdlog::error("{}:{}: \033[31msyntax error:\033[0m "
+                  "found non terminator {} in token_stream  at line {} column {}, ",
+                  __FILE__, __LINE__, 
+                  current_token.ToString(), current_token.ToString(), current_attr.Get<int>("row"), current_attr.Get<int>("col"));
+    spdlog::error("current token={}", current_token.ToString());
+    auto b = token_stream.cbegin() + max(0, (int) current_state_id_ - 5);
+    auto e = token_stream.end();
+    if (distance(b, token_stream.end()) >= 10) {
+      e = b + 10;
+    }
+    spdlog::error("token stream = [... {} {}]", 
+                  utils::ToString{}(vector<Token>{b, e}), current_token.ToString());
+    assert(false);
   }
 }
 
-AnnotatedParseTree LrParser::GetTree() const { return apt_stack_.front(); }
+AnnotatedParseTree LrParser::GetTree() const {
+  return apt_stack_.front();
+}
+
 } // namespace sly::core::grammar

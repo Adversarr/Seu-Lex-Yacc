@@ -111,6 +111,10 @@ struct Parms {
   set<string> nonTerminalTokens;
   vector<Prod> prods;
 
+  string lexHeadCodeblock;
+  string lexTailCodeblock;
+  string yaccTailCodeblock;
+
   void Print(ostream &oss) const;
 };
 
@@ -176,6 +180,11 @@ Parms ParseParameters(LexParms lexParms, YaccParms yaccParms) {
   for (const auto &[startToken, nextTokens] : yaccParms.yaccProds) {
     parms.prods.push_back({startToken, nextTokens});
   }
+
+  // inialize codeblocks
+  parms.lexHeadCodeblock = lexParms.headCodeblock;
+  parms.lexTailCodeblock = lexParms.tailCodeblock;
+  parms.yaccTailCodeblock = yaccParms.tailCodeblock;
 
   return parms;
 }
@@ -582,6 +591,26 @@ void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
   oss1 << R"(using sly::core::grammar::LrParser;)" << endl;
   oss1 << R"(using namespace std;)" << endl;
   oss1 << endl;
+  oss1 << R"(#define ECHO (cerr << yytext))" << endl;
+  oss1 << R"(#define error(...) {\)" << endl;
+  oss1 << R"(  fprintf(stderr, "%s:line %d: ", __FILE__, __LINE__);  \)" << endl;
+  oss1 << R"(  fprintf(stderr, __VA_ARGS__);                         \)" << endl;
+  oss1 << R"(  fprintf(stderr, "\n");                                \)" << endl;
+  oss1 << R"(  assert(false);                                              \)" << endl;
+  oss1 << R"(})" << endl;
+  oss1 << endl;
+
+  /* yacc tail codeblock */
+  oss1 << R"(/* user code from yacc file start */)" << endl;
+  oss1 << parms.yaccTailCodeblock << endl;
+  oss1 << R"(/* user code from yacc file end */)" << endl;
+  oss1 << endl;
+
+  /* lex head codeblock */
+  oss1 << R"(/* user code from lex file start */)" << endl;
+  oss1 << parms.lexHeadCodeblock << endl;
+  oss1 << R"(/* user code from lex file end */)" << endl;
+  oss1 << endl;
 
   /* section 2 */
   int num_lexical_tokens = parms.lexTokens.size();
@@ -608,7 +637,7 @@ void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
   oss1 << "// syntax tokens " << endl;
   oss1 << "Token syntax_tokens[256 + num_syntax_tokens] = {" << endl;
   for (tokenIdx = 0; tokenIdx <= 255; tokenIdx++) {
-    oss1 << "  Token::Terminator(string(1, " << tokenIdx << ")), " << endl;
+    oss1 << "  Token::Terminator(string(1, static_cast<char>(" << tokenIdx << "))), " << endl;
   }
   oss1 << "  //@variable" << endl;
   for (const string &tokenName : parms.terminalTokens) {
@@ -655,36 +684,28 @@ void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
     oss1 << "  RegEx(R\"(" << regex << ")\").GetDfaModel(), "<< endl;
   }
   oss1 << "};" << endl;
+  oss1 << endl;
 
   /* section 5 */
   oss1 << R"(/* section 5 */)" << endl;
-  oss1 << R"(void count() {)" << endl;
-  oss1 << R"(  // pass)" << endl;
-  oss1 << R"(})" << endl;
-  oss1 << R"()" << endl;
-  oss1 << R"(void comment() {)" << endl;
-  oss1 << R"(  // pass)" << endl;
-  oss1 << R"(})" << endl;
-  oss1 << R"()" << endl;
-  oss1 << R"(int check_type(void))" << endl;
-  oss1 << R"({)" << endl;
-  oss1 << R"(  return IDENTIFIER;)" << endl;
-  oss1 << R"(})" << endl;
-
-  oss1 << endl;
-  oss1 << endl;
-
-  /* section 5.1 */
   oss1 << R"(stringstream input_stream;)" << endl;
   oss1 << R"(Stream2TokenPipe s2ppl;)" << endl;
+  oss1 << R"(string yytext;)" << endl;
   oss1 << R"()" << endl;
   oss1 << R"(char input() {)" << endl;
-  oss1 << R"(  if (!(input_stream.good() && !input_stream.eof() && !input_stream.fail())) {)" << endl;
-  oss1 << R"(    return 0;)" << endl;
-  oss1 << R"(  })" << endl;
-  oss1 << R"(  char c = input_stream.get();)" << endl;
-  oss1 << R"(  return c;)" << endl;
+  oss1 << R"(  return s2ppl.input(input_stream);)" << endl;
   oss1 << R"(})" << endl;
+  oss1 << R"()" << endl;
+  oss1 << R"(void unput(char c) {)" << endl;
+  oss1 << R"(  s2ppl.unput(input_stream, c);)" << endl;
+  oss1 << R"(})" << endl;
+  oss1 << endl;
+
+   /* lex tail codeblock */
+  oss1 << R"(/* user code from lex file start */)" << endl;
+  oss1 << parms.lexTailCodeblock << endl;
+  oss1 << R"(/* user code from lex file end */)" << endl;
+  oss1 << endl;
 
   /* section 6 */
   oss1 << "/* section 6 */" << endl;
@@ -740,40 +761,48 @@ void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
   }
 
   // lexical
-  vector<AttrDict> attributes;
-  vector<Token> tokens;
-  while (true) {
-    auto lexical_token = s2ppl.Defer(input_stream);
-    if (lexical_token == ending)
-      break;
-    AttrDict ad;
-    ad.Set("lval", s2ppl.buffer_); 
+   vector<AttrDict> attributes;
+   vector<Token> tokens;
+   while (true) {
+     auto lexical_token = s2ppl.Defer(input_stream);
 
-    IdType id = to_syntax_token_id(lexical_token, ad);
-    if (id == 0) 
-      continue;
-    Token syntax_token = syntax_tokens[id];
+     AttrDict ad;
+     ad.Set("lval", s2ppl.buffer_); 
+     ad.Set("row", s2ppl.token_begin_row_);
+     ad.Set("col", s2ppl.token_begin_col_);
+     yytext = s2ppl.buffer_;
 
-    tokens.emplace_back(syntax_token);
-    attributes.emplace_back(ad);
-  }
+     Token syntax_token;
+     if (lexical_token == ending) {
+       syntax_token = ending;
+     } else {
+       IdType id = to_syntax_token_id(lexical_token, ad);
+       if (id == 0) 
+         continue;
+       syntax_token = syntax_tokens[id];
+     }
 
-  cerr << "tokens: " << endl;
-  for (int i = 0; i < tokens.size(); i++) {
-    auto token = tokens[i];
-    auto ad = attributes[i];
-    cerr << "  " << ad.Get<string>("lval") << " : " << token.GetTokName() << endl;
-  }
+     tokens.emplace_back(syntax_token);
+     attributes.emplace_back(ad);
+
+     // cerr << syntax_token.ToString() << " ";
+
+     parser.ParseStep(tokens, attributes);
+     if (lexical_token == ending) {
+       break;
+     }
+   }
+   cerr << endl;
 
   // syntax
-  parser.Parse(tokens, attributes);
   auto tree = parser.GetTree();
   cerr << "parse tree: " << endl;
-  tree.Print(std::cerr);
+  tree.PrintForShort(std::cerr, false);
 
   return 0;)";
   oss1 << endl;
   oss1 << "}" << endl;
+  oss1 << endl;
 
   // pre-compiled file
   oss2 << R"(

@@ -461,7 +461,6 @@ declaration_list
 %%
 #include <stdio.h>
 
-extern char yytext[];
 extern int column;
 
 void yyerror(char const *s)
