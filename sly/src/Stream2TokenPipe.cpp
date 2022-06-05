@@ -108,8 +108,8 @@ core::type::Token Stream2TokenPipe::Defer(std::istream &is) {
     assert(false);
   } else {
     spdlog::info("return: buffer={} corr={}", buffer_, token_list_[return_token_id].ToString());
-    return token_list_[return_token_id];
   }
+  return token_list_[return_token_id];
 }
 
 } // namespace sly::runtime
