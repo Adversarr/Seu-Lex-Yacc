@@ -7,7 +7,7 @@ file(GLOB SLY_SRC src/*.cpp)
 message("Fetching SPDLOG")
 FetchContent_Declare(
   spdlog
-  GIT_REPOSITORY https://hub.fastgit.xyz/gabime/spdlog.git
+  GIT_REPOSITORY https://github.com/gabime/spdlog.git
   GIT_TAG        76fb40d95455f249bd70824ecfcae7a8f0930fa3 # release-1.10.0
 )
 FetchContent_MakeAvailable(spdlog)
