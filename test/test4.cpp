@@ -596,7 +596,7 @@ void generateCodeFile(Parms parms, ostream &oss_code, ostream &oss_precompile) {
   oss1 << R"(  fprintf(stderr, "%s:line %d: ", __FILE__, __LINE__);  \)" << endl;
   oss1 << R"(  fprintf(stderr, __VA_ARGS__);                         \)" << endl;
   oss1 << R"(  fprintf(stderr, "\n");                                \)" << endl;
-  oss1 << R"(  assert(false);                                              \)" << endl;
+  oss1 << R"(  exit(1);                                              \)" << endl;
   oss1 << R"(})" << endl;
   oss1 << endl;
 

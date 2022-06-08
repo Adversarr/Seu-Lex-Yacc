@@ -51,6 +51,14 @@ Token Token::Terminator(string tok_name, IdType tid, Attr attr)
   return Token(std::move(tok_name), Type::kTerminator, tid, attr);
 }
 
+Token Token::NonTerminator(string tok_name, Attr attr) {
+  return Token(std::move(tok_name), Type::kNonTerminator, 0, attr);
+}
+
+Token Token::Terminator(string tok_name, Attr attr) {
+  return Token(std::move(tok_name), Type::kTerminator, 0, attr);
+}
+
 Token::Token()
 {
   type_ = Type::kEpsilon;
@@ -131,7 +139,7 @@ ostream &operator<<(ostream &os, const Token::Attr& attr) {
     os << "sly::core::type::Token::Attr::kNone";
   } else {
     spdlog::error("{}",(int) attr);
-    assert(false);
+    exit(1);
   }
   return os;
 }
@@ -144,7 +152,7 @@ ostream &operator<<(ostream &os, const Token::Type& type) {
   } else if (type == Token::Type::kEpsilon) {
     os << "sly::core::type::Token::Type::kEpsilon";
   } else {
-    assert(false);
+    exit(1);
   }
   return os;
 }
@@ -161,7 +169,7 @@ void Token::PrintImpl(std::ostream& os) const {
   } else if (type == Token::Type::kEpsilon) {
     os << "sly::core::type::Token::Type::kEpsilon";
   } else {
-    assert(false);
+    exit(1);
   }
   os << "," << GetTid() << ",";
   if (attr == Token::Attr::kLeftAssociative) {
@@ -172,7 +180,7 @@ void Token::PrintImpl(std::ostream& os) const {
     os << "sly::core::type::Token::Attr::kNone";
   } else {
     spdlog::error("{}",(int) attr);
-    assert(false);
+    exit(1);
   }
   os << ")";
 }

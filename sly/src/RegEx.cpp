@@ -398,6 +398,8 @@ void RegEx::Compile() {
 
 DfaModel re2dfa(string expr_) {
   static optional<grammar::ParsingTable> opt;
+  auto l = spdlog::get_level();
+  spdlog::set_level(spdlog::level::err);
   if (!opt_re.has_value()) {
     opt_re.emplace();
   }
@@ -406,13 +408,10 @@ DfaModel re2dfa(string expr_) {
   auto &eof_token = opt_re->eof_token;
   std::istringstream is(expr_);
   if (!opt.has_value()) {
-    auto l = spdlog::get_level();
-    spdlog::set_level(spdlog::level::err);
     sly::core::grammar::ContextFreeGrammar grammar{productions, seq, eof_token};
     sly::core::grammar::Lr1 lr1;
     grammar.Compile(lr1);
     opt = make_optional(move(lr1.GetParsingTable()));
-    spdlog::set_level(l);
   }
   LrParser parser(opt.value());
   vector<Token> token_input;
@@ -435,6 +434,7 @@ DfaModel re2dfa(string expr_) {
   tree.Annotate();
   // tree.Print(cout);
   auto nfa = tree.GetRootAttributes()[0].Get<NfaModel>("nfa");
+  spdlog::set_level(l);
   return DfaModel(nfa);
 }
 
