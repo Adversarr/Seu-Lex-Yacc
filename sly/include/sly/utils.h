@@ -299,10 +299,13 @@ public:
 
 // #define FUNC_START_INFO sly::utils::Log::GetGlobalLogger().Info(__FILE__, __LINE__, __FUNCTION__, "Start.")
 
-
+#ifndef NDEBUG
 #define FUNC_END_INFO spdlog::debug("{} {} {} {}",__FILE__, __LINE__, __FUNCTION__, "Done.")
-
 #define FUNC_START_INFO spdlog::debug("{} {} {} {}",__FILE__, __LINE__, __FUNCTION__, "Start.")
+#else
+#define FUNC_END_INFO
+#define FUNC_START_INFO
+#endif
 
 
 template<typename T>

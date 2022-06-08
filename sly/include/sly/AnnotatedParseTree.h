@@ -41,7 +41,9 @@ class AnnotatedParseTree {
   
   explicit AnnotatedParseTree(const Production& prod);
   
-  void Print(ostream& oss, int depth=0) const;
+  void PrintForShort(ostream& oss, bool printAttr=true) const;
+
+  void Print(ostream& oss, bool printAttr=true) const;
 
   string ToString() const;
   
@@ -55,6 +57,8 @@ class AnnotatedParseTree {
   vector<Action> actions_;
   
   std::deque<SubNode> sub_nodes_;
+
+  void Print_(ostream& oss, bool forShort=false, bool printAttr=true, int depth=0, vector<bool> isLast={}) const;
   
   bool is_annotated_; 
 };

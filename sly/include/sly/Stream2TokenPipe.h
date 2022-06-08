@@ -26,10 +26,24 @@ class Stream2TokenPipe {
 
   std::string buffer_;
 
+  int row_;
+  int col_;
+
+  int token_begin_row_;
+  int token_begin_col_;
+  int token_end_row_;
+  int token_end_col_;
+
+  char input(std::istream& is);
+  void unput(std::istream& is, char c); 
+
  private:
 
   std::string history_;
   int history_count_;
+
+  int row_prev_;
+  int col_prev_;
 
   std::vector<std::vector<int>> table_;
   

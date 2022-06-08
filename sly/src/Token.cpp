@@ -110,10 +110,10 @@ ostream &operator<<(ostream &os, const Token &tok)
   switch (tok.GetTokenType())
   {
     case Token::Type::kNonTerminator:
-      os << "N<" + tok.GetTokName() + ">";
+      os << "N<\033[33m" + tok.GetTokName() + "\033[0m>";
       break;
     case Token::Type::kTerminator:
-      os << "T<" + tok.GetTokName() + ">";
+      os << "T<\033[33m" + tok.GetTokName() + "\033[0m>";
       break;
     case Token::Type::kEpsilon:
       os << "E< >";

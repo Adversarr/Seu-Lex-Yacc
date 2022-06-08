@@ -18,6 +18,8 @@ class LrParser {
   explicit LrParser(ParsingTable& parsing_table);
   
   void Parse(vector<Token> token_stream, vector<YYSTATE> yylval_stream);
+
+  void ParseStep(const vector<Token>& token_stream, const vector<YYSTATE>& yylval_stream);
   
   const ParsingTable &GetPt() const;
   

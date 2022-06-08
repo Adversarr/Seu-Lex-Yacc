@@ -77,7 +77,7 @@ T AttrDict::Get(const std::string& attr_name) const
   auto i = attr_dict_.find(attr_name);
   if (i == attr_dict_.end()){
     spdlog::error("cannot find attribute[[{}]].", attr_name);
-    assert(false);
+    throw runtime_error(fmt::format("cannot find attribute[[{}]].", attr_name));
   }
   auto& v = i->second;
   // check has_value
