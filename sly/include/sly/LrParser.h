@@ -44,6 +44,7 @@ class LrParser {
   
   unordered_map<Token, type::Action, Token::Hash> token_actions_;
 
+  bool accepted_;
 };
 }
 

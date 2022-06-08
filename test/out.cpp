@@ -25,7 +25,7 @@ using namespace std;
   fprintf(stderr, "%s:line %d: ", __FILE__, __LINE__);  \
   fprintf(stderr, __VA_ARGS__);                         \
   fprintf(stderr, "\n");                                \
-  assert(false);                                              \
+  exit(1);                                              \
 }
 
 /* user code from yacc file start */

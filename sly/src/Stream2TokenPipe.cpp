@@ -106,7 +106,7 @@ core::type::Token Stream2TokenPipe::Defer(std::istream &is) {
                   c, static_cast<int>(c), row_+1, col_+1);
     spdlog::error("current_buffer=\"\033[33m{}\033[0m\"", sly::utils::escape(buffer_));
     spdlog::error("history_=\"\033[33m{}\033[0m\"", sly::utils::escape(history_));
-    assert(false);
+    exit(1);
   } else {
     spdlog::info("return: buffer={} corr={}", buffer_, token_list_[return_token_id].ToString());
   }

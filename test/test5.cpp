@@ -372,7 +372,8 @@ int main() {
       break;
     AttrDict ad;
     ad.Set("lval", s2ppl.buffer_); 
-
+    ad.Set<int>("row", 1);
+    ad.Set<int>("col", 1);
     IdType id = to_syntax_token_id(lexical_token, ad);
     if (lexical_token == ending) {
       break;
