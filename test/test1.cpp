@@ -115,6 +115,7 @@ int main() {
       break;
   }
   parser.Parse(tokens, attributes);
+
   auto tree = parser.GetTree();
   cout << "\n\nBefore Annotate.: " << endl;
   tree.Print(std::cout);

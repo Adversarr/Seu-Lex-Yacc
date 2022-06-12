@@ -1,5 +1,25 @@
 # Seu - Lex - Yacc (libsly)
 
+## 如何运行？很简单的啦！
+
+```bash
+# Configure CMake build
+cmake -S . -B build -G Ninja
+# build SeuLexYacc
+cmake --build build --target SeuLexYacc --config Release --
+# Run SeuLexYacc
+./build/standalone/SeuLexYacc
+# Build output 
+cmake --build build --target output --config Release --
+# backup original version
+cp ./build/standalone/output ./build/standalone/output_no_precompile_backup
+./build/standalone/output
+# build precompiled version
+cmake --build build --target output --config Release -- ./build/standalone/output
+```
+
+## 简介
+
 几个模块：
 
 1. core
@@ -37,7 +57,7 @@
 主要更新位于`test4.cpp`，该文件会读入`../demo/1.l`和`../demo/1.y`，然后将生成的代码写入`../test/out.cpp`。
 代码生成的规范可以参考`test5.cpp`。
 
-```
+```bash
 $ cd build
 $ make test4
 $ ./test/test4
